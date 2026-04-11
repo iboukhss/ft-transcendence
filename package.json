@@ -2,6 +2,9 @@
   "name": "ft-transcendance",
   "type": "module",
   "private": true,
+  "imports": {
+    "#server/*": "./server/*"
+  },
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",

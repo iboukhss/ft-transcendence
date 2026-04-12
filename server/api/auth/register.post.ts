@@ -1,20 +1,19 @@
-import { hash } from "bcrypt-ts";
+import { hash } from 'bcrypt-ts'
 
 export default defineEventHandler(async (event) => {
-    const{ username, email, password} = await readBody(event);
+  const { username, email, password } = await readBody(event)
 
-    if (!(username && email &&  password)){
-      throw createError({statusCode: 400, message: "Username, email and password must be provided in data body."});
-    }
+  if (!(username && email && password)) {
+    throw createError({ statusCode: 400, message: 'Username, email and password must be provided in data body.' })
+  }
 
-    const hashedPassword = await hash(password, 10);
+  const hashedPassword = await hash(password, 10)
 
-    const insertResult = await db.insert(tables.users).values({
-      username: username,
-      email: email,
-      password: hashedPassword
-    });
+  const insertResult = await db.insert(tables.users).values({
+    username: username,
+    email: email,
+    password: hashedPassword
+  })
 
-    return {success: true};
-
-  });
+  return { success: true }
+})

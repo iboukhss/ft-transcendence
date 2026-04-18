@@ -11,10 +11,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-
     "db:push": "drizzle-kit push",
     "db:seed": "npx tsx server/database/seed.ts"
   },
@@ -22,6 +20,7 @@
     "@nuxt/eslint": "^1.15.2",
     "drizzle-orm": "^0.45.2",
     "nuxt": "^4.4.2",
+    "nuxt-auth-utils": "^0.5.29",
     "postgres": "^3.4.9",
     "vue": "^3.5.32",
     "vue-router": "^5.0.4",
@@ -30,7 +29,8 @@
   "devDependencies": {
     "@types/node": "^25.5.2",
     "drizzle-kit": "^0.31.10",
-    "typescript": "^6.0.2",
+    "typescript": "^6.0.3",
     "vue-tsc": "^3.2.6"
-  }
+  },
+  "exports": {}
 }

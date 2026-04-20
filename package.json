@@ -3,7 +3,8 @@
   "type": "module",
   "private": true,
   "imports": {
-    "#server/*": "./server/*"
+    "#server/*": "./server/*",
+    "#shared/*": "./shared/*"
   },
   "scripts": {
     "build": "nuxt build",
@@ -15,6 +16,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "db:push": "drizzle-kit push",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
     "db:seed": "npx tsx server/database/seed.ts",
     "db:studio": "npx drizzle-kit studio"
   },

@@ -1,15 +1,30 @@
 import { db, tables } from '#server/utils/db'
 
 import { loginUser } from '#server/services/login.service'
+import { LoginSchema } from '#shared/dto/login.dto'
 
 export default defineEventHandler(async (event) => {
-  const { email, password } = await readBody(event)
+  const body = await readBody(event)
 
-  if (!email || !password) {
-    throw createError({ statusCode: 400, message: 'Missing credentials' })
+  const result = LoginSchema.safeParse(body)
+
+  if (!result.success) {
+    throw createError({
+      statusCode: 400,
+      message: 'Invalid credentials format'
+    })
   }
+
+  const { email, password } = result.data
 
   const user = await loginUser(db, tables, email, password)
 
-  return { user }
+  if (!user) {
+    throw createError({
+      statusCode: 401,
+      message: 'Invalid email or password'
+    })
+  }
+
+  return user
 })

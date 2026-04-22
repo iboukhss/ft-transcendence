@@ -1,27 +1,54 @@
-// server/services/auth.service.ts
 import { eq } from 'drizzle-orm'
+import type { RegisterDTO } from '#shared/dto/register.dto'
+import { toUserDTO } from '#server/dto/user.dto'
 
-export async function registerUser(db: any, tables: any, email: string, password: string) {
+export async function registerUser(db: any, tables: any, dto: RegisterDTO) {
   const existingUser = await db.query.users.findFirst({
-    where: eq(tables.users.email, email)
+    where: eq(tables.users.email, dto.email)
   })
 
   if (existingUser) {
     throw createError({ statusCode: 409, message: 'User already exists' })
   }
 
-  const hashedPassword = await hashPassword(password)
+  const hashedPassword = await hashPassword(dto.password)
 
-  const result = await db.insert(tables.users).values({
-    email,
-    password: hashedPassword
-  }).returning()
+  return await db.transaction(async (tx: any) => {
+    // 1. Create auth user
+    const result = await tx
+      .insert(tables.users)
+      .values({
+        email: dto.email,
+        password: hashedPassword,
+        role: dto.role
+      })
+      .returning()
 
-  const user = result[0]
+    const user = result[0]
 
-  if (!user) {
-    throw createError({ statusCode: 500, message: 'User creation failed' })
-  }
+    if (!user) {
+      throw createError({
+        statusCode: 500,
+        message: 'User creation failed'
+      })
+    }
 
-  return user
+    // 2. Create profile
+    await tx.insert(tables.profiles).values({
+      userId: user.id,
+
+      firstName: dto.firstName,
+      lastName: dto.lastName,
+
+      houseNumber: dto.houseNumber,
+      street: dto.street,
+      zip: dto.zip,
+
+      country: dto.country,
+      language: dto.language
+    })
+
+    // 3. Return safe DTO
+    return toUserDTO(user)
+  })
 }

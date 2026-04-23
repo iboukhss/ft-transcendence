@@ -1,13 +1,8 @@
 <script setup lang="ts">
-import { z } from 'zod'
+import type { LoginDTO } from '#shared/dto/login.dto'
 import type { FormSubmitEvent } from '@nuxt/ui'
 
-const schema = z.object({
-  email: z.email('Invalid email'),
-  password: z.string().min(8, 'Password must be at least 8 characters')
-})
-
-type Schema = z.output<typeof schema>
+import { loginSchema } from '#shared/dto/login.dto'
 
 const state = reactive({
   email: '',
@@ -18,7 +13,7 @@ const state = reactive({
 const toast = useToast()
 const isLoading = ref(false)
 
-async function onSubmit(event: FormSubmitEvent<Schema>) {
+async function onSubmit(event: FormSubmitEvent<LoginDTO>) {
   if (isLoading.value) {
     return
   }
@@ -62,7 +57,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
       <USeparator />
 
-      <UForm :schema="schema" :state="state" class="space-y-6" @submit="onSubmit">
+      <UForm :schema="loginSchema" :state="state" class="space-y-6" @submit="onSubmit">
         <UFormField label="Email" name="email">
           <UInput v-model="state.email" placeholder="jane@example.com" class="w-full" />
         </UFormField>

@@ -1,12 +1,12 @@
 import { db, tables } from '#server/utils/db'
 
 import { loginUser } from '#server/services/login.service'
-import { LoginSchema } from '#shared/dto/login.dto'
+import { loginSchema } from '#shared/dto/login.dto'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
-  const result = LoginSchema.safeParse(body)
+  const result = loginSchema.safeParse(body)
 
   if (!result.success) {
     throw createError({

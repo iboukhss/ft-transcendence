@@ -1,24 +1,13 @@
 <script setup lang="ts">
-import { z } from 'zod'
+import type { RegisterDTO } from '#shared/dto/register.dto'
+import { registerSchema } from '#shared/dto/register.dto'
+
 import type { FormSubmitEvent, RadioGroupItem, SelectMenuItem } from '@nuxt/ui'
 
 // Good read: https://ui.nuxt.com/docs/components/form
 
-const schema = z.object({
-  accountType: z.enum(['freelancer', 'company']),
-  firstName: z.string().trim().min(1, 'First name is required'),
-  lastName: z.string().trim().min(1, 'Last name is required'),
-  // NOTE(isma): If email validation breaks try this instead:
-  // https://github.com/colinhacks/zod/issues/4642#issuecomment-2957508997
-  email: z.string().trim().toLowerCase().email('Invalid email'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-  country: z.enum(['be', 'fr', 'de', 'lu'], 'Please select a country')
-})
-
-type Schema = z.output<typeof schema>
-
 // Partial makes every property in Schema optional (T | undefined)
-const state = reactive<Partial<Schema>>({
+const state = reactive<Partial<RegisterDTO>>({
   accountType: 'freelancer',
   firstName: '',
   lastName: '',
@@ -42,7 +31,7 @@ const countries: SelectMenuItem[] = [
 const toast = useToast()
 const isLoading = ref(false)
 
-async function onSubmit(event: FormSubmitEvent<Schema>) {
+async function onSubmit(event: FormSubmitEvent<RegisterDTO>) {
   if (isLoading.value) {
     return
   }
@@ -86,7 +75,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
       <USeparator />
 
-      <UForm :schema="schema" :state="state" class="space-y-6" @submit="onSubmit">
+      <UForm :schema="registerSchema" :state="state" class="space-y-6" @submit="onSubmit">
         <UFormField name="accountType">
           <URadioGroup v-model="state.accountType" value-key="id" :items="accountTypes" />
         </UFormField>

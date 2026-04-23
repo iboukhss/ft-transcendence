@@ -1,31 +1,31 @@
 import { pgTable, serial, text, pgEnum, timestamp, integer, real } from 'drizzle-orm/pg-core'
 
 import {
-  RoleEnum,
-  CountryEnum,
-  WorkPlaceEnum,
-  LanguageEnum,
-  OfferStatusEnum,
-  OrderStatusEnum,
-  CategoryEnum,
-  SkillsEnum
+  ACCOUNT_TYPE_VALUES,
+  COUNTRY_VALUES,
+  WORKPLACE_VALUES,
+  LANGUAGE_VALUES,
+  OFFER_STATUS_VALUES,
+  ORDER_STATUS_VALUES,
+  CATEGORY_VALUES,
+  SKILLS_VALUES
 } from '#shared/constants/enums'
 
-export const roleEnum = pgEnum('roleEnum', RoleEnum)
+export const roleEnum = pgEnum('roleEnum', ACCOUNT_TYPE_VALUES)
 
-export const countryEnum = pgEnum('countryEnum', CountryEnum)
+export const countryEnum = pgEnum('countryEnum', COUNTRY_VALUES)
 
-export const workPlaceEnum = pgEnum('workPlaceEnum', WorkPlaceEnum)
+export const workPlaceEnum = pgEnum('workPlaceEnum', WORKPLACE_VALUES)
 
-export const languageEnum = pgEnum('languageEnum', LanguageEnum)
+export const languageEnum = pgEnum('languageEnum', LANGUAGE_VALUES)
 
-export const offerStatusEnum = pgEnum('offerStatusEnum', OfferStatusEnum)
+export const offerStatusEnum = pgEnum('offerStatusEnum', OFFER_STATUS_VALUES)
 
-export const orderStatusEnum = pgEnum('orderStatusEnum', OrderStatusEnum)
+export const orderStatusEnum = pgEnum('orderStatusEnum', ORDER_STATUS_VALUES)
 
-export const categoryEnum = pgEnum('categoryEnum', CategoryEnum)
+export const categoryEnum = pgEnum('categoryEnum', CATEGORY_VALUES)
 
-export const skillsEnum = pgEnum('skillsEnum', SkillsEnum)
+export const skillsEnum = pgEnum('skillsEnum', SKILLS_VALUES)
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),

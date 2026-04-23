@@ -7,6 +7,9 @@ export function toUserDTO(user: User) {
   return {
     id: user.id,
     email: user.email,
-    role: user.role
+    accountType: user.accountType,
+    roleType: user.roleType
   }
 }
+
+export type SessionUserDTO = ReturnType<typeof toUserDTO>

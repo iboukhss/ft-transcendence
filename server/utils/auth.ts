@@ -1,8 +1,12 @@
-export async function requireUser(event: any) {
-  // reuse if already resolved
-  if (event.context.user) {
-    return event.context.user
-  }
+import { SessionUserDTO } from '#server/dto/user.dto'
+
+type UserSession = {
+  user: SessionUserDTO
+}
+
+export async function requireUserSession(
+  event: any
+): Promise<UserSession> {
 
   const session = await getUserSession(event)
 
@@ -13,8 +17,5 @@ export async function requireUser(event: any) {
     })
   }
 
-  // cache user in request context
-  event.context.user = session.user
-
-  return session.user
+  return session as UserSession
 }

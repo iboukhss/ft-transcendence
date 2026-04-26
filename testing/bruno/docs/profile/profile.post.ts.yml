@@ -1,0 +1,27 @@
+info:
+  name: profile.post.ts
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: http://localhost:3000/api/profile/profile
+  body:
+    type: json
+    data: |-
+      {
+        "firstName": "Gustave",
+        "lastName": "Eiffel",
+        "country": "fr",
+        "houseNumber": 15, 
+        "street": "Champ de Mars",
+        "zip": "75007",
+        "language": "fr"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

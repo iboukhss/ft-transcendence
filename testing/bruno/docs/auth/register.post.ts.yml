@@ -1,0 +1,30 @@
+info:
+  name: register.post.ts
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:3000/api/auth/register
+  body:
+    type: json
+    data: |-
+      {
+        "accountType": "freelancer",
+        "firstName": "Max",
+        "lastName": "Mustermann",
+        "email": "42student@42luxembourg.lu",
+        "password": "myPassword",
+        "country": "lu",
+        "houseNumber": 14,
+        "street": "Porte de France",
+        "zip": "4360",
+        "language": "fr"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

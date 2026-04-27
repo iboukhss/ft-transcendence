@@ -7,6 +7,12 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   // From here: https://ui.nuxt.com/docs/getting-started/installation/nuxt
   css: ['~/assets/css/main.css'],
+  devServer: {
+    https: {
+      key: './localhost-key.pem',
+      cert: './localhost.pem'
+    }
+  },
   // Stops useAppConfig warning spam
   experimental: {
     serverAppConfig: false

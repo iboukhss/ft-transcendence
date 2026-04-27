@@ -9,7 +9,7 @@ export function toUserDTO(user: User) {
     id: user.id,
     email: user.email,
     accountType: user.accountType,
-    roleType: user.roleType
+    role: user.role
   }
 }
 

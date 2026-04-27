@@ -1,19 +1,13 @@
-import { requireUserSession } from '#server/utils/auth'
-
 export default defineEventHandler(async (event) => {
   try {
-    const user = await requireUser(event)
-
-    console.log('You are logged in.', user)
+    const session = await requireUserSession(event)
 
     return {
       loggedIn: true,
-      user
+      user: session.user
     }
   }
   catch (error) {
-    console.log('You must log in.')
-
     return {
       loggedIn: false
     }

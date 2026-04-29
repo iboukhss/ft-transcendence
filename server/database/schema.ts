@@ -54,16 +54,16 @@ export const profiles = pgTable('profiles', {
   updatedAt: timestamp('updated_at').defaultNow().notNull()
 })
 
-export const offers = pgTable('offers', {
+export const jobs = pgTable('jobs', {
   id: serial('id').primaryKey(),
   userId: integer('user_id').notNull().references(() => users.id),
   title: text('title').notNull(),
   description: text('description').notNull(),
   category: categoryEnum('category').notNull(),
-  skills: skillsEnum('skills').notNull(),
+  skills: skillsEnum('skills').array().notNull(),
   hourlyRate: real('hourly_rate').notNull(),
   duration: integer('duration').default(1).notNull(),
-  workPlace: workPlaceEnum('work_place').notNull(),
+  workplace: workPlaceEnum('workplace').notNull(),
   location: countryEnum('location').notNull(),
   status: offerStatusEnum('status').default('active').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -72,7 +72,7 @@ export const offers = pgTable('offers', {
 
 export const orders = pgTable('orders', {
   id: serial('id').primaryKey(),
-  offerId: integer('offer_id').notNull().references(() => offers.id),
+  jobId: integer('job_id').notNull().references(() => jobs.id),
   buyerId: integer('buyer_id').notNull().references(() => users.id),
   sellerId: integer('seller_id').notNull().references(() => users.id),
   price: real('price').notNull(),

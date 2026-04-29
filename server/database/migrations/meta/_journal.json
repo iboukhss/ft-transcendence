@@ -8,6 +8,13 @@
       "when": 1777277051497,
       "tag": "0000_typical_synch",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1777484317377,
+      "tag": "0001_bitter_madame_masque",
+      "breakpoints": true
     }
   ]
 }

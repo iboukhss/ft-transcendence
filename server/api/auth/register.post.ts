@@ -1,6 +1,6 @@
 import { toUserDTO } from '#server/dto/user.dto'
 // server/api/auth/register.post.ts
-import { registerUser } from '#server/services/register.service'
+import { registerUser } from '#server/services/auth/register.service.js'
 import { db, tables } from '#server/utils/db'
 import { registerSchema } from '#shared/dto/register.dto'
 

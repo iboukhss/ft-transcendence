@@ -1,4 +1,4 @@
-import { loginUser } from '#server/services/login.service'
+import { loginUser } from '#server/services/auth/login.service.js'
 import { db, tables } from '#server/utils/db'
 import { loginSchema } from '#shared/dto/login.dto'
 

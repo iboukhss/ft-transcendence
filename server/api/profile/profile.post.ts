@@ -1,4 +1,4 @@
-import { updateProfile } from '#server/services/update-profile.service'
+import { updateProfile } from '#server/services/profiles/update-profile.service'
 import { db, tables } from '#server/utils/db'
 import { profileSchema } from '#shared/dto/profile.dto'
 

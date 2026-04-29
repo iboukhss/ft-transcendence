@@ -1,4 +1,4 @@
-import { getProfile } from '#server/services/get-profile.service'
+import { getProfile } from '#server/services/profiles/get-profile.service'
 import { db, tables } from '#server/utils/db'
 
 export default defineEventHandler(async (event) => {

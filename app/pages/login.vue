@@ -27,6 +27,10 @@ async function onSubmit(event: FormSubmitEvent<LoginDTO>) {
       body: event.data
     })
 
+    // NOTE(isma): Had a race condition where the UI didn't update after login
+    const { fetch: refreshSession } = useUserSession()
+    await refreshSession()
+
     toast.add({
       title: 'Connected',
       description: 'Welcome back!',
@@ -52,7 +56,7 @@ async function onSubmit(event: FormSubmitEvent<LoginDTO>) {
   <div class="flex-1 flex flex-col items-center justify-center py-12 px-4">
     <div class="w-full max-w-lg space-y-6">
       <header class="text-center">
-        <h2 class="text-xl font-bold">Welcome Back</h2>
+        <h2 class="text-xl font-bold">Welcome back!</h2>
         <p class="text-sm text-muted">Enter your credentials to access your LuxLink account.</p>
       </header>
 

@@ -3,11 +3,11 @@ import type { ButtonProps } from '@nuxt/ui'
 
 const links = ref<ButtonProps[]>([
   {
-    label: 'Hire Top Talents',
+    label: 'Hire top talents',
     to: '/profiles'
   },
   {
-    label: 'Apply as a Freelancer',
+    label: 'Apply as a freelancer',
     to: '/jobs',
     variant: 'subtle'
   }

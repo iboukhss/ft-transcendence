@@ -10,7 +10,7 @@ http:
     type: json
     data: |-
       {
-        "accountType": "freelancer",
+        "accountType": "company",
         "firstName": "Max",
         "lastName": "Mustermann",
         "email": "42student@42luxembourg.lu",

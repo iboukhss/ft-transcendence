@@ -1,10 +1,13 @@
-import type { InferSelectModel } from 'drizzle-orm'
+import type { DBUser } from '#server/utils/db'
 
-import type { users } from '#server/database/schema'
+export interface SessionUserDTO {
+  id: number
+  email: string
+  accountType: string
+  role: string
+}
 
-type User = InferSelectModel<typeof users>
-
-export function toUserDTO(user: User) {
+export function toSessionUserDTO(user: DBUser): SessionUserDTO {
   return {
     id: user.id,
     email: user.email,
@@ -12,5 +15,3 @@ export function toUserDTO(user: User) {
     role: user.role
   }
 }
-
-export type SessionUserDTO = ReturnType<typeof toUserDTO>

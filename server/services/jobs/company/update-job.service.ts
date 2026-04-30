@@ -1,19 +1,11 @@
 import { eq, and } from 'drizzle-orm'
-import { success } from 'zod'
 
-import type { UserSession } from '#auth-utils'
 import type { DB, Tables } from '#server/utils/db'
 import type { JobDTO } from '#shared/dto/job.dto.js'
 
 import { toJobDTO } from '#server/dto/job.dto.js'
 
-export async function updateJob(db: DB, tables: Tables, session: UserSession, jobId: number, dto: JobDTO) {
-  if (!session.user?.id) {
-    throw createError({ statusCode: 401, message: 'Unauthorized' })
-  }
-
-  const userId = session.user.id
-
+export async function updateJob(db: DB, tables: Tables, userId: number, jobId: number, dto: JobDTO) {
   const [updatedJob] = await db
     .update(tables.jobs)
     .set({
@@ -31,7 +23,7 @@ export async function updateJob(db: DB, tables: Tables, session: UserSession, jo
     })
     .where(
       and(
-        eq(tables.jobs.userId, session.user.id),
+        eq(tables.jobs.userId, userId),
         eq(tables.jobs.id, jobId)
       )
     )

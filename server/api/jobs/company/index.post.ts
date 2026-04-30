@@ -1,6 +1,7 @@
 import { createJob } from '#server/services/jobs/company/create-job.service.js'
 import { db, tables } from '#server/utils/db'
 import { requireCompany } from '#server/utils/permission-utils.js'
+import { validateOrThrow } from '#server/utils/validateOrThrow'
 import { jobSchema } from '#shared/dto/job.dto'
 
 export default defineEventHandler(async (event) => {
@@ -12,13 +13,9 @@ export default defineEventHandler(async (event) => {
 
   const result = jobSchema.safeParse(body)
 
-  if (!result.success) {
-    throw createError({
-      statusCode: 400,
-      message: 'Invalid job format' })
-  }
+  const validData = await validateOrThrow(result)
 
-  const job = await createJob(db, tables, session, result.data)
+  const job = await createJob(db, tables, session.user.id, validData)
 
   return { job }
 })

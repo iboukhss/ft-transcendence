@@ -1,7 +1,7 @@
 info:
   name: profile.post.ts
   type: http
-  seq: 4
+  seq: 1
 
 http:
   method: POST
@@ -13,7 +13,7 @@ http:
         "firstName": "Gustave",
         "lastName": "Eiffel",
         "country": "fr",
-        "houseNumber": 15, 
+        "houseNumber": 14, 
         "street": "Champ de Mars",
         "zip": "75007",
         "language": "fr"

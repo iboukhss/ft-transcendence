@@ -1,15 +1,8 @@
 import { eq, and } from 'drizzle-orm'
 
-import type { UserSession } from '#auth-utils'
 import type { DB, Tables } from '#server/utils/db'
 
-export async function deleteJob(db: DB, tables: Tables, session: UserSession, jobId: number) {
-  if (!session.user?.id) {
-    throw createError({ statusCode: 401, message: 'Unauthorized' })
-  }
-
-  const userId = session.user.id
-
+export async function deleteJob(db: DB, tables: Tables, userId: number, jobId: number) {
   const deletedJob = await db
     .delete(tables.jobs)
     .where(

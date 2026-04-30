@@ -7,16 +7,13 @@ import { loginSchema } from '#shared/dto/login.dto'
 // https://unjs.io/blog/2023-08-15-h3-towards-the-edge-of-the-web#runtime-type-safe-request-utils
 
 export default defineEventHandler(async (event) => {
-  const { email, password } = await readValidatedBody(event, loginSchema.parse)
+  const body = await readBody(event)
 
-  const user = await loginUser(db, tables, email, password)
+  const result = loginSchema.safeParse(body)
 
-  if (!user) {
-    throw createError({
-      statusCode: 401,
-      message: 'Invalid email or password'
-    })
-  }
+  const validData = validateOrThrow(result)
+
+  const user = await loginUser(db, tables, validData)
 
   await setUserSession(event, {
     user: user,

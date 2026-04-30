@@ -9,16 +9,9 @@ export default defineEventHandler(async (event) => {
 
   const result = profileSchema.safeParse(body)
 
-  if (!result.success) {
-    throw createError({
-      statusCode: 400,
-      message: 'Invalid profile format'
-    })
-  }
+  const validData = validateOrThrow(result)
 
-  const userId = session.user.id
-
-  const profile = await updateProfile(db, tables, userId, result.data)
+  const profile = await updateProfile(db, tables, session.user.id, validData)
 
   return {
     profile

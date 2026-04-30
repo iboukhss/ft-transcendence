@@ -5,12 +5,12 @@ info:
 
 http:
   method: PUT
-  url: https://localhost:3000/api/jobs/company/3
+  url: https://localhost:3000/api/jobs/company/5
   body:
     type: json
     data: |-
       {
-        "title": "Road to Glory",
+        "title": "Artemis",
         "description": "My first mission description must have more than 30 characters!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
         "category": "devops",
         "skills": ["c", "golang"],

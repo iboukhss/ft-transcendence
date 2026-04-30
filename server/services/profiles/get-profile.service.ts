@@ -1,14 +1,12 @@
 import { eq } from 'drizzle-orm'
-import { toProfileResponseDTO } from '#server/dto/profile-response.dto.js'
 
-export async function getProfile(
-  db: any,
-  tables: any,
-  userId: number
-) {
-  const profile
-    = await db.query.profiles.findFirst({
+import type { DB, Tables } from '#server/utils/db'
 
+import { toProfileResponseDTO } from '#server/dto/profile.dto.js'
+
+export async function getProfile(db: DB, tables: Tables, userId: number) {
+  const profile = await db.query.profiles.findFirst(
+    {
       where:
         eq(
           tables.profiles.userId,

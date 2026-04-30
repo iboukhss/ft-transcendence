@@ -1,10 +1,14 @@
 import { eq } from 'drizzle-orm'
+
+import type { DB, Tables } from '#server/utils/db'
 import type { ProfileDTO } from '#shared/dto/profile.dto'
 
-export async function updateProfile(db: any, tables: any, userId: number, dto: ProfileDTO) {
+import { toProfileResponseDTO } from '#server/dto/profile.dto.js'
+
+export async function updateProfile(db: DB, tables: Tables, userId: number, dto: ProfileDTO) {
   const updates = {
-    ...(dto.firstName !== undefined && {     //...(condition && { key: value })
-      firstName: dto.firstName               //add field to the object "updates"
+    ...(dto.firstName !== undefined && { // ...(condition && { key: value })
+      firstName: dto.firstName // add field to the object "updates"
     }),
 
     ...(dto.lastName !== undefined && {
@@ -47,5 +51,5 @@ export async function updateProfile(db: any, tables: any, userId: number, dto: P
     })
   }
 
-  return profile
+  return toProfileResponseDTO(profile)
 }

@@ -18,3 +18,5 @@ export type DB = PostgresJsDatabase<typeof schema>
 export type Tables = typeof schema
 export type Transaction = Parameters<Parameters<DB['transaction']>[0]>[0]
 export type DBUser = InferSelectModel<typeof schema.users>
+export type DBJob = InferSelectModel<typeof schema.jobs>
+export type DBProfile = InferSelectModel<typeof schema.profiles>

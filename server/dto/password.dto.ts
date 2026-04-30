@@ -1,11 +1,11 @@
 import type { DBUser } from '#server/utils/db'
 
-export interface ChangePasswordResponse {
+export interface ChangePasswordResponseDTO {
   id: string | number
   updatedAt: string
 }
 
-export function toPasswordDTO(user: DBUser): ChangePasswordResponse {
+export function toPasswordDTO(user: DBUser): ChangePasswordResponseDTO {
   return {
     id: user.id,
     updatedAt: (user.updatedAt instanceof Date ? user.updatedAt : new Date()).toISOString()

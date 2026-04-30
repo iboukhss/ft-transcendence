@@ -10,7 +10,7 @@ http:
     type: json
     data: |-
       {
-        "title": "Road to Glory 22",
+        "title": "Road to Glory NEW ONE",
         "description": "My first mission description must have more than 30 characters!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
         "category": "devops",
         "skills": ["c"],

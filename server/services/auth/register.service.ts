@@ -1,10 +1,11 @@
 import { eq } from 'drizzle-orm'
 
+import type { DB, Tables, Transaction } from '#server/utils/db'
 import type { RegisterDTO } from '#shared/dto/register.dto'
 
-import { toUserDTO } from '#server/dto/user.dto'
+import { toSessionUserDTO } from '#server/dto/user.dto'
 
-export async function registerUser(db: any, tables: any, dto: RegisterDTO) {
+export async function registerUser(db: DB, tables: Tables, dto: RegisterDTO) {
   const existingUser = await db.query.users.findFirst({
     where: eq(tables.users.email, dto.email)
   })
@@ -15,7 +16,7 @@ export async function registerUser(db: any, tables: any, dto: RegisterDTO) {
 
   const hashedPassword = await hashPassword(dto.password)
 
-  return await db.transaction(async (tx: any) => {
+  return await db.transaction(async (tx: Transaction) => {
     // 1. Create auth user
     const result = await tx
       .insert(tables.users)
@@ -52,6 +53,6 @@ export async function registerUser(db: any, tables: any, dto: RegisterDTO) {
     })
 
     // 3. Return safe DTO
-    return toUserDTO(user)
+    return toSessionUserDTO(user)
   })
 }

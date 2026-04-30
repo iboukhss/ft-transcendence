@@ -1,5 +1,7 @@
 import { updateJob } from '#server/services/jobs/company/update-job.service.js'
+import { db, tables } from '#server/utils/db'
 import { requireCompany } from '#server/utils/permission-utils.js'
+import { validateOrThrow } from '#server/utils/validateOrThrow'
 import { jobSchema } from '#shared/dto/job.dto.js'
 
 export default defineEventHandler(async (event) => {
@@ -11,11 +13,7 @@ export default defineEventHandler(async (event) => {
 
   const result = jobSchema.safeParse(body)
 
-  if (!result.success) {
-    throw createError({
-      statusCode: 400,
-      message: 'Invalid job format' })
-  }
+  const validData = await validateOrThrow(result)
 
   const jobId = getRouterParam(event, 'id')
 
@@ -26,7 +24,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const updatedJob = await updateJob(db, tables, session, Number(jobId), result.data)
+  const updatedJob = await updateJob(db, tables, session.user.id, Number(jobId), validData)
 
   return { updatedJob }
 })

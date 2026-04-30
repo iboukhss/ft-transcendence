@@ -1,6 +1,7 @@
 // Read the docs
 // https://orm.drizzle.team/docs/get-started-postgresql
 
+import type { InferSelectModel } from 'drizzle-orm'
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 
 import { drizzle } from 'drizzle-orm/postgres-js'
@@ -16,3 +17,4 @@ export const db = drizzle(queryClient, { schema })
 export type DB = PostgresJsDatabase<typeof schema>
 export type Tables = typeof schema
 export type Transaction = Parameters<Parameters<DB['transaction']>[0]>[0]
+export type DBUser = InferSelectModel<typeof schema.users>

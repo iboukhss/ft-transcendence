@@ -5,11 +5,7 @@ export interface ChangePasswordResponse {
   updatedAt: string
 }
 
-export function toPasswordDTO(user: DBUser | undefined | null): ChangePasswordResponse | null {
-  if (!user) {
-    return null
-  }
-
+export function toPasswordDTO(user: DBUser): ChangePasswordResponse {
   return {
     id: user.id,
     updatedAt: (user.updatedAt instanceof Date ? user.updatedAt : new Date()).toISOString()

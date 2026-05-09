@@ -11,9 +11,9 @@ http:
     data: |-
       {
         "accountType": "company",
-        "firstName": "Max",
-        "lastName": "Mustermann",
-        "email": "42student@42luxembourg.lu",
+        "firstName": "Heck",
+        "lastName": "Dennis",
+        "email": "hd@gmail.com",
         "password": "myPassword",
         "country": "lu",
         "houseNumber": 14,

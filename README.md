@@ -4,16 +4,22 @@
 - Node.js v24+
 - npm
 - Docker and Docker Compose
-- Git
 
-## Node modules used
-- nuxt
+## Stack
+- **Framework:** Nuxt 4 (full-stack)
+- **Database:** PostgreSQL
+- **ORM:** Drizzle ORM
+- **Form validation:** Zod
+- **Styling:** Nuxt UI with Tailwind CSS
+- **Auth:** [nuxt-auth-utils](https://nuxt.com/modules/auth-utils)
+
+## Development dependencies
+- drizzle-kit
 - @nuxt/eslint
-- drizzle-orm
-- zod
-- nuxt-auth-utils
-- @nuxt/ui
-- tailwindcss
+- eslint-plugin-perfectionist
+- eslint-plugin-tailwindcss
+- bruno
+- mkcert
 
 ## Initial dev setup
 
@@ -21,17 +27,19 @@
 # 1. Copy the environment file
 cp .env.example .env
 
-# 2. Install all dependencies
+# 2. Generate HTTPS keys (important!)
+sudo apt install mkcert
+mkcert -install
+mkcert localhost
+
+# 3. Install the project dependencies
 npm install
 
-# 3. Start the Postgres container
+# 4. Start the database container
 docker compose up -d
 
-# 4. Push the schema to the newly created database
-npm run db:push
-
-# 5. Populate the database with some test data
-npm run db:seed
+# 5. Apply SQL migrations
+npm run db:migrate
 
 # 6. Start the server
 npm run dev
@@ -49,10 +57,13 @@ npm run dev
 npm run lint
 npm run lint:fix
 
-# Database operations
+# Database operations (Drizzle)
 npm run db:push
+npm run db:generate
+npm run db:migrate
+npm run db:studio
 npm run db:seed
 
-# Start Drizzle Studio
-npx drizzle-kit studio
+# Other
+npm run typecheck
 ```

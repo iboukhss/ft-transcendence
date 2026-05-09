@@ -1,11 +1,13 @@
 // @ts-check
 import perfectionist from 'eslint-plugin-perfectionist'
+import tailwind from 'eslint-plugin-tailwindcss'
 
 import withNuxt from './.nuxt/eslint.config.mjs'
 
 export default withNuxt({
   plugins: {
-    perfectionist
+    perfectionist,
+    tailwind
   },
   rules: {
     // NOTE(isma): I have personally found these settings incredibly annoying while editing
@@ -13,6 +15,7 @@ export default withNuxt({
     'vue/first-attribute-linebreak': 'off',
     'vue/singleline-html-element-content-newline': 'off',
     'vue/html-closing-bracket-newline': 'off',
+    'vue/no-multi-spaces': 'off',
 
     // Read here: https://perfectionist.dev/rules/sort-imports.html
     'perfectionist/sort-imports': [
@@ -21,6 +24,8 @@ export default withNuxt({
         type: 'alphabetical',
         order: 'asc'
       }
-    ]
+    ],
+
+    'tailwind/classnames-order': 'warn'
   }
 })

@@ -53,11 +53,11 @@ async function onSubmit(event: FormSubmitEvent<LoginDTO>) {
 </script>
 
 <template>
-  <div class="flex-1 flex flex-col items-center justify-center py-12 px-4">
-    <div class="w-full max-w-lg space-y-6">
+  <div class="flex flex-1 flex-col items-center justify-center px-4">
+    <div class="w-full max-w-xl space-y-6">
       <header class="text-center">
         <h2 class="text-xl font-bold">Welcome back!</h2>
-        <p class="text-sm text-muted">Enter your credentials to access your LuxLink account.</p>
+        <p class="text-muted text-sm">Enter your credentials to access your LuxLink account.</p>
       </header>
 
       <USeparator />

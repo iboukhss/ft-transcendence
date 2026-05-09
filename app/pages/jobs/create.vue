@@ -11,8 +11,8 @@ const state = reactive<Partial<JobDTO>>({
   title: '',
   category: undefined,
   skills: [],
-  durationMonths: 3,
-  rate: undefined,
+  duration: 3,
+  hourlyRate: undefined,
   workplace: undefined,
   description: ''
 })
@@ -34,7 +34,7 @@ const skillOptions: SelectMenuItem[] = SKILL_KEYS.map(k => ({
 </script>
 
 <template>
-  <div class="flex-1 flex flex-col items-center py-12 px-4">
+  <div class="flex flex-1 flex-col items-center px-4">
     <div class="w-full max-w-lg space-y-6">
       <header class="text-center">
         <h2 class="text-xl font-bold">Post a new job</h2>
@@ -66,9 +66,9 @@ const skillOptions: SelectMenuItem[] = SKILL_KEYS.map(k => ({
           />
         </UFormField>
 
-        <UFormField :label="`Duration: ${state.durationMonths} months`" name="durationMonths">
+        <UFormField :label="`Duration: ${state.duration} months`" name="durationMonths">
           <USlider
-            v-model="state.durationMonths"
+            v-model="state.duration"
             :min="1" :max="12" :step="1"
             class="w-full"
           />
@@ -76,7 +76,7 @@ const skillOptions: SelectMenuItem[] = SKILL_KEYS.map(k => ({
 
         <UFormField label="Budget" name="rate">
           <UInput
-            v-model="state.rate"
+            v-model="state.hourlyRate"
             type="number"
             placeholder="15.00"
             min="0" step="0.01"

@@ -6,5 +6,5 @@ export default defineEventHandler(async (event) => {
 
   const profile = await getProfile(db, tables, session.user.id)
 
-  return { profile }
+  return profile
 })

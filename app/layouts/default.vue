@@ -30,6 +30,11 @@ const userMenuItems = computed<DropdownMenuItem[][]>(() => [
       label: 'My jobs',
       icon: 'i-lucide-briefcase',
       to: '/my-jobs'
+    },
+    {
+      label: 'Settings',
+      icon: 'i-lucide-settings',
+      to: '/settings'
     }
   ],
   [
@@ -51,7 +56,7 @@ const logout = async () => {
 </script>
 
 <template>
-  <UApp>
+  <div>
     <UHeader title="LuxLink">
       <template #left>
         <NuxtLink to="/">
@@ -87,13 +92,22 @@ const logout = async () => {
     </UHeader>
 
     <UMain>
-      <slot />
+      <UContainer class="py-10">
+        <slot />
+      </UContainer>
     </UMain>
 
     <UFooter>
       <template #left>
-        <span class="text-sm text-muted">© 2026 42 Luxembourg Students</span>
+        <span class="text-muted text-sm">© 2026 42 Luxembourg students</span>
+      </template>
+
+      <template #right>
+        <div class="text-muted flex gap-6 text-sm">
+          <ULink to="/terms">Terms of service</ULink>
+          <ULink to="/privacy">Privacy policy</ULink>
+        </div>
       </template>
     </UFooter>
-  </UApp>
+  </div>
 </template>

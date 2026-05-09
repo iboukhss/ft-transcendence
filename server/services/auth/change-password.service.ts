@@ -2,11 +2,11 @@ import { eq } from 'drizzle-orm'
 
 import type { UserSession } from '#auth-utils'
 import type { DB, Tables } from '#server/utils/db'
-import type { passwordDTO } from '#shared/dto/password.dto'
+import type { PasswordDTO } from '#shared/dto/password.dto'
 
 import { toPasswordDTO } from '#server/dto/password.dto.js'
 
-export async function changePassword(db: DB, tables: Tables, session: UserSession, dto: passwordDTO) {
+export async function changePassword(db: DB, tables: Tables, session: UserSession, dto: PasswordDTO) {
   if (!session.user?.id) {
     throw createError({
       statusCode: 401,

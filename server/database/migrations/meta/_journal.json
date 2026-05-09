@@ -15,6 +15,13 @@
       "when": 1777484317377,
       "tag": "0001_bitter_madame_masque",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1777546149703,
+      "tag": "0002_flawless_slyde",
+      "breakpoints": true
     }
   ]
 }

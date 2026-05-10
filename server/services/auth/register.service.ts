@@ -40,16 +40,9 @@ export async function registerUser(db: DB, tables: Tables, dto: RegisterDTO) {
     // 2. Create profile
     await tx.insert(tables.profiles).values({
       userId: user.id,
-
       firstName: dto.firstName,
       lastName: dto.lastName,
-
-      houseNumber: dto.houseNumber,
-      street: dto.street,
-      zip: dto.zip,
-
-      country: dto.country,
-      language: dto.language
+      country: dto.country
     })
 
     // 3. Return safe DTO

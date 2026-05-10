@@ -1,17 +1,14 @@
+// public account information dto
+
 import { z } from 'zod'
 
-import { COUNTRY_KEYS, LANGUAGE_KEYS } from '#shared/constants/enums'
+import { LANGUAGE_KEYS, SKILL_KEYS, COUNTRY_KEYS } from '#shared/constants/enums'
 
 export const profileSchema = z.object({
-  firstName: z.string().trim().min(1, 'First name is required'),
-  lastName: z.string().trim().min(1, 'Last name is required'),
-  country: z.enum(COUNTRY_KEYS, 'Please select a country'),
-
-  // Unused for now
-  houseNumber: z.int().optional(),
-  street: z.string().trim().min(1).optional(),
-  zip: z.string().trim().min(1).optional(),
+  country: z.enum(COUNTRY_KEYS, 'Please select a country').optional(),
+  about: z.string().trim().min(50, 'About me is required').optional(),
+  skills: z.enum(SKILL_KEYS).optional(),
   language: z.enum(LANGUAGE_KEYS).optional()
-})
+}).strict()
 
 export type ProfileDTO = z.infer<typeof profileSchema>

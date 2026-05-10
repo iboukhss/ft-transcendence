@@ -49,6 +49,9 @@ export const profiles = pgTable('profiles', {
   street: text('street'),
   zip: text('zip'),
   country: countryEnum('country').notNull(),
+  avatar: text('avatar'),
+  about: text('about'),
+  skills: skillsEnum('skills').array(),
   language: languageEnum('language'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull()

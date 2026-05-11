@@ -1,22 +1,11 @@
 import { eq } from 'drizzle-orm'
 
-import type { UserSession } from '#auth-utils'
 import type { DB, Tables } from '#server/utils/db'
 import type { PasswordDTO } from '#shared/dto/password.dto'
 
 import { toPasswordResponseDTO } from '#server/dto/password.dto.js'
 
-export async function changePassword(db: DB, tables: Tables, session: UserSession, dto: PasswordDTO) {
-  if (!session.user?.id) {
-    throw createError({
-      statusCode: 401,
-      message: 'Unauthorized',
-      statusMessage: 'User not logged in'
-    })
-  }
-
-  const userId = session.user.id
-
+export async function changePassword(db: DB, tables: Tables, userId: number, dto: PasswordDTO) {
   // check that oldPassword hash matches db
   const user = await db.query.users.findFirst({
     where: eq(tables.users.id, userId)

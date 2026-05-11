@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
 
   const validData = await validateOrThrow(result)
 
-  const changedPassword = await changePassword(db, tables, session, validData)
+  const changedPassword = await changePassword(db, tables, session.user.id, validData)
 
   return changedPassword
 })

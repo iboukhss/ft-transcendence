@@ -4,18 +4,15 @@ info:
   seq: 1
 
 http:
-  method: POST
-  url: https://localhost:3000/api/profile/profile
+  method: PATCH
+  url: https://localhost:3000/api/profile
   body:
     type: json
     data: |-
       {
-        "firstName": "Gustave",
-        "lastName": "Eiffel",
         "country": "fr",
-        "houseNumber": 14, 
-        "street": "Champ de Mars",
-        "zip": "75007",
+        "about": "some random text with a minimum of 50 characters. so this needs to be quite looooooooooooooooooooooooooooooooooooooooooooooooong yes we can", 
+        "skills": ["c", "golang"],
         "language": "fr"
       }
   auth: inherit

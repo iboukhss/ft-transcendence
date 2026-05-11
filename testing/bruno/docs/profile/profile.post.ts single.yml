@@ -1,0 +1,21 @@
+info:
+  name: profile.post.ts single
+  type: http
+  seq: 3
+
+http:
+  method: PATCH
+  url: https://localhost:3000/api/profile
+  body:
+    type: json
+    data: |-
+      {
+          "about": "Imagine Dragons (engl. für Stell dir Drachen vor!) ist eine US-amerikanische Band aus Las Vegas, Nevada. Sie wurde im Jahre 2008 gegründet und 2012 durch die Songs It’s Time und Radioactive bekannt. Mit über 70 Millionen zertifiziert verkauften Tonträgern ist sie eine der kommerziell erfolgreichsten Gruppen des 21. Jahrhunderts." 
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -13,13 +13,9 @@ http:
         "accountType": "company",
         "firstName": "Heck",
         "lastName": "Dennis",
-        "email": "hd@gmail.com",
-        "password": "myPassword",
-        "country": "lu",
-        "houseNumber": 14,
-        "street": "Porte de France",
-        "zip": "4360",
-        "language": "fr"
+        "email": "heckde@gmail.com",
+        "password": "newPassword",
+        "country": "lu"
       }
   auth: inherit
 

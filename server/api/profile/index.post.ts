@@ -13,7 +13,5 @@ export default defineEventHandler(async (event) => {
 
   const profile = await updateProfile(db, tables, session.user.id, validData)
 
-  return {
-    profile
-  }
+  return profile
 })

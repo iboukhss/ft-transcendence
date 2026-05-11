@@ -17,5 +17,5 @@ export default defineEventHandler(async (event) => {
 
   const job = await createJob(db, tables, session.user.id, validData)
 
-  return { job }
+  return job
 })

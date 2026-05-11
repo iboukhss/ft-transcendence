@@ -18,5 +18,5 @@ export default defineEventHandler(async (event) => {
 
   const deletedJob = await deleteJob(db, tables, session.user.id, Number(jobId))
 
-  return { deletedJob }
+  return deletedJob
 })

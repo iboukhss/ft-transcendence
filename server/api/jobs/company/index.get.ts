@@ -9,5 +9,5 @@ export default defineEventHandler(async (event) => {
 
   const jobs = await getJobs(db, tables, session.user.id)
 
-  return { jobs }
+  return jobs
 })

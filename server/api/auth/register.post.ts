@@ -15,7 +15,5 @@ export default defineEventHandler(async (event) => {
     user
   })
 
-  return {
-    user
-  }
+  return user
 })

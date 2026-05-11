@@ -20,5 +20,5 @@ export default defineEventHandler(async (event) => {
     loggedInAt: new Date()
   })
 
-  return { user }
+  return user
 })

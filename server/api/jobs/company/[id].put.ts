@@ -26,5 +26,5 @@ export default defineEventHandler(async (event) => {
 
   const updatedJob = await updateJob(db, tables, session.user.id, Number(jobId), validData)
 
-  return { updatedJob }
+  return updatedJob
 })

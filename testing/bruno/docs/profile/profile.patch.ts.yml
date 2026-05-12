@@ -1,5 +1,5 @@
 info:
-  name: profile.post.ts
+  name: profile.patch.ts
   type: http
   seq: 1
 
@@ -10,10 +10,10 @@ http:
     type: json
     data: |-
       {
-        "country": "fr",
+        "country": "lu",
         "about": "some random text with a minimum of 50 characters. so this needs to be quite looooooooooooooooooooooooooooooooooooooooooooooooong yes we can", 
         "skills": ["c", "golang"],
-        "language": "fr"
+        "language": ["de", "fr"]
       }
   auth: inherit
 

@@ -1,20 +1,18 @@
-import type { DBProfile } from '#server/utils/db.js'
+import type { AccountDTO } from '#shared/dto/account.dto.js'
 
 export interface AccountResponseDTO {
-  firstName: string
-  lastName: string
-  houseNumber: number | null
-  street: string | null
-  zip: string | null
+  email: string // table users
+  houseNumber: number | null // table profiles
+  street: string | null // table profiles
+  zip: string | null // table profiles
 }
 
-export function toAccountResponseDTO(profile: DBProfile): AccountResponseDTO {
+export function toAccountResponseDTO(account: AccountDTO): AccountResponseDTO {
   return {
 
-    firstName: profile.firstName,
-    lastName: profile.lastName,
-    houseNumber: profile.houseNumber,
-    street: profile.street,
-    zip: profile.zip
+    email: account.email,
+    houseNumber: account.houseNumber,
+    street: account.street,
+    zip: account.zip
   }
 }

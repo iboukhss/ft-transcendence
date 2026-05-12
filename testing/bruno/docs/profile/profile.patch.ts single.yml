@@ -1,0 +1,22 @@
+info:
+  name: profile.patch.ts single
+  type: http
+  seq: 3
+
+http:
+  method: PATCH
+  url: https://localhost:3000/api/profile
+  body:
+    type: json
+    data: |-
+      {
+          "about": "some random text with a minimum of 50 characters. so this needs to be quite looooooooooooooooooooooooooooooooooooooooooooooooong yes we can",
+        "languages": ["de", "fr"]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,5 +1,5 @@
 info:
-  name: profile.post.ts
+  name: profile.patch.ts
   type: http
   seq: 1
 
@@ -10,9 +10,8 @@ http:
     type: json
     data: |-
       {
-        "firstName": "Gustave",
-        "lastName": "Eiffel",
-        "houseNumber": 14, 
+        "email": "Gustave@hotmail.com",
+        "houseNumber": null, 
         "street": "Champ de Mars",
         "zip": "75007"
       }

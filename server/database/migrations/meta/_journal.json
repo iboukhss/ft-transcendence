@@ -29,6 +29,20 @@
       "when": 1778425935050,
       "tag": "0003_real_scrambler",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1778616224427,
+      "tag": "0004_light_klaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1778616514130,
+      "tag": "0005_narrow_abomination",
+      "breakpoints": true
     }
   ]
 }

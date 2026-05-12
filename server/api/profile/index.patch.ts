@@ -1,4 +1,4 @@
-import { patchProfile } from '#server/services/profiles/patch-profile.service'
+import { patchProfile } from '#server/services/profile/patch-profile.service.js'
 import { db, tables } from '#server/utils/db'
 import { profileSchema } from '#shared/dto/profile.dto'
 

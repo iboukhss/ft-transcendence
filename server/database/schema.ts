@@ -52,7 +52,7 @@ export const profiles = pgTable('profiles', {
   avatar: text('avatar'),
   about: text('about'),
   skills: skillsEnum('skills').array(),
-  language: languageEnum('language'),
+  languages: languageEnum('languages').array(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull()
 })

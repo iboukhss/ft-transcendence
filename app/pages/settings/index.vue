@@ -39,7 +39,7 @@ const saveProfile = async () => {
       title: 'Profile updated',
       description: 'Your changes have been saved sucessfully.',
       color: 'success',
-      icon: 'i-lucide-check-circle'
+      icon: 'i-lucide-circle-check'
     })
   }
   catch (err) {
@@ -47,7 +47,7 @@ const saveProfile = async () => {
       title: 'Update failed',
       description: 'Something went wrong while saving your profile.',
       color: 'error',
-      icon: 'i-lucide-x-cirle'
+      icon: 'i-lucide-circle-x'
     })
   }
 }

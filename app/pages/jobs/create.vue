@@ -98,12 +98,14 @@ const skillOptions: SelectMenuItem[] = SKILL_KEYS.map(k => ({
 
         <UFormField
           label="Job description"
-          name="description">
+          name="description"
+        >
           <UTextarea
             v-model="state.description"
             placeholder="Write something..."
             :rows="5"
-            class="w-full" />
+            class="w-full"
+          />
         </UFormField>
 
         <UButton type="submit" block size="lg">

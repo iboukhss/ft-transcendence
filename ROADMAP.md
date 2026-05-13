@@ -40,11 +40,11 @@ Closest example projects ideas: **Marketplace Platform**, **Pet Adoption Platfor
 | ✅ | Use a framework for both the frontend and backend | 2 pts |
 | ⚫ | Use a frontend framework | 1 pt |
 | ⚫ | Use a backend framework | 1 pt |
-| ❔ | Implement real-time features using WebSockets or similar technology | 1 pt |
-| ❔ | Allow users to interact with each other | 2 pts |
+| ❌ | Implement real-time features using WebSockets or similar technology | 1 pt |
+| ❌ | Allow users to interact with each other | 2 pts |
 | ✅ | Implement a public API | 2 pts |
 | ✅ | Use an ORM for the database | 1 pt |
-| ❌ | Implement a complete notification system | 1 pt |
+| ❔ | Implement a complete notification system | 1 pt |
 | ✅ | Server-Side Rendering | 1 pt |
 | ❌ | Progressive Web App (PWA) with offline support and installability | 1 pt |
 | ❔ | Custom-made design system with reusable components | 1 pt |

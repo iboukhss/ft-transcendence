@@ -8,9 +8,11 @@ export const WORKPLACE_KEYS = ['on_site', 'remote', 'hybrid'] as const
 
 export const LANGUAGE_KEYS = ['en', 'de', 'fr', 'lu'] as const
 
-export const OFFER_STATUS_KEYS = ['active', 'paused', 'deleted'] as const
+export const JOB_STATUS_KEYS = ['active', 'paused', 'deleted', 'booked'] as const
 
-export const ORDER_STATUS_KEYS = ['pending', 'accepted', 'rejected', 'completed', 'cancelled'] as const
+export const OFFER_STATUS_KEYS = ['pending', 'withdrawn', 'accepted', 'rejected'] as const
+
+export const BOOKING_STATUS_KEYS = ['upcoming', 'ongoing', 'completed', 'cancelled', 'disputed'] as const
 
 export const SKILL_KEYS = [
   'c',

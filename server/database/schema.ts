@@ -1,4 +1,4 @@
-import { pgTable, serial, text, pgEnum, timestamp, integer, real } from 'drizzle-orm/pg-core'
+import { pgTable, unique, serial, text, pgEnum, timestamp, integer, real } from 'drizzle-orm/pg-core'
 
 import {
   ROLE_KEYS,
@@ -7,9 +7,10 @@ import {
   WORKPLACE_KEYS,
   LANGUAGE_KEYS,
   OFFER_STATUS_KEYS,
-  ORDER_STATUS_KEYS,
+  BOOKING_STATUS_KEYS,
   JOB_CATEGORY_KEYS,
-  SKILL_KEYS
+  SKILL_KEYS,
+  JOB_STATUS_KEYS
 } from '#shared/constants/enums'
 
 export const roleEnum = pgEnum('roleEnum', ROLE_KEYS)
@@ -22,9 +23,11 @@ export const workPlaceEnum = pgEnum('workPlaceEnum', WORKPLACE_KEYS)
 
 export const languageEnum = pgEnum('languageEnum', LANGUAGE_KEYS)
 
+export const jobStatusEnum = pgEnum('jobStatusEnum', JOB_STATUS_KEYS)
+
 export const offerStatusEnum = pgEnum('offerStatusEnum', OFFER_STATUS_KEYS)
 
-export const orderStatusEnum = pgEnum('orderStatusEnum', ORDER_STATUS_KEYS)
+export const bookingStatusEnum = pgEnum('bookingStatusEnum', BOOKING_STATUS_KEYS)
 
 export const categoryEnum = pgEnum('categoryEnum', JOB_CATEGORY_KEYS)
 
@@ -95,18 +98,46 @@ export const jobs = pgTable('jobs', {
   duration: integer('duration').default(1).notNull(),
   workplace: workPlaceEnum('workplace').notNull(),
   location: countryEnum('location').notNull(),
-  status: offerStatusEnum('status').default('active').notNull(),
+  status: jobStatusEnum('status').default('active').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull()
 })
 
-export const orders = pgTable('orders', {
+export const bookings = pgTable('bookings', {
   id: serial('id').primaryKey(),
+  offerId: integer('offer_id').notNull().references(() => offers.id),
   jobId: integer('job_id').notNull().references(() => jobs.id),
   buyerId: integer('buyer_id').notNull().references(() => users.id),
   sellerId: integer('seller_id').notNull().references(() => users.id),
   price: real('price').notNull(),
-  status: orderStatusEnum('status').default('pending').notNull(),
+  hourlyRate: real('hourly_rate').notNull(),
+  duration: integer('duration').notNull(),
+  workplace: workPlaceEnum('workplace'),
+  status: bookingStatusEnum('status').default('upcoming').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull()
+}, table => ({
+  oncePerOffer: unique().on(table.offerId)
+}))
+
+export const offers = pgTable('offers', {
+  id: serial('id').primaryKey(),
+  jobId: integer('job_id').notNull().references(() => jobs.id),
+  buyerId: integer('buyer_id').notNull().references(() => users.id),
+  sellerId: integer('seller_id').notNull().references(() => users.id),
+  status: offerStatusEnum('status').default('pending').notNull(),
+  motivationLetter: text('motivation_letter').notNull(),
+  proposedHourlyRate: real('proposed_hourly_rate'),
+  proposedDuration: integer('proposed_duration'),
+  proposedWorkplace: workPlaceEnum('proposed_workplace'),
+  buyerAgreed: timestamp('buyer_agreed'),
+  sellerAgreed: timestamp('seller_agreed'),
+  buyerDeclined: timestamp('buyer_declined'),
+  sellerDeclined: timestamp('seller_declined'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull()
+}, (table) => {
+  return {
+    oncePerOffer: unique().on(table.jobId, table.sellerId)
+  }
 })

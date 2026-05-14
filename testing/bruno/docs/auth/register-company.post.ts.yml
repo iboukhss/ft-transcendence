@@ -1,0 +1,26 @@
+info:
+  name: register-company.post.ts
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: https://localhost:3000/api/auth/register
+  body:
+    type: json
+    data: |-
+      {
+        "accountType": "company",
+        "firstName": "Heck",
+        "lastName": "Dennis",
+        "email": "heckde@gmail.com",
+        "password": "newPassword",
+        "country": "lu"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

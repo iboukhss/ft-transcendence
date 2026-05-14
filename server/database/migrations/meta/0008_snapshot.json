@@ -1,11 +1,11 @@
 {
-  "id": "cb748624-4055-41bf-80b9-3794b26ff760",
-  "prevId": "e5442942-5739-49a3-8f28-7348a16b2218",
+  "id": "ada41646-f288-47e9-8417-69151bcd5498",
+  "prevId": "1b694174-ef0a-439f-8b24-d440789299fd",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.company_profiles": {
-      "name": "company_profiles",
+    "public.bookings": {
+      "name": "bookings",
       "schema": "",
       "columns": {
         "id": {
@@ -14,154 +14,62 @@
           "primaryKey": true,
           "notNull": true
         },
-        "user_id": {
-          "name": "user_id",
+        "offer_id": {
+          "name": "offer_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
-        "company_name": {
-          "name": "company_name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "country": {
-          "name": "country",
-          "type": "countryEnum",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "website": {
-          "name": "website",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "logo": {
-          "name": "logo",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "description": {
-          "name": "description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "company_profiles_user_id_users_id_fk": {
-          "name": "company_profiles_user_id_users_id_fk",
-          "tableFrom": "company_profiles",
-          "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "company_profiles_user_id_unique": {
-          "name": "company_profiles_user_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "user_id"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.freelancer_profiles": {
-      "name": "freelancer_profiles",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "user_id": {
-          "name": "user_id",
+        "job_id": {
+          "name": "job_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
-        "first_name": {
-          "name": "first_name",
-          "type": "text",
+        "buyer_id": {
+          "name": "buyer_id",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
-        "last_name": {
-          "name": "last_name",
-          "type": "text",
+        "seller_id": {
+          "name": "seller_id",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
-        "country": {
-          "name": "country",
-          "type": "countryEnum",
-          "typeSchema": "public",
+        "price": {
+          "name": "price",
+          "type": "real",
           "primaryKey": false,
           "notNull": true
-        },
-        "avatar": {
-          "name": "avatar",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "bio": {
-          "name": "bio",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "skills": {
-          "name": "skills",
-          "type": "skillsEnum[]",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "languages": {
-          "name": "languages",
-          "type": "languageEnum[]",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false
         },
         "hourly_rate": {
           "name": "hourly_rate",
           "type": "real",
           "primaryKey": false,
+          "notNull": true
+        },
+        "duration": {
+          "name": "duration",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "workplace": {
+          "name": "workplace",
+          "type": "workPlaceEnum",
+          "typeSchema": "public",
+          "primaryKey": false,
           "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "bookingStatusEnum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'upcoming'"
         },
         "created_at": {
           "name": "created_at",
@@ -180,27 +88,66 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "freelancer_profiles_user_id_users_id_fk": {
-          "name": "freelancer_profiles_user_id_users_id_fk",
-          "tableFrom": "freelancer_profiles",
-          "tableTo": "users",
+        "bookings_offer_id_offers_id_fk": {
+          "name": "bookings_offer_id_offers_id_fk",
+          "tableFrom": "bookings",
+          "tableTo": "offers",
           "columnsFrom": [
-            "user_id"
+            "offer_id"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "bookings_job_id_jobs_id_fk": {
+          "name": "bookings_job_id_jobs_id_fk",
+          "tableFrom": "bookings",
+          "tableTo": "jobs",
+          "columnsFrom": [
+            "job_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "bookings_buyer_id_users_id_fk": {
+          "name": "bookings_buyer_id_users_id_fk",
+          "tableFrom": "bookings",
+          "tableTo": "users",
+          "columnsFrom": [
+            "buyer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "bookings_seller_id_users_id_fk": {
+          "name": "bookings_seller_id_users_id_fk",
+          "tableFrom": "bookings",
+          "tableTo": "users",
+          "columnsFrom": [
+            "seller_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "freelancer_profiles_user_id_unique": {
-          "name": "freelancer_profiles_user_id_unique",
+        "bookings_offer_id_unique": {
+          "name": "bookings_offer_id_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "user_id"
+            "offer_id"
           ]
         }
       },
@@ -279,7 +226,7 @@
         },
         "status": {
           "name": "status",
-          "type": "offerStatusEnum",
+          "type": "jobStatusEnum",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
@@ -322,8 +269,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.orders": {
-      "name": "orders",
+    "public.offers": {
+      "name": "offers",
       "schema": "",
       "columns": {
         "id": {
@@ -350,19 +297,62 @@
           "primaryKey": false,
           "notNull": true
         },
-        "price": {
-          "name": "price",
-          "type": "real",
-          "primaryKey": false,
-          "notNull": true
-        },
         "status": {
           "name": "status",
-          "type": "orderStatusEnum",
+          "type": "offerStatusEnum",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'pending'"
+        },
+        "motivation_letter": {
+          "name": "motivation_letter",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "proposed_hourly_rate": {
+          "name": "proposed_hourly_rate",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "proposed_duration": {
+          "name": "proposed_duration",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "proposed_workplace": {
+          "name": "proposed_workplace",
+          "type": "workPlaceEnum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "buyer_agreed": {
+          "name": "buyer_agreed",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seller_agreed": {
+          "name": "seller_agreed",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "buyer_declined": {
+          "name": "buyer_declined",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seller_declined": {
+          "name": "seller_declined",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -381,9 +371,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "orders_job_id_jobs_id_fk": {
-          "name": "orders_job_id_jobs_id_fk",
-          "tableFrom": "orders",
+        "offers_job_id_jobs_id_fk": {
+          "name": "offers_job_id_jobs_id_fk",
+          "tableFrom": "offers",
           "tableTo": "jobs",
           "columnsFrom": [
             "job_id"
@@ -394,9 +384,9 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "orders_buyer_id_users_id_fk": {
-          "name": "orders_buyer_id_users_id_fk",
-          "tableFrom": "orders",
+        "offers_buyer_id_users_id_fk": {
+          "name": "offers_buyer_id_users_id_fk",
+          "tableFrom": "offers",
           "tableTo": "users",
           "columnsFrom": [
             "buyer_id"
@@ -407,9 +397,9 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "orders_seller_id_users_id_fk": {
-          "name": "orders_seller_id_users_id_fk",
-          "tableFrom": "orders",
+        "offers_seller_id_users_id_fk": {
+          "name": "offers_seller_id_users_id_fk",
+          "tableFrom": "offers",
           "tableTo": "users",
           "columnsFrom": [
             "seller_id"
@@ -422,7 +412,16 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "offers_job_id_seller_id_unique": {
+          "name": "offers_job_id_seller_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "job_id",
+            "seller_id"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -628,6 +627,17 @@
         "company"
       ]
     },
+    "public.bookingStatusEnum": {
+      "name": "bookingStatusEnum",
+      "schema": "public",
+      "values": [
+        "upcoming",
+        "ongoing",
+        "completed",
+        "cancelled",
+        "disputed"
+      ]
+    },
     "public.categoryEnum": {
       "name": "categoryEnum",
       "schema": "public",
@@ -650,6 +660,16 @@
         "lu"
       ]
     },
+    "public.jobStatusEnum": {
+      "name": "jobStatusEnum",
+      "schema": "public",
+      "values": [
+        "active",
+        "paused",
+        "deleted",
+        "booked"
+      ]
+    },
     "public.languageEnum": {
       "name": "languageEnum",
       "schema": "public",
@@ -664,20 +684,10 @@
       "name": "offerStatusEnum",
       "schema": "public",
       "values": [
-        "active",
-        "paused",
-        "deleted"
-      ]
-    },
-    "public.orderStatusEnum": {
-      "name": "orderStatusEnum",
-      "schema": "public",
-      "values": [
         "pending",
+        "withdrawn",
         "accepted",
-        "rejected",
-        "completed",
-        "cancelled"
+        "rejected"
       ]
     },
     "public.roleEnum": {

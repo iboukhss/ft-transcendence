@@ -1,0 +1,1 @@
+ALTER TABLE "bookings" RENAME COLUMN "proposed_workplace" TO "workplace";

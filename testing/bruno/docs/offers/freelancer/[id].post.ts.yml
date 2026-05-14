@@ -1,0 +1,24 @@
+info:
+  name: "[id].post.ts"
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: https://localhost:3000/api/offers/freelancer/1
+  body:
+    type: json
+    data: |
+      {
+        "motivationLetter": "I am probably the best candidate you can find. Take me or no one. There is no one better than me. You will not even need my CV. Go ahead. Just do it.",
+        "proposedHourlyRate": 10,
+        "proposedDuration": 12,
+        "proposedWorkplace": "remote"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

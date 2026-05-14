@@ -29,7 +29,7 @@ const toggleEdit = () => {
 const saveProfile = async () => {
   try {
     const response = await $fetch<{ profile: ProfileDTO }>('/api/profile', {
-      method: 'POST',
+      method: 'PATCH',
       body: state.value
     })
     profile.value = response.profile

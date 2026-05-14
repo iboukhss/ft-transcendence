@@ -43,6 +43,27 @@
       "when": 1778616514130,
       "tag": "0005_narrow_abomination",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1779009793430,
+      "tag": "0006_late_prima",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1779028622465,
+      "tag": "0007_ambitious_shotgun",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1779029650510,
+      "tag": "0008_dapper_ogun",
+      "breakpoints": true
     }
   ]
 }

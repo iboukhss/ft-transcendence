@@ -1,17 +1,12 @@
 import { getJobById } from "#server/services/jobs/public/get-job.service.js";
 import { db, tables} from '#server/utils/db'
+import { getRouterParamAsNumber } from "#server/utils/router.js";
 
 export default defineEventHandler(async (event) => {
-  const id = getRouterParam(event, 'id')
 
-  if (!id) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'Invalid job ID'
-    })
-  }
+  const jobId = getRouterParamAsNumber(event)
 
-  const job = await getJobById(db, tables, parseInt(id))
+  const job = await getJobById(db, tables, jobId)
 
   return job
 })

@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { JOB_CATEGORY_KEYS, WORKPLACE_KEYS, SKILL_KEYS, COUNTRY_KEYS, OFFER_STATUS_KEYS } from '#shared/constants/enums'
+import { JOB_CATEGORY_KEYS, WORKPLACE_KEYS, SKILL_KEYS, COUNTRY_KEYS, JOB_STATUS_KEYS } from '#shared/constants/enums'
 
 export const jobSchema = z.object({
   title: z.string().min(1, 'Must provide a job title'),
@@ -11,7 +11,7 @@ export const jobSchema = z.object({
   duration: z.number().int().min(1, 'Please indicate the mission\'s duration').max(12),
   workplace: z.enum(WORKPLACE_KEYS, 'Please select a workplace'),
   location: z.enum(COUNTRY_KEYS, 'Please select a location'),
-  status: z.enum(OFFER_STATUS_KEYS, 'Please select a status')
+  status: z.enum(JOB_STATUS_KEYS, 'Please select a status')
 })
 
 export type JobDTO = z.infer<typeof jobSchema>

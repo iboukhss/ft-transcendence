@@ -1,19 +1,5 @@
 import type { DBJob } from '#server/utils/db'
-
-export interface JobResponseDTO {
-  id: string | number
-  title: string
-  description: string
-  category: string
-  skills: string[]
-  hourlyRate: number
-  duration: number
-  workplace: string
-  location: string
-  status: string
-  createdAt: string
-  updatedAt: string
-}
+import type { JobResponseDTO } from '#shared/dto/job.dto'
 
 export function toJobDTO(job: DBJob): JobResponseDTO {
   return {

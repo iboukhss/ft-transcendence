@@ -15,3 +15,9 @@ export const jobSchema = z.object({
 })
 
 export type JobDTO = z.infer<typeof jobSchema>
+
+export type JobResponseDTO = JobDTO & {
+  id: string | number
+  createdAt: string
+  updatedAt: string
+}

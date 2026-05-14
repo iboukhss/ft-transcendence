@@ -3,9 +3,9 @@ import type { SelectMenuItem, RadioGroupItem } from '@nuxt/ui'
 
 import type { JobDTO } from '#shared/dto/job.dto'
 
-import { JOB_CATEGORY_KEYS, WORKPLACE_KEYS, SKILL_KEYS } from '#shared/constants/enums'
+import { JOB_CATEGORY_KEYS, WORKPLACE_KEYS, SKILL_KEYS, COUNTRY_KEYS } from '#shared/constants/enums'
 import { jobSchema } from '#shared/dto/job.dto'
-import { JOB_CATEGORY_LABELS, SKILL_LABELS, WORKPLACE_LABELS } from '~/utils/labels'
+import { JOB_CATEGORY_LABELS, SKILL_LABELS, WORKPLACE_LABELS, COUNTRY_LABELS } from '~/utils/labels'
 
 const state = reactive<Partial<JobDTO>>({
   title: '',
@@ -14,7 +14,9 @@ const state = reactive<Partial<JobDTO>>({
   duration: 3,
   hourlyRate: undefined,
   workplace: undefined,
-  description: ''
+  description: '',
+  status: 'active',
+  location: undefined
 })
 
 const categoryOptions: SelectMenuItem[] = JOB_CATEGORY_KEYS.map(k => ({
@@ -31,6 +33,47 @@ const skillOptions: SelectMenuItem[] = SKILL_KEYS.map(k => ({
   key: k,
   label: SKILL_LABELS[k]
 }))
+
+const countryOptions: SelectMenuItem[] = COUNTRY_KEYS.map(k => ({
+  key: k,
+  label: COUNTRY_LABELS[k]
+}))
+
+const toast = useToast()
+const isLoading = ref(false)
+
+async function onSubmit() {
+  if (isLoading.value) {
+    return
+  }
+
+  isLoading.value = true
+
+  try {
+    await $fetch('/api/jobs/company', {
+      method: 'POST',
+      body: state
+    })
+
+    toast.add({
+      title: 'Success',
+      description: 'Your job offer has been posted',
+      color: 'success'
+    })
+
+    await navigateTo('/jobs')
+  }
+  catch (err: any) {
+    toast.add({
+      title: 'Error',
+      description: err.data?.message || 'Something went wrong',
+      color: 'error'
+    })
+  }
+  finally {
+    isLoading.value = false
+  }
+}
 </script>
 
 <template>
@@ -42,7 +85,13 @@ const skillOptions: SelectMenuItem[] = SKILL_KEYS.map(k => ({
 
       <USeparator />
 
-      <UForm :schema="jobSchema" :state="state" class="space-y-6">
+      <UForm
+        :schema="jobSchema"
+        :state="state"
+        class="space-y-6"
+        @submit="onSubmit"
+        @error="(event) => console.log('Validation errors:', event.errors)"
+      >
         <UFormField label="Job title" name="title">
           <UInput v-model="state.title" class="w-full" />
         </UFormField>
@@ -66,7 +115,7 @@ const skillOptions: SelectMenuItem[] = SKILL_KEYS.map(k => ({
           />
         </UFormField>
 
-        <UFormField :label="`Duration: ${state.duration} months`" name="durationMonths">
+        <UFormField :label="`Duration: ${state.duration} months`" name="duration">
           <USlider
             v-model="state.duration"
             :min="1" :max="12" :step="1"
@@ -74,7 +123,7 @@ const skillOptions: SelectMenuItem[] = SKILL_KEYS.map(k => ({
           />
         </UFormField>
 
-        <UFormField label="Budget" name="rate">
+        <UFormField label="Budget" name="hourlyRate">
           <UInput
             v-model="state.hourlyRate"
             type="number"
@@ -85,6 +134,15 @@ const skillOptions: SelectMenuItem[] = SKILL_KEYS.map(k => ({
             <template #leading>€</template>
             <template #trailing>/hr</template>
           </UInput>
+        </UFormField>
+
+        <UFormField label="Location" name="location">
+          <USelectMenu
+            v-model="state.location"
+            value-key="key"
+            :items="countryOptions"
+            class="w-full"
+          />
         </UFormField>
 
         <UFormField label="Workplace" name="workplace">
@@ -108,7 +166,7 @@ const skillOptions: SelectMenuItem[] = SKILL_KEYS.map(k => ({
           />
         </UFormField>
 
-        <UButton type="submit" block size="lg">
+        <UButton type="submit" block size="lg" :loading="isLoading">
           Post Job
         </UButton>
       </UForm>

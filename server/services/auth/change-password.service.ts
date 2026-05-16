@@ -4,7 +4,7 @@ import type { UserSession } from '#auth-utils'
 import type { DB, Tables } from '#server/utils/db'
 import type { PasswordDTO } from '#shared/dto/password.dto'
 
-import { toPasswordDTO } from '#server/dto/password.dto.js'
+import { toPasswordResponseDTO } from '#server/dto/password.dto.js'
 
 export async function changePassword(db: DB, tables: Tables, session: UserSession, dto: PasswordDTO) {
   if (!session.user?.id) {
@@ -58,5 +58,5 @@ export async function changePassword(db: DB, tables: Tables, session: UserSessio
       statusMessage: 'Update failed'
     })
   }
-  return toPasswordDTO(changedPassword)
+  return toPasswordResponseDTO(changedPassword)
 }

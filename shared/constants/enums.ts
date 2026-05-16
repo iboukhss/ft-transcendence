@@ -10,7 +10,7 @@ export const LANGUAGE_KEYS = ['en', 'de', 'fr', 'lu'] as const
 
 export const OFFER_STATUS_KEYS = ['active', 'paused', 'deleted'] as const
 
-export const ORDER_STATUS_KEYS = ['pending', 'accepted', 'rejected', 'completed', 'cancelled'] as const
+export const BOOKING_STATUS_KEYS = ['pending', 'accepted', 'rejected', 'completed', 'cancelled'] as const
 
 export const SKILL_KEYS = [
   'c',

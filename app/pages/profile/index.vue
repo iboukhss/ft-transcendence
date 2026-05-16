@@ -1,23 +1,21 @@
 <script setup lang="ts">
-import type { ProfileDTO } from '#shared/dto/profile.dto'
-
 import { COUNTRY_LABELS } from '~/utils/labels'
 
 const { user } = useUserSession()
-const { data: profile } = await useFetch<ProfileDTO>('/api/profile')
+const { data: profile } = await useFetch('/api/profile')
 
 const isEditingBio = ref(false)
 </script>
 
 <template>
-  <div class="space-y-8">
+  <div v-if="profile && profile.type === 'freelancer'" class="space-y-8">
     <div class="flex items-start justify-between ">
       <div class="flex items-center gap-6">
         <UAvatar :alt="user?.email" size="3xl" class="h-24 w-24" />
 
         <div class="flex flex-col">
           <h1 class="text-3xl font-bold">
-            {{ profile?.firstName }} {{ profile?.lastName }}
+            {{ profile.firstName }} {{ profile.lastName }}
           </h1>
 
           <div class="text-muted mt-1 flex flex-col text-sm">

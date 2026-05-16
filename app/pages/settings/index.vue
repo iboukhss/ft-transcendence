@@ -14,13 +14,9 @@ const countryOptions: SelectMenuItem[] = COUNTRY_KEYS.map(k => ({
 const isEditing = ref(false)
 const toast = useToast()
 
-const { data: profile } = await useFetch<ProfileDTO>('/api/profile')
+const { data: profile } = await useFetch('/api/profile')
 
-const state = ref({
-  firstName: profile?.value?.firstName || '',
-  lastName: profile?.value?.lastName || '',
-  country: profile?.value?.country || undefined
-})
+const state = ref<ProfileDTO>(profile.value ? { ...profile.value } : {} as ProfileDTO)
 
 const toggleEdit = () => {
   isEditing.value = !isEditing.value
@@ -28,11 +24,12 @@ const toggleEdit = () => {
 
 const saveProfile = async () => {
   try {
-    const response = await $fetch<{ profile: ProfileDTO }>('/api/profile', {
+    const response = await $fetch('/api/profile', {
       method: 'PATCH',
       body: state.value
     })
-    profile.value = response.profile
+
+    profile.value = response
     isEditing.value = false
 
     toast.add({
@@ -54,7 +51,7 @@ const saveProfile = async () => {
 </script>
 
 <template>
-  <div class="space-y-8">
+  <div v-if="profile" class=" space-y-8">
     <div class="flex items-center justify-between gap-4">
       <header>
         <h2 class="text-xl font-semibold">Public profile</h2>

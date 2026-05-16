@@ -11,7 +11,10 @@ export default defineEventHandler(async (event) => {
 
   const validData = validateOrThrow(result)
 
-  const profile = await patchProfile(db, tables, session.user.id, validData)
-
-  return profile
+  return await patchProfile(
+    db,
+    tables,
+    session.user.id,
+    validData
+  )
 })

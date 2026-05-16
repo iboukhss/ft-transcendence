@@ -1,18 +1,23 @@
 import { eq } from 'drizzle-orm'
 
 import type { DB, Tables } from '#server/utils/db'
-import type { ProfileDTO } from '#shared/dto/profile.dto'
 
-import { toProfileResponseDTO } from '#server/dto/profile.dto'
+import { profileSchema, type ProfileDTO } from '#shared/dto/profile.dto'
 
-export async function patchProfile(db: DB, tables: Tables, userId: number, dto: ProfileDTO) {
+export async function patchProfile(db: DB, tables: Tables, userId: number, dto: ProfileDTO): Promise<ProfileDTO> {
+  const table = dto.type === 'freelancer'
+    ? tables.freelancerProfiles
+    : tables.companyProfiles
+
+  const { type, ...dbFields } = dto
+
   const [profile] = await db
-    .update(tables.profiles)
+    .update(table)
     .set({
-      ...dto,
+      ...dbFields,
       updatedAt: new Date()
     })
-    .where (eq(tables.profiles.userId, userId))
+    .where(eq(table.userId, userId))
     .returning()
 
   if (!profile) {
@@ -22,5 +27,8 @@ export async function patchProfile(db: DB, tables: Tables, userId: number, dto: 
     })
   }
 
-  return toProfileResponseDTO(profile)
+  return profileSchema.parse({
+    type: dto.type,
+    ...profile
+  })
 }

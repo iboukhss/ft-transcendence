@@ -16,7 +16,11 @@ export const db = drizzle(queryClient, { schema })
 
 export type DB = PostgresJsDatabase<typeof schema>
 export type Tables = typeof schema
+
+// Relevant discussion
+// https://github.com/drizzle-team/drizzle-orm/issues/2851#issuecomment-2517850853
 export type Transaction = Parameters<Parameters<DB['transaction']>[0]>[0]
+
 export type DBUser = InferSelectModel<typeof schema.users>
 export type DBJob = InferSelectModel<typeof schema.jobs>
 export type DBProfile = InferSelectModel<typeof schema.profiles>

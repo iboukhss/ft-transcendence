@@ -40,6 +40,33 @@ export const users = pgTable('users', {
   updatedAt: timestamp('updated_at').defaultNow().notNull()
 })
 
+export const freelancerProfiles = pgTable('freelancer_profiles', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }).unique(),
+  firstName: text('first_name').notNull(),
+  lastName: text('last_name').notNull(),
+  country: countryEnum('country').notNull(),
+  avatar: text('avatar'),
+  bio: text('bio'),
+  skills: skillsEnum('skills').array().notNull().default([]),
+  languages: languageEnum('languages').array().notNull().default([]),
+  hourlyRate: real('hourly_rate'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull()
+})
+
+export const companyProfiles = pgTable('company_profiles', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }).unique(),
+  companyName: text('company_name').notNull(),
+  country: countryEnum('country').notNull(),
+  website: text('website'),
+  logo: text('logo'),
+  description: text('description'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull()
+})
+
 export const profiles = pgTable('profiles', {
   id: serial('id').primaryKey(),
   userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }).unique(),

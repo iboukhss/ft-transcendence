@@ -11,8 +11,7 @@ http:
     data: |-
       {
         "accountType": "company",
-        "firstName": "Heck",
-        "lastName": "Dennis",
+        "companyName": "FancyWork4Free",
         "email": "heckde@gmail.com",
         "password": "newPassword",
         "country": "lu"

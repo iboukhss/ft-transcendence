@@ -11,9 +11,9 @@ http:
     data: |-
       {
         "accountType": "freelancer",
-        "firstName": "Anna Lena",
-        "lastName": "Kohnen",
-        "email": "alk@gmail.com",
+        "firstName": "Ismail",
+        "lastName": "Iboukhess",
+        "email": "iboukh@gmail.com",
         "password": "newPassword",
         "country": "lu"
       }

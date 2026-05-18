@@ -57,6 +57,13 @@
       "when": 1778909686888,
       "tag": "0007_mature_lyja",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1779134165559,
+      "tag": "0008_futuristic_mentor",
+      "breakpoints": true
     }
   ]
 }

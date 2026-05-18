@@ -19,6 +19,8 @@ export const freelancerProfileSchema = z.object({
 export const companyProfileSchema = z.object({
   type: z.literal('company'),
   companyName: z.string().min(1),
+  contactFirstName: z.string().min(1),
+  contactLastName: z.string().min(1),
   country: z.enum(COUNTRY_KEYS),
   website: z.url().nullable(),
   logo: z.string().nullable(),

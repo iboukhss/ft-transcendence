@@ -18,7 +18,7 @@ export async function registerUser(db: DB, tables: Tables, dto: RegisterDTO) {
 
   return await db.transaction(async (tx: Transaction) => {
     // 1. Create auth user
-    const [user] = await tx
+    const [newUser] = await tx
       .insert(tables.users)
       .values({
         email: dto.email,
@@ -28,7 +28,7 @@ export async function registerUser(db: DB, tables: Tables, dto: RegisterDTO) {
       })
       .returning()
 
-    if (!user) {
+    if (!newUser) {
       throw createError({
         statusCode: 500,
         message: 'User creation failed'
@@ -38,7 +38,7 @@ export async function registerUser(db: DB, tables: Tables, dto: RegisterDTO) {
     // 2. Create profile
     if (dto.accountType === 'freelancer') {
       await tx.insert(tables.freelancerProfiles).values({
-        userId: user.id,
+        userId: newUser.id,
         firstName: dto.firstName,
         lastName: dto.lastName,
         country: dto.country
@@ -46,13 +46,15 @@ export async function registerUser(db: DB, tables: Tables, dto: RegisterDTO) {
     }
     else {
       await tx.insert(tables.companyProfiles).values({
-        userId: user.id,
+        userId: newUser.id,
+        contactFirstName: dto.contactFirstName,
+        contactLastName: dto.contactLastName,
         companyName: dto.companyName,
         country: dto.country
       })
     }
 
     // 3. Return safe DTO
-    return toSessionUserDTO(user)
+    return toSessionUserDTO(newUser)
   })
 }

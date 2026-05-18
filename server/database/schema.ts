@@ -61,6 +61,8 @@ export const freelancerProfiles = pgTable('freelancer_profiles', {
 export const companyProfiles = pgTable('company_profiles', {
   id: serial('id').primaryKey(),
   userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }).unique(),
+  contactFirstName: text('contact_first_name').notNull(),
+  contactLastName: text('contact_last_name').notNull(),
   companyName: text('company_name').notNull(),
   country: countryEnum('country').notNull(),
   website: text('website'),

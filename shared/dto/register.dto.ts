@@ -4,7 +4,7 @@ import { COUNTRY_KEYS } from '#shared/constants/enums'
 
 export const baseRegisterSchema = z.object({
   email: z.email('Invalid email'),
-  password: z.string('Password must be at least 8 characters'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
   country: z.enum(COUNTRY_KEYS, 'Please select a country')
 })
 
@@ -16,6 +16,8 @@ export const freelancerRegisterSchema = baseRegisterSchema.extend({
 
 export const companyRegisterSchema = baseRegisterSchema.extend({
   accountType: z.literal('company'),
+  contactFirstName: z.string().trim().min(1, 'Contact first name is required'),
+  contactLastName: z.string().trim().min(1, 'Contact last name is required'),
   companyName: z.string().trim().min(1, 'Company name is required')
 })
 

@@ -11,9 +11,7 @@ export default defineEventHandler(async (event) => {
 
   const user = await registerUser(db, tables, validData)
 
-  await setUserSession(event, {
-    user
-  })
+  await setUserSession(event, { user })
 
   return user
 })

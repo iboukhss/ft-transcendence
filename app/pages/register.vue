@@ -7,19 +7,7 @@ import { COUNTRY_KEYS, ACCOUNT_TYPE_KEYS } from '#shared/constants/enums'
 import { registerSchema } from '#shared/dto/register.dto'
 import { ACCOUNT_TYPE_INFO, COUNTRY_LABELS } from '~/utils/labels'
 
-// Good read: https://ui.nuxt.com/docs/components/form
-
-// Partial makes every property in Schema optional (T | undefined)
-const state = reactive<Partial<RegisterDTO>>({
-  accountType: 'freelancer',
-  firstName: '',
-  lastName: '',
-  email: '',
-  password: '',
-  country: undefined
-})
-
-const accountOptions: RadioGroupItem[] = ACCOUNT_TYPE_KEYS.map(k => ({
+const accountTypeOptions: RadioGroupItem[] = ACCOUNT_TYPE_KEYS.map(k => ({
   id: k,
   label: ACCOUNT_TYPE_INFO[k].label,
   description: ACCOUNT_TYPE_INFO[k].description
@@ -29,6 +17,27 @@ const countryOptions: SelectMenuItem[] = COUNTRY_KEYS.map(k => ({
   key: k,
   label: COUNTRY_LABELS[k]
 }))
+
+const accountType = ref('freelancer')
+
+const freelancerState = reactive<Extract<RegisterDTO, { accountType: 'freelancer' }>>({
+  accountType: 'freelancer',
+  email: '',
+  password: '',
+  firstName: '',
+  lastName: '',
+  country: undefined
+})
+
+const companyState = reactive<Extract<RegisterDTO, { accountType: 'company' }>>({
+  accountType: 'company',
+  email: '',
+  password: '',
+  contactFirstName: '',
+  contactLastName: '',
+  companyName: '',
+  country: undefined
+})
 
 const toast = useToast()
 const isLoading = ref(false)
@@ -77,37 +86,89 @@ async function onSubmit(event: FormSubmitEvent<RegisterDTO>) {
 
       <USeparator />
 
-      <UForm :schema="registerSchema" :state="state" class="space-y-6" @submit="onSubmit">
-        <UFormField name="accountType">
-          <URadioGroup v-model="state.accountType" value-key="id" :items="accountOptions" />
-        </UFormField>
+      <UFormField>
+        <URadioGroup v-model="accountType" value-key="id" :items="accountTypeOptions" />
+      </UFormField>
 
+      <UForm
+        v-if="accountType === 'freelancer'"
+        :schema="registerSchema"
+        :state="freelancerState"
+        class="space-y-6"
+        @submit="onSubmit"
+      >
         <div class="grid grid-cols-2 gap-4">
           <UFormField label="First name" name="firstName">
-            <UInput v-model="state.firstName" placeholder="Jane" class="w-full" />
+            <UInput v-model="freelancerState.firstName" placeholder="Jane" class="w-full" />
           </UFormField>
 
           <UFormField label="Last name" name="lastName">
-            <UInput v-model="state.lastName" placeholder="Doe" class="w-full" />
+            <UInput v-model="freelancerState.lastName" placeholder="Doe" class="w-full" />
           </UFormField>
         </div>
 
         <UFormField label="Email" name="email">
-          <UInput v-model="state.email" placeholder="jane@example.com" class="w-full" />
+          <UInput v-model="freelancerState.email" placeholder="jane@example.com" class="w-full" />
         </UFormField>
 
         <UFormField label="Password" name="password">
-          <UInput v-model="state.password" type="password" class="w-full" />
+          <UInput v-model="freelancerState.password" type="password" class="w-full" />
         </UFormField>
 
         <UFormField label="Country" name="country">
           <USelectMenu
-            v-model="state.country"
+            v-model="freelancerState.country"
             value-key="key"
             placeholder="Select country"
             :items="countryOptions"
             :search-input="false"
-            class="w-full" />
+            class="w-full"
+          />
+        </UFormField>
+
+        <UButton type="submit" block :loading="isLoading" :disabled="isLoading" size="lg">
+          Create Account
+        </UButton>
+      </UForm>
+
+      <UForm
+        v-else
+        :schema="registerSchema"
+        :state="companyState"
+        class="space-y-6"
+        @submit="onSubmit"
+      >
+        <div class="grid grid-cols-2 gap-4">
+          <UFormField label="First name" name="contactFirstName">
+            <UInput v-model="companyState.contactFirstName" placeholder="John" class="w-full" />
+          </UFormField>
+
+          <UFormField label="Last name" name="contactLastName">
+            <UInput v-model="companyState.contactLastName" placeholder="Smith" class="w-full" />
+          </UFormField>
+        </div>
+
+        <UFormField label="Company name" name="companyName">
+          <UInput v-model="companyState.companyName" placeholder="Acme Corporation" class="w-full" />
+        </UFormField>
+
+        <UFormField label="Work email" name="email">
+          <UInput v-model="companyState.email" placeholder="js@acme.com" class="w-full" />
+        </UFormField>
+
+        <UFormField label="Password" name="password">
+          <UInput v-model="companyState.password" type="password" class="w-full" />
+        </UFormField>
+
+        <UFormField label="Country" name="country">
+          <USelectMenu
+            v-model="companyState.country"
+            value-key="key"
+            placeholder="Select country"
+            :items="countryOptions"
+            :search-input="false"
+            class="w-full"
+          />
         </UFormField>
 
         <UButton type="submit" block :loading="isLoading" :disabled="isLoading" size="lg">

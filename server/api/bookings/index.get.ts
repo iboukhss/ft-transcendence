@@ -1,8 +1,13 @@
-import { getBookingsAll } from '#server/services/bookings/get-bookings-all.service.js'
-import { db } from '#server/utils/db'
+import { getBookingsUser } from '#server/services/bookings/get-bookings-user.service.js'
+import { db, tables } from '#server/utils/db'
 
-export default defineEventHandler(async (event) => {
+export default eventHandler(async (event) => {
   const session = await requireUserSession(event)
 
-  return (getBookingsAll(db))
+  return getBookingsUser(
+    db,
+    tables,
+    session.user.id,
+    session.user.accountType
+  )
 })

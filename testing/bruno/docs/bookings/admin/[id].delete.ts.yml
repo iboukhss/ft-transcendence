@@ -1,11 +1,11 @@
 info:
-  name: "[id].patch.ts"
+  name: "[id].delete.ts"
   type: http
   seq: 1
 
 http:
-  method: PATCH
-  url: https://localhost:3000/api/offers/accept/1
+  method: DELETE
+  url: https://localhost:3000/api/bookings/admin/1
   auth: inherit
 
 settings:

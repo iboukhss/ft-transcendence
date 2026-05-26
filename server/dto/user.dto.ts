@@ -1,3 +1,5 @@
+// NOTE(isma): DEPRECATED
+
 import type { DBUser } from '#server/utils/db'
 
 export interface SessionUserDTO {

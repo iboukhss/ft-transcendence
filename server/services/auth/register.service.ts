@@ -2,10 +2,11 @@ import { eq } from 'drizzle-orm'
 
 import type { DB, Tables, Transaction } from '#server/utils/db'
 import type { RegisterDTO } from '#shared/dto/register.dto'
+import type { SessionUserDTO } from '#shared/dto/user.dto.js'
 
-import { toSessionUserDTO } from '#server/dto/user.dto'
+import { sessionUserSchema } from '#shared/dto/user.dto.js'
 
-export async function registerUser(db: DB, tables: Tables, dto: RegisterDTO) {
+export async function registerUser(db: DB, tables: Tables, dto: RegisterDTO): Promise<SessionUserDTO> {
   const existingUser = await db.query.users.findFirst({
     where: eq(tables.users.email, dto.email)
   })
@@ -55,6 +56,6 @@ export async function registerUser(db: DB, tables: Tables, dto: RegisterDTO) {
     }
 
     // 3. Return safe DTO
-    return toSessionUserDTO(newUser)
+    return sessionUserSchema.parse(newUser)
   })
 }

@@ -4,9 +4,7 @@ import { loginSchema } from '#shared/dto/login.dto'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
-
   const result = loginSchema.safeParse(body)
-
   const validData = validateOrThrow(result)
 
   const user = await loginUser(db, tables, validData)

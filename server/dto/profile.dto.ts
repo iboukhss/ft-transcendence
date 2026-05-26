@@ -1,3 +1,5 @@
+// NOTE(isma): DEPRECATED
+
 import type { DBProfile } from '#server/utils/db.js'
 
 export interface ProfileResponseDTO {

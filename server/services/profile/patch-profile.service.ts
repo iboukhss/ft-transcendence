@@ -1,10 +1,11 @@
 import { eq } from 'drizzle-orm'
 
 import type { DB, Tables } from '#server/utils/db'
+import type { ProfileDTO, PatchProfileDTO } from '#shared/dto/profile.dto'
 
-import { profileSchema, type ProfileDTO } from '#shared/dto/profile.dto'
+import { profileSchema } from '#shared/dto/profile.dto'
 
-export async function patchProfile(db: DB, tables: Tables, userId: number, dto: ProfileDTO): Promise<ProfileDTO> {
+export async function patchProfile(db: DB, tables: Tables, userId: number, dto: PatchProfileDTO): Promise<ProfileDTO> {
   const table = dto.type === 'freelancer'
     ? tables.freelancerProfiles
     : tables.companyProfiles

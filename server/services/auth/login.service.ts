@@ -3,9 +3,9 @@ import { eq } from 'drizzle-orm'
 import type { DB, Tables } from '#server/utils/db'
 import type { LoginDTO } from '#shared/dto/login.dto.js'
 
-import { toSessionUserDTO } from '#server/dto/user.dto'
+import { sessionUserSchema, type SessionUserDTO } from '#shared/dto/user.dto.js'
 
-export async function loginUser(db: DB, tables: Tables, dto: LoginDTO) {
+export async function loginUser(db: DB, tables: Tables, dto: LoginDTO): Promise<SessionUserDTO> {
   const user = await db.query.users.findFirst({
     where: eq(tables.users.email, dto.email)
   })
@@ -20,5 +20,5 @@ export async function loginUser(db: DB, tables: Tables, dto: LoginDTO) {
     throw createError({ statusCode: 401 })
   }
 
-  return toSessionUserDTO(user)
+  return sessionUserSchema.parse(user)
 }

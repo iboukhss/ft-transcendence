@@ -1,4 +1,4 @@
-import type { SessionUserDTO } from '#server/dto/user.dto'
+import type { SessionUserDTO } from '#shared/dto/user.dto'
 
 declare module '#auth-utils' {
   interface User extends SessionUserDTO {}

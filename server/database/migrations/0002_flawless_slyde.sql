@@ -1,1 +1,0 @@
-ALTER TABLE "jobs" ALTER COLUMN "skills" SET DATA TYPE "public"."skillsEnum"[] USING "skills"::text::"public"."skillsEnum"[];

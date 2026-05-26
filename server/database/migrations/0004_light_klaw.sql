@@ -1,1 +1,0 @@
-ALTER TABLE "profiles" ALTER COLUMN "language" SET DATA TYPE "public"."languageEnum"[] USING "language"::text::"public"."languageEnum"[];

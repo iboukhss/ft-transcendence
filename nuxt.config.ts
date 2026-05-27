@@ -18,6 +18,11 @@ export default defineNuxtConfig({
     serverAppConfig: false
   },
   compatibilityDate: '2026-04-01',
+  nitro: {
+    experimental: {
+      tasks: true
+    }
+  },
   // Disabled typecheck due to random IPC crashes
   typescript: {
     typeCheck: false,

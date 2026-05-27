@@ -15,11 +15,14 @@
 
 ## Development dependencies
 - drizzle-kit
+- drizzle-seed
 - @nuxt/eslint
 - eslint-plugin-perfectionist
 - eslint-plugin-tailwindcss
+- @faker-js/faker
 - mkcert
 - bruno
+- curl
 
 ## Initial dev setup
 
@@ -70,6 +73,7 @@ npm run db:push
 npm run db:generate
 npm run db:migrate
 npm run db:studio
+npm run db:reset
 npm run db:seed
 
 # Other
@@ -79,4 +83,7 @@ npm run typecheck
 docker compose down -v
 docker compose up -d
 npm run db:push
+
+# Or use this more gentle method to scrub all database tables
+npm run db:reset
 ```

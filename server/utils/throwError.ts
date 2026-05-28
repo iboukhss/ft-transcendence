@@ -14,6 +14,14 @@ export function throw400(statusMessage: string) {
   })
 }
 
+export function throw401(statusMessage: string) {
+  throw createError({
+    statusCode: 401,
+    message: 'Unauthorized',
+    statusMessage: statusMessage
+  })
+}
+
 export function throw403(statusMessage: string) {
   throw createError({
     statusCode: 403,

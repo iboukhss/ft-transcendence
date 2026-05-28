@@ -40,17 +40,29 @@ Closest example projects ideas: **Marketplace Platform**, **Pet Adoption Platfor
 | ✅ | Use a framework for both the frontend and backend | 2 pts |
 | ⚫ | Use a frontend framework | 1 pt |
 | ⚫ | Use a backend framework | 1 pt |
-| ❌ | Implement real-time features using WebSockets or similar technology | 1 pt |
-| ❌ | Allow users to interact with each other | 2 pts |
+| ❔ | Implement real-time features using WebSockets or similar technology | 2 pt |
+| ❔ | Allow users to interact with each other | 2 pts |
 | ✅ | Implement a public API | 2 pts |
 | ✅ | Use an ORM for the database | 1 pt |
-| ❔ | Implement a complete notification system | 1 pt |
+| ✅ | Implement a complete notification system | 1 pt |
 | ✅ | Server-Side Rendering | 1 pt |
 | ❌ | Progressive Web App (PWA) with offline support and installability | 1 pt |
 | ❔ | Custom-made design system with reusable components | 1 pt |
 | ✅ | Implement advanced search functionality with filters, sorting, and pagination | 1 pt |
 | ❔ | File upload and management system | 1 pt |
-| | | 7/14 pts |
+| | | 8/14 pts |
+
+**Missing features**:
+
+- [ ] Implement public API keys, rate limits and documentation
+
+**Other notes**:
+
+- Look into [WebSockets with Nitro](https://nitro.build/docs/websocket).
+- Full chat system is a lot of work, very nice to have but maybe not worth the time investment right now.
+- We can pass Nuxt toasts as "A complete notification system" for all CRUD operations.
+- Reusable components can be done for an easy extra point.
+- File upload system seems very manageable.
 
 ### Accessibility and internationalitzation
 
@@ -62,6 +74,11 @@ Closest example projects ideas: **Marketplace Platform**, **Pet Adoption Platfor
 | ✅ | Support for at least 2 additional browsers | 1 pt |
 | | | 1/5 pts |
 
+**Notes**:
+
+- There is an [official i18n module for Nuxt](https://nuxt.com/modules/i18n) (not sure if worth the effort for just 1 point).
+- Need to do more rigorous testing overall.
+
 ### User management
 
 | Status | Goal | Score |
@@ -69,11 +86,22 @@ Closest example projects ideas: **Marketplace Platform**, **Pet Adoption Platfor
 | ✅ | Standard user management and authentication | 2 pts |
 | ⚫ | Game statistics and match history | 1 pt |
 | ✅ | Implement remote authentication with OAuth 2.0 | 1 pt |
-| ❔ | Advanced permission system | 2 pts |
+| ✅ | Advanced permission system | 2 pts |
 | ❔ | An organization system | 2 pts |
 | ❔ | Implement a complete 2FA system | 1 pt |
 | ❔ | User activity analytics and insights dashboard | 1 pt |
-| | | 3/10 pts |
+| | | 5/10 pts |
+
+**Missing features**:
+
+- [ ] Allow users to upload an avatar.
+- [ ] Display online status in real time.
+- [ ] Implement OAuth via 42 API using nuxt-auth-utils.
+- [ ] Add at least one admin account and look into middleware for admins, users, guests and potentially moderators.
+
+**Other notes:**
+
+- 2FA could be a pretty easy point to get, again, check nuxt-auth-utils.
 
 ### Artificial intelligence
 
@@ -104,11 +132,15 @@ N/A
 
 | Status | Goal | Score |
 | --- | --- | --- |
-| ✅ | Infrastructure for log management using ELK | 2 pts |
-| ✅ | Monitoring system with Promethueus and Grafana | 2 pts |
+| ❔ | Infrastructure for log management using ELK | 2 pts |
+| ❔ | Monitoring system with Prometheus and Grafana | 2 pts |
 | ❔ | Backend as microservices | 2 pts |
 | ❌ | Health check and status page system with automated backups and disaster recovery procedures | 1 pt |
-| | | 4/7 pts |
+| | | 0/7 pts |
+
+**Notes**:
+
+- ELK, Prometheus and Grafana are super boring and kinda useless, still good points tho.
 
 ### Data and analytics
 
@@ -118,6 +150,10 @@ N/A
 | ❔ | Data export and import functionality | 1 pt |
 | ❔ | GDPR compliance features | 1 pt |
 | | | 0/4 pts |
+
+**Notes**:
+
+- Simply being able to delete an account and exporing its data as JSON can get us very close to 2 extra points.
 
 ### Blockchain
 
@@ -133,7 +169,7 @@ Some ideas mentionned:
 
 ---
 
-**Potential final score:** 15/14 pts
+**Potential final score:** 14/14 pts
 
 ## Final deadline
 

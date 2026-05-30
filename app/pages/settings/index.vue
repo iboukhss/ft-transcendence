@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { FormSubmitEvent, SelectMenuItem } from '@nuxt/ui'
 
-import type { ProfileIdentityDTO, ProfileDTO } from '#shared/dto/profile.dto.js'
+import type { ProfileIdentityDTO, ProfileDTO, UploadAvatarDTO } from '#shared/dto/profile.dto.js'
 
 import { COUNTRY_KEYS } from '#shared/constants/enums'
-import { profileIdentitySchema } from '#shared/dto/profile.dto'
+import { profileIdentitySchema, uploadAvatarSchema } from '#shared/dto/profile.dto'
 import { COUNTRY_LABELS } from '~/utils/labels'
 
 const countryOptions: SelectMenuItem[] = COUNTRY_KEYS.map(k => ({
@@ -62,6 +62,59 @@ const saveIdentity = async (event: FormSubmitEvent<ProfileIdentityDTO>) => {
   }
   finally {
     isLoading.value = false
+  }
+}
+
+const isUploading = ref(false)
+
+const avatarState = reactive<Partial<UploadAvatarDTO>>({
+  avatar: undefined
+})
+
+const onAvatarUpload = async (event: FormSubmitEvent<UploadAvatarDTO>) => {
+  if (isUploading.value || !event.data.avatar || !profile.value) {
+    return
+  }
+
+  isUploading.value = true
+
+  try {
+    const formData = new FormData()
+    formData.append('avatar', event.data.avatar)
+
+    const response = await $fetch('/api/profile/avatar', {
+      method: 'POST',
+      body: formData
+    })
+
+    if (response.success) {
+      if (profile.value.type === 'freelancer') {
+        profile.value.avatar = response.avatarUrl
+      }
+      else {
+        profile.value.logo = response.avatarUrl
+      }
+
+      avatarState.avatar = undefined
+
+      toast.add({
+        title: 'Success',
+        description: 'Your profile picture has been updated.',
+        color: 'success',
+        icon: 'i-lucide-circle-check'
+      })
+    }
+  }
+  catch (err: any) {
+    toast.add({
+      title: 'Upload failed',
+      description: 'Something went wrong while uploading.',
+      color: 'error',
+      icon: 'i-lucide-circle-x'
+    })
+  }
+  finally {
+    isUploading.value = false
   }
 }
 </script>
@@ -181,6 +234,39 @@ const saveIdentity = async (event: FormSubmitEvent<ProfileIdentityDTO>) => {
             color="primary"
             :loading="isLoading"
           />
+        </div>
+      </UForm>
+
+      <div>
+        <header>
+          <h2 class="text-xl font-semibold">Avatar</h2>
+          <p class="text-muted text-sm">Upload a profile picture</p>
+        </header>
+      </div>
+
+      <UForm
+        :schema="uploadAvatarSchema"
+        :state="avatarState"
+        @submit="onAvatarUpload"
+      >
+        <div class="flex items-center gap-4">
+          <UAvatar
+            :src="profile.type === 'freelancer' ? profile.avatar : profile.logo"
+            size="4xl"
+          />
+
+          <UFormField name="avatar">
+            <UFileUpload
+              v-model="avatarState.avatar"
+              variant="area"
+              label="Choose image"
+              description="JPEG, PNG, WEBP or GIF (max 2MB)"
+            />
+          </UFormField>
+        </div>
+
+        <div class="flex justify-end pt-4">
+          <UButton type="submit" label="Submit" />
         </div>
       </UForm>
     </div>

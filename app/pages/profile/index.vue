@@ -70,7 +70,14 @@ const saveBio = async () => {
     <div v-if="profile.type === 'freelancer'" class="space-y-8">
       <div class="flex items-start justify-between ">
         <div class="flex items-center gap-6">
-          <UAvatar :alt="profile.firstName" size="3xl" class="h-24 w-24" />
+          <UAvatar
+            :src="profile.avatar ?? undefined"
+            :chip="{
+              inset: true,
+              position: 'top-left'
+            }"
+            size="4xl"
+          />
 
           <div class="flex flex-col">
             <h1 class="text-3xl font-bold">
@@ -161,7 +168,14 @@ const saveBio = async () => {
     <div v-else-if="profile.type === 'company'" class="space-y-8">
       <div class="flex items-start justify-between ">
         <div class="flex items-center gap-6">
-          <UAvatar :alt="profile.companyName" size="3xl" class="h-24 w-24" />
+          <UAvatar
+            :src="profile.logo ?? undefined"
+            :chip="{
+              inset: true,
+              position: 'top-left'
+            }"
+            size="4xl"
+          />
 
           <div class="flex flex-col">
             <h1 class="text-3xl font-bold">

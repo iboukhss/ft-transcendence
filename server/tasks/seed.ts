@@ -46,6 +46,7 @@ export default defineTask({
             firstName: faker.person.firstName(),
             lastName: faker.person.lastName(),
             country: faker.helpers.arrayElement(COUNTRY_KEYS),
+            avatar: faker.image.urlLoremFlickr({ width: 300, height: 300, category: 'kitten' }),
             bio: faker.person.bio()
           }))
       }
@@ -71,6 +72,7 @@ export default defineTask({
             contactLastName: faker.person.lastName(),
             companyName: faker.company.name(),
             country: faker.helpers.arrayElement(COUNTRY_KEYS),
+            logo: faker.image.urlLoremFlickr({ width: 300, height: 300, category: 'owl' }),
             website: faker.internet.url(),
             description: faker.company.catchPhrase() + '. ' + faker.lorem.paragraph()
           })

@@ -21,6 +21,12 @@ export default defineNuxtConfig({
   nitro: {
     experimental: {
       tasks: true
+    },
+    storage: {
+      uploads: {
+        driver: 'fs',
+        base: './public/uploads'
+      }
     }
   },
   // Disabled typecheck due to random IPC crashes

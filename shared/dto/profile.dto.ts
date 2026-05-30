@@ -4,6 +4,8 @@ import { z } from 'zod'
 
 import { LANGUAGE_KEYS, SKILL_KEYS, COUNTRY_KEYS } from '#shared/constants/enums'
 
+// Retrieve profile information
+
 export const freelancerProfileSchema = z.object({
   type: z.literal('freelancer'),
   firstName: z.string().min(1, 'First name required'),
@@ -31,6 +33,8 @@ export const profileSchema = z.discriminatedUnion('type', [
   freelancerProfileSchema,
   companyProfileSchema
 ])
+
+// Edit profile information
 
 export const patchFreelancerSchema = freelancerProfileSchema.partial().extend({
   type: z.literal('freelancer')
@@ -68,3 +72,17 @@ export const profileIdentitySchema = z.discriminatedUnion('type', [
 export type ProfileDTO = z.infer<typeof profileSchema>
 export type PatchProfileDTO = z.infer<typeof patchProfileSchema>
 export type ProfileIdentityDTO = z.infer<typeof profileIdentitySchema>
+
+// Upload profile picture
+// Zod 4 can validate files: https://zod.dev/api?id=files#files
+
+export const AVATAR_MAX_SIZE = 2 * 1024 * 1024
+export const AVATAR_ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+
+export const uploadAvatarSchema = z.object({
+  avatar: z.file('Please select an image file')
+    .max(AVATAR_MAX_SIZE, 'Image must be less than 2MB')
+    .mime(AVATAR_ALLOWED_MIME_TYPES, 'Unsupported image format')
+})
+
+export type UploadAvatarDTO = z.infer<typeof uploadAvatarSchema>

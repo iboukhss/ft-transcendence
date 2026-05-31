@@ -1,40 +1,10 @@
 <script setup lang="ts">
-import type { ProfileDTO } from '#shared/dto/profile.dto.js'
+import type { PatchProfileDTO, ProfileDTO } from '#shared/dto/profile.dto'
 
-import { COUNTRY_LABELS } from '~/utils/labels'
-
-const { data: profile } = await useFetch('/api/profile')
-
-const isEditingBio = ref(false)
-const isLoading = ref(false)
+const { data: profile } = await useFetch<ProfileDTO>('/api/profile')
 const toast = useToast()
 
-const bioState = ref(
-  profile.value?.type === 'freelancer'
-    ? profile.value.bio ?? ''
-    : profile.value?.description ?? ''
-)
-
-const toggleEditBio = () => {
-  if (isEditingBio.value && profile.value) {
-    bioState.value = profile.value.type === 'freelancer'
-      ? profile.value.bio ?? ''
-      : profile.value.description ?? ''
-  }
-  isEditingBio.value = !isEditingBio.value
-}
-
-const saveBio = async () => {
-  if (isLoading.value || !profile.value) {
-    return
-  }
-
-  isLoading.value = true
-
-  const payload = profile.value.type === 'freelancer'
-    ? { type: 'freelancer', bio: bioState.value }
-    : { type: 'company', description: bioState.value }
-
+async function onProfileUpdate(payload: PatchProfileDTO, done: (success: boolean) => void) {
   try {
     const response = await $fetch<ProfileDTO>('/api/profile', {
       method: 'PATCH',
@@ -42,211 +12,44 @@ const saveBio = async () => {
     })
 
     profile.value = response
-    isEditingBio.value = false
-
-    toast.add({
-      title: 'Success',
-      description: 'About section updated.',
-      color: 'success',
-      icon: 'i-lucide-circle-check'
-    })
+    toast.add({ title: 'Success', description: 'Profile updated.', color: 'success' })
+    done(true)
   }
-  catch (err) {
-    toast.add({
-      title: 'Failure',
-      description: 'Something went wrong while saving about section.',
-      color: 'error',
-      icon: 'i-lucide-circle-x'
-    })
-  }
-  finally {
-    isLoading.value = false
+  catch (err: any) {
+    toast.add({ title: 'Error', description: 'Failed to update profile.', color: 'error' })
+    done(false)
   }
 }
 </script>
 
 <template>
   <UPage v-if="profile">
-    <div v-if="profile.type === 'freelancer'" class="space-y-8">
-      <div class="flex items-start justify-between ">
-        <div class="flex items-center gap-6">
-          <UAvatar
-            :src="profile.avatar ?? undefined"
-            :chip="{
-              inset: true,
-              position: 'top-left'
-            }"
-            size="4xl"
-          />
-
-          <div class="flex flex-col">
-            <h1 class="text-3xl font-bold">
-              {{ profile.firstName }} {{ profile.lastName }}
-            </h1>
-
-            <div class="text-muted mt-1 flex flex-col text-sm">
-              <div class="flex items-center gap-1">
-                <UIcon name="i-lucide-map-pin" />
-                <span>{{ profile.country ? COUNTRY_LABELS[profile.country] : 'Location not set' }}</span>
-              </div>
-              <div class="flex items-center gap-1">
-                <UIcon name="i-lucide-clock" />
-                <span>10:42 AM local time</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <UButton
-          to="/settings"
-          icon="i-lucide-pencil"
-          variant="outline"
-          color="neutral"
-          size="sm"
-          label="Edit profile"
+    <LLFreelancerView
+      v-if="profile.type === 'freelancer'"
+      :profile="profile"
+      is-own-profile
+    >
+      <template #about>
+        <LLEditAboutSection
+          v-model="profile.bio"
+          placeholder="Tell us about your background..."
+          @save="(val, done) => onProfileUpdate({ type: 'freelancer', bio: val }, done)"
         />
-      </div>
+      </template>
+    </LLFreelancerView>
 
-      <USeparator />
-
-      <section>
-        <div class="mb-2 flex items-center justify-between">
-          <h2 class="text-xl font-semibold">About</h2>
-          <UButton
-            v-if="!isEditingBio"
-            icon="i-lucide-pencil"
-            variant="ghost"
-            color="neutral"
-            size="sm"
-            @click="toggleEditBio"
-          />
-        </div>
-
-        <div v-if="isEditingBio" class="space-y-3">
-          <UTextarea
-            v-model="bioState"
-            placeholder="Write your bio..."
-            class="w-full"
-          />
-
-          <div class="flex justify-end gap-3">
-            <UButton
-              label="Cancel"
-              variant="ghost"
-              color="neutral"
-              @click="toggleEditBio"
-            />
-            <UButton
-              label="Save"
-              color="primary"
-              :loading="isLoading"
-              @click="saveBio"
-            />
-          </div>
-        </div>
-
-        <p v-else class="leading-relaxed whitespace-pre-line">
-          {{ profile.bio || 'No bio provided yet.' }}
-        </p>
-      </section>
-
-      <USeparator />
-
-      <div>
-        <h2 class="text-xl font-semibold">Skills</h2>
-        <p>No skills provided yet.</p>
-      </div>
-
-      <USeparator />
-
-      <div>
-        <h2 class="text-xl font-semibold">Languages</h2>
-        <p>No languages provided yet.</p>
-      </div>
-    </div>
-
-    <div v-else-if="profile.type === 'company'" class="space-y-8">
-      <div class="flex items-start justify-between ">
-        <div class="flex items-center gap-6">
-          <UAvatar
-            :src="profile.logo ?? undefined"
-            :chip="{
-              inset: true,
-              position: 'top-left'
-            }"
-            size="4xl"
-          />
-
-          <div class="flex flex-col">
-            <h1 class="text-3xl font-bold">
-              {{ profile.companyName }}
-            </h1>
-
-            <div class="text-muted mt-1 flex flex-col text-sm">
-              <div class="flex items-center gap-1">
-                <UIcon name="i-lucide-map-pin" />
-                <span>{{ profile.country ? COUNTRY_LABELS[profile.country] : 'Location not set' }}</span>
-              </div>
-              <div class="flex items-center gap-1">
-                <UIcon name="i-lucide-clock" />
-                <span>10:42 AM local time</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <UButton
-          to="/settings"
-          icon="i-lucide-pencil"
-          variant="outline"
-          color="neutral"
-          size="sm"
-          label="Edit profile"
+    <LLCompanyView
+      v-else
+      :profile="profile"
+      is-own-profile
+    >
+      <template #about>
+        <LLEditAboutSection
+          v-model="profile.description"
+          placeholder="Describe your company mission..."
+          @save="(val, done) => onProfileUpdate({ type: 'company', description: val }, done)"
         />
-      </div>
-
-      <USeparator />
-
-      <section>
-        <div class="mb-2 flex items-center justify-between">
-          <h2 class="text-xl font-semibold">About</h2>
-          <UButton
-            v-if="!isEditingBio"
-            icon="i-lucide-pencil"
-            variant="ghost"
-            color="neutral"
-            size="sm"
-            @click="toggleEditBio"
-          />
-        </div>
-
-        <div v-if="isEditingBio" class="space-y-3">
-          <UTextarea
-            v-model="bioState"
-            placeholder="Write your description..."
-            class="w-full"
-          />
-
-          <div class="flex justify-end gap-3">
-            <UButton
-              label="Cancel"
-              variant="ghost"
-              color="neutral"
-              @click="toggleEditBio"
-            />
-            <UButton
-              label="Save"
-              color="primary"
-              :loading="isLoading"
-              @click="saveBio"
-            />
-          </div>
-        </div>
-
-        <p v-else class="leading-relaxed whitespace-pre-line">
-          {{ profile.description || 'No description provided yet.' }}
-        </p>
-      </section>
-    </div>
+      </template>
+    </LLCompanyView>
   </UPage>
 </template>

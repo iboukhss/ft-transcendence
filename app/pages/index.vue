@@ -21,9 +21,12 @@ const links = ref<ButtonProps[]>([
     orientation="horizontal"
     :links="links"
   >
-    <img
-      src="/freelancer-office-stock.jpg"
-      class="rounded-xl shadow-xl"
-    >
+    <div class="relative">
+      <div class="bg-primary-500/20 absolute -inset-4 rounded-full blur-3xl" />
+      <img
+        src="/freelancer-office-stock.jpg"
+        class="relative rounded-xl border border-neutral-200 shadow-xl dark:border-neutral-800"
+      >
+    </div>
   </UPageHero>
 </template>

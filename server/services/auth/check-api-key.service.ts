@@ -10,6 +10,7 @@ export async function checkApiKey(db: DB, tables: Tables, apiKey: string) {
     .select({
       userId: tables.apiKeys.userId,
       accountType: tables.users.accountType,
+      role: tables.users.role,
       isActive: tables.apiKeys.isActive
     })
     .from(tables.apiKeys)

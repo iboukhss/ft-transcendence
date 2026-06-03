@@ -1,0 +1,18 @@
+info:
+  name: index.get.ts
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: https://localhost:3000/api/v1/jobs/company
+  headers:
+    - name: x-api-key
+      value: some-secret-key-2
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

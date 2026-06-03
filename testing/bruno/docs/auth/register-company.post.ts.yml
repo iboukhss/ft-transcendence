@@ -10,11 +10,14 @@ http:
     type: json
     data: |-
       {
-        "accountType": "company",
-        "companyName": "FancyWork4Free",
         "email": "heckde@gmail.com",
         "password": "newPassword",
-        "country": "lu"
+        "country": "lu",
+        
+        "accountType": "company",
+        "contactFirstName": "Dennis",
+        "contactLastName": "Heck",
+        "companyName": "FancyWork4Free"  
       }
   auth: inherit
 

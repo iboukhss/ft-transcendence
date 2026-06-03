@@ -23,6 +23,9 @@ export default defineNuxtConfig({
       tasks: true
     },
     storage: {
+      cache: {
+        driver: 'memory'
+      },
       uploads: {
         driver: 'fs',
         base: './public/uploads'

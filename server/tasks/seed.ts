@@ -86,6 +86,13 @@ export default defineTask({
           })
           .returning()
 
+        const [apiKeys] = await db
+          .insert(tables.apiKeys)
+          .values({
+
+          })
+          .returning()
+
         const [insertedCompany] = await db
           .insert(tables.companyProfiles)
           .values({

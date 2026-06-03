@@ -37,3 +37,11 @@ export function throw404(statusMessage: string) {
     statusMessage: statusMessage
   })
 }
+
+export function throw429(statusMessage: string) {
+  throw createError({
+    statusCode: 404,
+    message: 'Too Many Requests',
+    statusMessage: statusMessage
+  })
+}

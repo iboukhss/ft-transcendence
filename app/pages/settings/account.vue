@@ -5,7 +5,6 @@ import { passwordSchema } from '#shared/dto/password.dto.js'
 
 const toast = useToast()
 
-const isEditingEmail = ref(false)
 const isUpdatingPassword = ref(false)
 
 const emailState = ref({
@@ -47,86 +46,62 @@ async function onPasswordSubmit() {
 </script>
 
 <template>
-  <div class="space-y-8">
-    <header>
-      <h1 class="text-xl font-semibold">Account security</h1>
-      <p class="text-muted text-sm">Manage your login credentials</p>
-    </header>
+  <UPageBody class="space-y-8">
+    <div class="px-2 text-3xl font-bold tracking-tight">
+      <h1>Account security</h1>
+    </div>
 
-    <section class="space-y-6">
-      <div class="flex items-center justify-between gap-4">
-        <div>
-          <h2 class="text-lg font-semibold">Email</h2>
-          <p class="text-muted text-sm">Your email is used for login and notifications</p>
-        </div>
-        <UButton
-          v-if="!isEditingEmail"
-          label="Change email"
-          variant="subtle"
-          color="neutral"
-          @click="isEditingEmail = true"
-        />
-      </div>
-
-      <div class="space-y-6">
-        <UFormField label="Email">
-          <UInput
-            v-model="emailState.email"
-            :disabled="!isEditingEmail"
-            :variant="isEditingEmail ? 'outline' : 'subtle'"
-          />
-        </UFormField>
-
-        <div v-if="isEditingEmail" class="flex justify-end gap-3 pt-2">
-          <UButton
-            label="Cancel"
-            variant="ghost"
-            color="neutral"
-            @click="isEditingEmail = false"
-          />
-          <UButton
-            label="Save"
-            color="primary"
-          />
-        </div>
-      </div>
-    </section>
-
-    <section class="space-y-6">
-      <div class="flex items-center justify-between gap-4">
-        <div>
-          <h2 class="text-lg font-semibold">Password</h2>
-          <p class="text-muted text-sm">Ensure your account is using a strong password</p>
-        </div>
-      </div>
-
-      <UForm
-        :schema="passwordSchema"
-        :state="passwordState"
-        class="space-y-4"
-        @submit="onPasswordSubmit"
+    <UForm>
+      <UCard
+        title="Email"
+        description="Your email will be used for login and notifications"
       >
-        <UFormField label="Current password" name="oldPassword">
-          <UInput v-model="passwordState.oldPassword" type="password" />
+        <UFormField>
+          <UInput v-model="emailState.email" />
         </UFormField>
 
-        <UFormField label="New password" name="newPassword">
-          <UInput v-model="passwordState.newPassword" type="password" />
-        </UFormField>
-
-        <UFormField label="Confirm new password" name="confirmPassword">
-          <UInput v-model="passwordState.confirmPassword" type="password" />
-        </UFormField>
-
-        <div>
+        <template #footer>
           <UButton
-            label="Update password"
             type="submit"
-            color="primary"
+            label="Change email"
+            variant="outline"
+          />
+        </template>
+      </UCard>
+    </UForm>
+
+    <UForm
+      :schema="passwordSchema"
+      :state="passwordState"
+      @submit="onPasswordSubmit"
+    >
+      <UCard
+        title="Password"
+        description="Make sure to use a strong password"
+      >
+        <div class="space-y-4">
+          <UFormField label="Current password" name="oldPassword">
+            <UInput v-model="passwordState.oldPassword" type="password" />
+          </UFormField>
+
+          <UFormField label="New password" name="newPassword">
+            <UInput v-model="passwordState.newPassword" type="password" />
+          </UFormField>
+
+          <UFormField label="Confirm new password" name="confirmPassword">
+            <UInput v-model="passwordState.confirmPassword" type="password" />
+          </UFormField>
+        </div>
+
+        <template #footer>
+          <UButton
+            type="submit"
+            label="Update password"
+            variant="outline"
             :loading="isUpdatingPassword"
           />
-        </div>
-      </UForm>
-    </section>
-  </div>
+        </template>
+      </UCard>
+    </UForm>
+  </UPageBody>
 </template>

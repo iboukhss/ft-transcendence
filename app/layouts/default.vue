@@ -49,6 +49,31 @@ const userMenuItems = computed<DropdownMenuItem[][]>(() => [
 
 const { loggedIn, user, clear } = useUserSession()
 
+// NOTE(isma): I wasted 2 hours on this -_-
+const { data: profile, pending, error } = await useFetch('/api/profile', {
+  watch: [loggedIn]
+})
+
+const userDisplayName = computed(() => {
+  if (!profile.value) {
+    return ''
+  }
+
+  return profile.value.type === 'freelancer'
+    ? profile.value.firstName
+    : profile.value.contactFirstName
+})
+
+const userAvatarUrl = computed(() => {
+  if (!profile.value) {
+    return undefined
+  }
+
+  return profile.value.type === 'freelancer'
+    ? profile.value.avatar
+    : profile.value.logo
+})
+
 const logout = async () => {
   await clear()
   await navigateTo('/')
@@ -57,10 +82,10 @@ const logout = async () => {
 
 <template>
   <div>
-    <UHeader title="LuxLink">
+    <UHeader>
       <template #left>
         <NuxtLink to="/">
-          <span class="text-2xl font-bold">LuxLink</span>
+          <span class="text-2xl font-bold tracking-tight">LuxLink</span>
         </NuxtLink>
       </template>
 
@@ -69,20 +94,27 @@ const logout = async () => {
       <template #right>
         <div class="flex items-center gap-4">
           <template v-if="loggedIn">
-            <UButton label="Post a job offer" to="/jobs/create" color="primary" variant="subtle" />
+            <UButton
+              v-if="user?.accountType === 'company'"
+              label="Post a job offer"
+              to="/jobs/create"
+              variant="subtle"
+              color="primary"
+            />
 
             <UDropdownMenu :items="userMenuItems">
-              <UButton
-                color="neutral"
-                icon="i-lucide-user-circle"
-                variant="ghost"
-                :label="user?.email"
-              />
+              <UButton variant="ghost" color="neutral">
+                <UAvatar
+                  :src="userAvatarUrl || ''"
+                  :alt="userDisplayName"
+                />
+                <span>{{ userDisplayName }}</span>
+              </UButton>
             </UDropdownMenu>
           </template>
 
           <template v-else>
-            <UButton label="Log in" to="/login" color="neutral" variant="ghost" />
+            <UButton label="Log in" to="/login" variant="ghost" color="neutral" />
             <UButton label="Join now" to="/register" color="primary" />
           </template>
 
@@ -92,7 +124,7 @@ const logout = async () => {
     </UHeader>
 
     <UMain>
-      <UContainer class="py-10">
+      <UContainer>
         <slot />
       </UContainer>
     </UMain>

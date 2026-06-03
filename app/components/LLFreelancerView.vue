@@ -11,7 +11,7 @@ defineProps<{
 
 <template>
   <div class="space-y-8">
-    <div class="flex items-start justify-between ">
+    <div class="flex items-center justify-between">
       <div class="flex items-center gap-6">
         <UAvatar
           :src="profile.avatar ?? undefined"
@@ -43,11 +43,9 @@ defineProps<{
       <UButton
         v-if="isOwnProfile"
         to="/settings"
-        icon="i-lucide-pencil"
-        variant="outline"
+        label="Edit profile settings"
+        variant="subtle"
         color="neutral"
-        size="sm"
-        label="Edit profile"
       />
     </div>
 

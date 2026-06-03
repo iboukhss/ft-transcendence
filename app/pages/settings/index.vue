@@ -22,13 +22,6 @@ const identityState = ref<ProfileIdentityDTO | null>(
   profile.value ? profileIdentitySchema.parse(profile.value) : null
 )
 
-const toggleEdit = () => {
-  if (isEditing.value && profile.value) {
-    identityState.value = profileIdentitySchema.parse(profile.value)
-  }
-  isEditing.value = !isEditing.value
-}
-
 const saveIdentity = async (event: FormSubmitEvent<ProfileIdentityDTO>) => {
   if (isLoading.value) {
     return
@@ -120,46 +113,41 @@ const onAvatarUpload = async (event: FormSubmitEvent<UploadAvatarDTO>) => {
 </script>
 
 <template>
-  <UPage v-if="profile && identityState">
-    <div class="space-y-8">
-      <div class="flex items-center justify-between gap-4">
-        <header>
-          <h2 class="text-xl font-semibold">Public profile</h2>
-          <p class="text-muted text-sm">Manage your identity on LuxLink</p>
-        </header>
-
-        <UButton
-          v-if="!isEditing"
-          icon="i-lucide-pencil"
-          color="primary"
-          variant="ghost"
-          @click="toggleEdit"
-        >
-          {{ isEditing ? 'Cancel' : 'Edit' }}
-        </UButton>
+  <UPageBody v-if="profile && identityState" class="space-y-8">
+    <div class="flex items-center justify-between px-2">
+      <div class="px-2 text-3xl font-bold tracking-tight">
+        <h1>Public profile</h1>
       </div>
 
-      <UForm
-        :schema="profileIdentitySchema"
-        :state="identityState"
-        @submit="saveIdentity"
+      <UButton
+        to="/profile"
+        label="Go back to profile"
+        variant="subtle"
+        color="neutral"
+      />
+    </div>
+
+    <UForm
+      :schema="profileIdentitySchema"
+      :state="identityState"
+      @submit="saveIdentity"
+    >
+      <UCard
+        title="Identity"
+        description="Manage your identity on LuxLink"
       >
         <div v-if="identityState.type === 'freelancer'" class="space-y-4">
           <UFormField label="First name" name="firstName">
             <UInput
               v-model="identityState.firstName"
-              :variant="isEditing ? 'outline' : 'subtle'"
-              :disabled="!isEditing"
-              :color="isEditing ? 'primary' : 'neutral'"
+              variant="outline"
             />
           </UFormField>
 
           <UFormField label="Last name" name="lastName">
             <UInput
               v-model="identityState.lastName"
-              :variant="isEditing ? 'outline' : 'subtle'"
-              :disabled="!isEditing"
-              :color="isEditing ? 'primary' : 'neutral'"
+              variant="outline"
             />
           </UFormField>
 
@@ -167,12 +155,11 @@ const onAvatarUpload = async (event: FormSubmitEvent<UploadAvatarDTO>) => {
             <USelect
               v-model="identityState.country"
               value-key="key"
-              :variant="isEditing ? 'outline' : 'subtle'"
-              :disabled="!isEditing"
-              :color="isEditing ? 'primary' : 'neutral'"
+              variant="outline"
               :items="countryOptions"
               :ui="{
-                content: 'min-w-fit' // Found there: https://github.com/nuxt/ui/issues/3920
+                // Found there: https://github.com/nuxt/ui/issues/3920
+                content: 'min-w-fit'
               }"
             />
           </UFormField>
@@ -182,27 +169,21 @@ const onAvatarUpload = async (event: FormSubmitEvent<UploadAvatarDTO>) => {
           <UFormField label="Contact first name" name="contactFirstName">
             <UInput
               v-model="identityState.contactFirstName"
-              :variant="isEditing ? 'outline' : 'subtle'"
-              :disabled="!isEditing"
-              :color="isEditing ? 'primary' : 'neutral'"
+              variant="outline"
             />
           </UFormField>
 
           <UFormField label="Contact last name" name="contactLastName">
             <UInput
               v-model="identityState.contactLastName"
-              :variant="isEditing ? 'outline' : 'subtle'"
-              :disabled="!isEditing"
-              :color="isEditing ? 'primary' : 'neutral'"
+              variant="outline"
             />
           </UFormField>
 
           <UFormField label="Company name" name="companyName">
             <UInput
               v-model="identityState.companyName"
-              :variant="isEditing ? 'outline' : 'subtle'"
-              :disabled="!isEditing"
-              :color="isEditing ? 'primary' : 'neutral'"
+              variant="outline"
             />
           </UFormField>
 
@@ -210,44 +191,37 @@ const onAvatarUpload = async (event: FormSubmitEvent<UploadAvatarDTO>) => {
             <USelect
               v-model="identityState.country"
               value-key="key"
-              :variant="isEditing ? 'outline' : 'subtle'"
-              :disabled="!isEditing"
-              :color="isEditing ? 'primary' : 'neutral'"
+              variant="outline"
               :items="countryOptions"
               :ui="{
-                content: 'min-w-fit' // Found there: https://github.com/nuxt/ui/issues/3920
+                // Found there: https://github.com/nuxt/ui/issues/3920
+                content: 'min-w-fit'
               }"
             />
           </UFormField>
         </div>
 
-        <div v-if="isEditing" class="flex justify-end gap-3 pt-4">
-          <UButton
-            label="Cancel"
-            variant="ghost"
-            color="neutral"
-            @click="toggleEdit"
-          />
-          <UButton
-            type="submit"
-            label="Save"
-            color="primary"
-            :loading="isLoading"
-          />
-        </div>
-      </UForm>
+        <template #footer>
+          <div class="flex">
+            <UButton
+              type="submit"
+              label="Save profile changes"
+              variant="outline"
+              :loading="isLoading"
+            />
+          </div>
+        </template>
+      </UCard>
+    </UForm>
 
-      <div>
-        <header>
-          <h2 class="text-xl font-semibold">Avatar</h2>
-          <p class="text-muted text-sm">Upload a profile picture</p>
-        </header>
-      </div>
-
-      <UForm
-        :schema="uploadAvatarSchema"
-        :state="avatarState"
-        @submit="onAvatarUpload"
+    <UForm
+      :schema="uploadAvatarSchema"
+      :state="avatarState"
+      @submit="onAvatarUpload"
+    >
+      <UCard
+        title="Avatar"
+        description="Upload a profile picture"
       >
         <div class="flex items-center gap-4">
           <UAvatar
@@ -265,10 +239,17 @@ const onAvatarUpload = async (event: FormSubmitEvent<UploadAvatarDTO>) => {
           </UFormField>
         </div>
 
-        <div class="flex justify-end pt-4">
-          <UButton type="submit" label="Submit" />
-        </div>
-      </UForm>
-    </div>
-  </UPage>
+        <template #footer>
+          <div>
+            <UButton
+              type="submit"
+              label="Upload new picture"
+              variant="outline"
+              :loading="isUploading"
+            />
+          </div>
+        </template>
+      </UCard>
+    </UForm>
+  </UPageBody>
 </template>

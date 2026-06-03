@@ -77,10 +77,10 @@ async function onSubmit() {
 </script>
 
 <template>
-  <div class="flex flex-1 flex-col items-center px-4">
-    <div class="w-full max-w-lg space-y-6">
+  <Upage>
+    <UPageBody class="mx-auto max-w-xl space-y-8">
       <header class="text-center">
-        <h2 class="text-xl font-bold">Post a new job</h2>
+        <h2 class="text-3xl font-bold tracking-tight">Post a new job</h2>
       </header>
 
       <USeparator />
@@ -170,6 +170,6 @@ async function onSubmit() {
           Post Job
         </UButton>
       </UForm>
-    </div>
-  </div>
+    </UPageBody>
+  </UPage>
 </template>

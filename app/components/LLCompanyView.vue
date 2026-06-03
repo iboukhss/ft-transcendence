@@ -43,11 +43,9 @@ defineProps<{
       <UButton
         v-if="isOwnProfile"
         to="/settings"
-        icon="i-lucide-pencil"
-        variant="outline"
-        color="neutral"
-        size="sm"
         label="Edit profile"
+        variant="subtle"
+        color="neutral"
       />
     </div>
 

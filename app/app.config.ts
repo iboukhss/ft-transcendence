@@ -44,6 +44,11 @@ export default defineAppConfig({
           class: 'translate-x-1/2 -translate-y-1/2 transform'
         }
       ]
+    },
+    card: {
+      slots: {
+        root: 'divide-none'
+      }
     }
   }
 })

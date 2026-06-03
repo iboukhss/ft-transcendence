@@ -56,7 +56,7 @@ const onSave = () => {
 
     <div v-else>
       <p v-if="aboutText" class="leading-relaxed whitespace-pre-line">{{ aboutText }}</p>
-      <p v-else class="text-muted text-sm italic">{{ placeholder || 'No information provided' }}</p>
+      <p v-else>{{ 'No information provided yet.' }}</p>
     </div>
   </div>
 </template>

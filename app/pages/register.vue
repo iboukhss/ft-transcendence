@@ -77,10 +77,10 @@ async function onSubmit(event: FormSubmitEvent<RegisterDTO>) {
 </script>
 
 <template>
-  <div class="flex flex-1 flex-col items-center justify-center px-4">
-    <div class="w-full max-w-xl space-y-6">
-      <header class="text-center">
-        <h2 class="text-xl font-bold">Register</h2>
+  <UPage>
+    <UPageBody class="mx-auto max-w-xl space-y-8">
+      <header class="space-y-1.5 text-center">
+        <h2 class="text-3xl font-bold tracking-tight">Register</h2>
         <p class="text-muted text-sm">Create your LuxLink account.</p>
       </header>
 
@@ -98,24 +98,24 @@ async function onSubmit(event: FormSubmitEvent<RegisterDTO>) {
         @submit="onSubmit"
       >
         <div class="grid grid-cols-2 gap-4">
-          <UFormField label="First name" name="firstName">
+          <UFormField label="First name" name="firstName" required>
             <UInput v-model="freelancerState.firstName" placeholder="Jane" class="w-full" />
           </UFormField>
 
-          <UFormField label="Last name" name="lastName">
+          <UFormField label="Last name" name="lastName" required>
             <UInput v-model="freelancerState.lastName" placeholder="Doe" class="w-full" />
           </UFormField>
         </div>
 
-        <UFormField label="Email" name="email">
+        <UFormField label="Email" name="email" required>
           <UInput v-model="freelancerState.email" placeholder="jane@example.com" class="w-full" />
         </UFormField>
 
-        <UFormField label="Password" name="password">
-          <UInput v-model="freelancerState.password" type="password" class="w-full" />
+        <UFormField label="Password" name="password" required>
+          <UInput v-model="freelancerState.password" type="password" placeholder="Password (8 or more characters)" class="w-full" />
         </UFormField>
 
-        <UFormField label="Country" name="country">
+        <UFormField label="Country" name="country" required>
           <USelectMenu
             v-model="freelancerState.country"
             value-key="key"
@@ -125,6 +125,12 @@ async function onSubmit(event: FormSubmitEvent<RegisterDTO>) {
             class="w-full"
           />
         </UFormField>
+
+        <UCheckbox>
+          <template #label>
+            I understand and agree to the <NuxtLink to="/terms" class="text-primary underline">Terms of service</NuxtLink> and <NuxtLink to="/privacy" class="text-primary underline">Privacy policy</NuxtLink>
+          </template>
+        </UCheckbox>
 
         <UButton type="submit" block :loading="isLoading" :disabled="isLoading" size="lg">
           Create Account
@@ -139,28 +145,28 @@ async function onSubmit(event: FormSubmitEvent<RegisterDTO>) {
         @submit="onSubmit"
       >
         <div class="grid grid-cols-2 gap-4">
-          <UFormField label="First name" name="contactFirstName">
+          <UFormField label="First name" name="contactFirstName" required>
             <UInput v-model="companyState.contactFirstName" placeholder="John" class="w-full" />
           </UFormField>
 
-          <UFormField label="Last name" name="contactLastName">
+          <UFormField label="Last name" name="contactLastName" required>
             <UInput v-model="companyState.contactLastName" placeholder="Smith" class="w-full" />
           </UFormField>
         </div>
 
-        <UFormField label="Company name" name="companyName">
+        <UFormField label="Company name" name="companyName" required>
           <UInput v-model="companyState.companyName" placeholder="Acme Corporation" class="w-full" />
         </UFormField>
 
-        <UFormField label="Work email" name="email">
-          <UInput v-model="companyState.email" placeholder="js@acme.com" class="w-full" />
+        <UFormField label="Work email" name="email" required>
+          <UInput v-model="companyState.email" placeholder="john.smith@acme.com" class="w-full" />
         </UFormField>
 
-        <UFormField label="Password" name="password">
-          <UInput v-model="companyState.password" type="password" class="w-full" />
+        <UFormField label="Password" name="password" required>
+          <UInput v-model="companyState.password" type="password" placeholder="Password (8 or more characters)" class="w-full" />
         </UFormField>
 
-        <UFormField label="Country" name="country">
+        <UFormField label="Country" name="country" required>
           <USelectMenu
             v-model="companyState.country"
             value-key="key"
@@ -171,10 +177,16 @@ async function onSubmit(event: FormSubmitEvent<RegisterDTO>) {
           />
         </UFormField>
 
+        <UCheckbox>
+          <template #label>
+            I understand and agree to the <NuxtLink to="/terms" class="text-primary underline">Terms of service</NuxtLink> and <NuxtLink to="/privacy" class="text-primary underline">Privacy policy</NuxtLink>
+          </template>
+        </UCheckbox>
+
         <UButton type="submit" block :loading="isLoading" :disabled="isLoading" size="lg">
           Create Account
         </UButton>
       </UForm>
-    </div>
-  </div>
+    </UPageBody>
+  </UPage>
 </template>

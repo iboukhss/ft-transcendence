@@ -41,6 +41,7 @@ const companyState = reactive<Extract<RegisterDTO, { accountType: 'company' }>>(
 
 const toast = useToast()
 const isLoading = ref(false)
+const agreedToTerms = ref(false)
 
 async function onSubmit(event: FormSubmitEvent<RegisterDTO>) {
   if (isLoading.value) {
@@ -126,13 +127,13 @@ async function onSubmit(event: FormSubmitEvent<RegisterDTO>) {
           />
         </UFormField>
 
-        <UCheckbox>
+        <UCheckbox v-model="agreedToTerms">
           <template #label>
             I understand and agree to the <NuxtLink to="/terms" class="text-primary underline">Terms of service</NuxtLink> and <NuxtLink to="/privacy" class="text-primary underline">Privacy policy</NuxtLink>
           </template>
         </UCheckbox>
 
-        <UButton type="submit" block :loading="isLoading" :disabled="isLoading" size="lg">
+        <UButton type="submit" block :loading="isLoading" :disabled="isLoading || !agreedToTerms" size="lg">
           Create Account
         </UButton>
       </UForm>
@@ -177,13 +178,13 @@ async function onSubmit(event: FormSubmitEvent<RegisterDTO>) {
           />
         </UFormField>
 
-        <UCheckbox>
+        <UCheckbox v-model="agreedToTerms">
           <template #label>
             I understand and agree to the <NuxtLink to="/terms" class="text-primary underline">Terms of service</NuxtLink> and <NuxtLink to="/privacy" class="text-primary underline">Privacy policy</NuxtLink>
           </template>
         </UCheckbox>
 
-        <UButton type="submit" block :loading="isLoading" :disabled="isLoading" size="lg">
+        <UButton type="submit" block :loading="isLoading" :disabled="isLoading || !agreedToTerms" size="lg">
           Create Account
         </UButton>
       </UForm>

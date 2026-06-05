@@ -20,6 +20,10 @@ const items: NavigationMenuItem[][] = [
       to: '/settings/preferences'
     }
   ], [
+    { label: 'Request data',
+      icon: 'i-lucide-download',
+      to: '/settings/data-request'
+    },
     {
       label: 'Delete account',
       icon: 'i-lucide-trash',

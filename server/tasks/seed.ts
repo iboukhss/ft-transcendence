@@ -25,6 +25,28 @@ export default defineTask({
       faker.seed(42)
 
       const MOCK_HASHED_PASSWORD = await hashPassword('password')
+      const ADMIN_HASHED_PASSWORD = await hashPassword('admin')
+
+      console.log('Generating admin account...')
+      const [insertedAdmin] = await db
+        .insert(tables.users)
+        .values({
+          email: 'admin@luxlink.com',
+          password: ADMIN_HASHED_PASSWORD,
+          accountType: 'company',
+          role: 'admin',
+          createdAt: new Date()
+        })
+        .returning()
+
+      await db
+        .insert(tables.profiles)
+        .values({
+          userId: insertedAdmin.id,
+          firstName: 'Admin',
+          lastName: 'Admin',
+          country: 'fr'
+        })
 
       console.log('Generating 12 freelancer accounts...')
       for (let i = 0; i < 12; i++) {

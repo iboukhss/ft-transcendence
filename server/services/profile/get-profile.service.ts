@@ -6,8 +6,7 @@ import { profileSchema, type ProfileDTO } from '#shared/dto/profile.dto.js'
 
 export async function getProfile(db: DB, tables: Tables, userId: number, accountType: string): Promise<ProfileDTO> {
   let rawData
-
-  if (accountType == 'freelancer') {
+  if (accountType) {
     rawData = await db.query.freelancerProfiles.findFirst({
       where: eq(tables.freelancerProfiles.userId, userId)
     })

@@ -42,6 +42,7 @@ const companyState = reactive<Extract<RegisterDTO, { accountType: 'company' }>>(
 const toast = useToast()
 const isLoading = ref(false)
 const agreedToTerms = ref(false)
+const isAdult = ref(false)
 
 async function onSubmit(event: FormSubmitEvent<RegisterDTO>) {
   if (isLoading.value) {
@@ -132,8 +133,13 @@ async function onSubmit(event: FormSubmitEvent<RegisterDTO>) {
             I understand and agree to the <NuxtLink to="/terms" class="text-primary underline">Terms of service</NuxtLink> and <NuxtLink to="/privacy" class="text-primary underline">Privacy policy</NuxtLink>
           </template>
         </UCheckbox>
+        <UCheckbox v-model="isAdult">
+          <template #label>
+            I confirm that I am at least 18 years of age
+          </template>
+        </UCheckbox>
 
-        <UButton type="submit" block :loading="isLoading" :disabled="isLoading || !agreedToTerms" size="lg">
+        <UButton type="submit" block :loading="isLoading" :disabled="isLoading || !agreedToTerms || !isAdult" size="lg">
           Create Account
         </UButton>
       </UForm>

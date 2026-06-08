@@ -6,7 +6,13 @@ import { LANGUAGE_KEYS, SKILL_KEYS, COUNTRY_KEYS } from '#shared/constants/enums
 
 // Retrieve profile information
 
-export const freelancerProfileSchema = z.object({
+export const baseProfileSchema = z.object({
+  userId: z.number(),
+  createdAt: z.date(),
+  updatedAt: z.date()
+})
+
+export const freelancerProfileSchema = baseProfileSchema.extend({
   type: z.literal('freelancer'),
   firstName: z.string().min(1, 'First name required'),
   lastName: z.string().min(1, 'Last name required'),
@@ -18,7 +24,7 @@ export const freelancerProfileSchema = z.object({
   hourlyRate: z.number().nullable()
 })
 
-export const companyProfileSchema = z.object({
+export const companyProfileSchema = baseProfileSchema.extend({
   type: z.literal('company'),
   companyName: z.string().min(1, 'Company name required'),
   contactFirstName: z.string().min(1),
@@ -72,6 +78,8 @@ export const profileIdentitySchema = z.discriminatedUnion('type', [
 export type ProfileDTO = z.infer<typeof profileSchema>
 export type PatchProfileDTO = z.infer<typeof patchProfileSchema>
 export type ProfileIdentityDTO = z.infer<typeof profileIdentitySchema>
+
+export type FreelancerDTO = z.infer<typeof freelancerProfileSchema>
 
 // Upload profile picture
 // Zod 4 can validate files: https://zod.dev/api?id=files#files

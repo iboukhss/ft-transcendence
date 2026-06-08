@@ -1,7 +1,8 @@
-import { toJobDTO } from '#server/dto/job.dto.js'
 import { eq } from 'drizzle-orm'
 
-export async function getJobById(db: DB, tables: Tables, jobId: number) {
+import { jobSchema } from '#shared/dto/job.dto.js'
+
+export async function getJobById(jobId: number) {
   const job = await db.query.jobs.findFirst({
     where: eq(tables.jobs.id, jobId)
   })
@@ -13,5 +14,5 @@ export async function getJobById(db: DB, tables: Tables, jobId: number) {
     })
   }
 
-  return toJobDTO(job)
+  return jobSchema.parse(job)
 }

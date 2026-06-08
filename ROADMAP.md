@@ -47,14 +47,15 @@ Closest example projects ideas: **Marketplace Platform**, **Pet Adoption Platfor
 | ✅ | Implement a complete notification system | 1 pt |
 | ✅ | Server-Side Rendering | 1 pt |
 | ❌ | Progressive Web App (PWA) with offline support and installability | 1 pt |
-| ❔ | Custom-made design system with reusable components | 1 pt |
-| ✅ | Implement advanced search functionality with filters, sorting, and pagination | 1 pt |
-| ❔ | File upload and management system | 1 pt |
-| | | 8/14 pts |
+| ✅ | Custom-made design system with reusable components | 1 pt |
+| ❔ | Implement advanced search functionality with filters, sorting, and pagination | 1 pt |
+| ✅ | File upload and management system | 1 pt |
+| | | 9/14 pts |
 
 **Missing features**:
 
 - [ ] Implement public API keys, rate limits and documentation
+- [ ] Add ability to delete uploaded files
 
 **Other notes**:
 
@@ -69,7 +70,7 @@ Closest example projects ideas: **Marketplace Platform**, **Pet Adoption Platfor
 | Status | Goal | Score |
 | --- | --- | --- |
 | ❌ | Complete accessibility compliance (WCAG 2.1 AA) | 2 pts |
-| ❔ | Multi-language support (at least 3) | 1 pt |
+| ❌ | Multi-language support (at least 3) | 1 pt |
 | ❌ | Right-to-left (RTL) language support | 1 pt |
 | ✅ | Support for at least 2 additional browsers | 1 pt |
 | | | 1/5 pts |
@@ -88,13 +89,13 @@ Closest example projects ideas: **Marketplace Platform**, **Pet Adoption Platfor
 | ✅ | Implement remote authentication with OAuth 2.0 | 1 pt |
 | ✅ | Advanced permission system | 2 pts |
 | ❔ | An organization system | 2 pts |
-| ❔ | Implement a complete 2FA system | 1 pt |
+| ❌ | Implement a complete 2FA system | 1 pt |
 | ❔ | User activity analytics and insights dashboard | 1 pt |
 | | | 5/10 pts |
 
 **Missing features**:
 
-- [ ] Allow users to upload an avatar.
+- [x] Allow users to upload an avatar.
 - [ ] Display online status in real time.
 - [ ] Implement OAuth via 42 API using nuxt-auth-utils.
 - [ ] Add at least one admin account and look into middleware for admins, users, guests and potentially moderators.
@@ -121,7 +122,7 @@ Closest example projects ideas: **Marketplace Platform**, **Pet Adoption Platfor
 
 | Status | Goal | Score |
 | --- | --- | --- |
-| ❔ | Implement WAF/ModSecurity + HashiCorp Vault for secrets | 2 pts |
+| ❌ | Implement WAF/ModSecurity + HashiCorp Vault for secrets | 2 pts |
 | | 0/2 pts |
 
 ### Gaming and user experience
@@ -132,9 +133,9 @@ N/A
 
 | Status | Goal | Score |
 | --- | --- | --- |
-| ❔ | Infrastructure for log management using ELK | 2 pts |
-| ❔ | Monitoring system with Prometheus and Grafana | 2 pts |
-| ❔ | Backend as microservices | 2 pts |
+| ❌ | Infrastructure for log management using ELK | 2 pts |
+| ❌ | Monitoring system with Prometheus and Grafana | 2 pts |
+| ❌ | Backend as microservices | 2 pts |
 | ❌ | Health check and status page system with automated backups and disaster recovery procedures | 1 pt |
 | | | 0/7 pts |
 
@@ -148,8 +149,8 @@ N/A
 | --- | --- | --- |
 | ❌ | Advanced analytics dashboard with data visualization | 2 pts |
 | ❔ | Data export and import functionality | 1 pt |
-| ❔ | GDPR compliance features | 1 pt |
-| | | 0/4 pts |
+| ✅ | GDPR compliance features | 1 pt |
+| | | 1/4 pts |
 
 **Notes**:
 
@@ -169,7 +170,7 @@ Some ideas mentionned:
 
 ---
 
-**Potential final score:** 14/14 pts
+**Potential final score:** 16/14 pts
 
 ## Final deadline
 

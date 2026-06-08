@@ -31,7 +31,7 @@ export default defineTask({
       const [insertedAdmin] = await db
         .insert(tables.users)
         .values({
-          email: 'admin@luxlink.com',
+          email: 'admin@luxlink.lu',
           password: ADMIN_HASHED_PASSWORD,
           accountType: 'company',
           role: 'admin',
@@ -40,11 +40,12 @@ export default defineTask({
         .returning()
 
       await db
-        .insert(tables.profiles)
+        .insert(tables.companyProfiles)
         .values({
           userId: insertedAdmin.id,
-          firstName: 'Admin',
-          lastName: 'Admin',
+          contactFirstName: 'Admin',
+          contactLastName: 'Admin',
+          companyName: 'Administrator',
           country: 'fr'
         })
 

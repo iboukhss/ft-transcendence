@@ -1,16 +1,31 @@
 <script setup lang="ts">
+import { z } from 'zod'
+
 const toast = useToast()
-const confirmText = ref('')
-const password = ref('')
 const isLoading = ref(false)
-const router = useRouter()
+const { clear } = useUserSession()
+//const router = useRouter()
+
+const schema = z.object({
+  confirmText: z.literal('DELETE', {
+    errorMap: () => ({ message: 'Please type DELETE exactly as shown' })
+  }),
+  password: z.string().min(1, 'Password is required')
+})
+
+type Schema = z.infer<typeof schema>
+
+const state = reactive<Partial<Schema>>({
+  confirmText: '',
+  password: ''
+})
 
 async function onDeleteAccount() {
   isLoading.value = true
   try {
     await $fetch('/api/account', {
       method: 'DELETE',
-      body: { password: password.value }
+      body: { password: state.password }
     })
     toast.add({
       title: 'Account deleted',
@@ -18,7 +33,8 @@ async function onDeleteAccount() {
       color: 'success',
       icon: 'i-lucide-circle-check'
     })
-    router.push('/')
+    await clear()
+    navigateTo('/')
   }
   catch (err: any) {
     toast.add({
@@ -75,27 +91,22 @@ async function onDeleteAccount() {
       title="Confirm deletion"
       description="Please complete both steps below to permanently delete your account."
     >
-      <div class="space-y-6">
-
+      <UForm
+        :schema="schema"
+        :state="state"
+        class="space-y-6"
+        @submit="onDeleteAccount"
+      >
         <!-- Step 1: type DELETE -->
         <UFormField
           label="Step 1 — Type DELETE to confirm"
           name="confirmText"
-          :hint="`Type the word DELETE in capitals`"
+          hint="Type the word DELETE in capitals"
         >
           <UInput
-            v-model="confirmText"
+            v-model="state.confirmText"
             placeholder="DELETE"
-            :color="confirmText && confirmText !== 'DELETE' ? 'error' : 'neutral'"
           />
-          <template #help>
-            <span
-              v-if="confirmText && confirmText !== 'DELETE'"
-              class="text-red-500 text-xs"
-            >
-              Please type DELETE exactly as shown
-            </span>
-          </template>
         </UFormField>
 
         <!-- Step 2: enter password -->
@@ -104,34 +115,27 @@ async function onDeleteAccount() {
           name="password"
         >
           <UInput
-            v-model="password"
+            v-model="state.password"
             type="password"
             placeholder="Your current password"
             autocomplete="current-password"
           />
         </UFormField>
 
-      </div>
-
-      <template #footer>
         <div class="flex items-center justify-start gap-6">
+          <UButton
+            type="submit"
+            class="w-72"
+            label="Permanently delete my account"
+            :loading="isLoading"
+            color="error"
+            icon="i-lucide-trash"
+          />
           <ULink to="/settings" class="text-sm text-muted hover:text-primary">
             Cancel
           </ULink>
-          <UButton
-            #block
-		class="w-72"
-		label="Permanently delete my account"
-            :loading="isLoading"
-            :disabled="isLoading || confirmText !== 'DELETE' || !password"
-            color="error"
-            icon="i-lucide-trash"
-            @click="onDeleteAccount"
-          >
-            Permanently delete my account
-          </UButton>
         </div>
-      </template>
+      </UForm>
     </UCard>
 
   </UPageBody>

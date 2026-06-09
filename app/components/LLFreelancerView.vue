@@ -19,6 +19,7 @@ defineProps<{
             inset: true,
             position: 'top-left'
           }"
+          :alt="profile.firstName"
           size="4xl"
         />
 

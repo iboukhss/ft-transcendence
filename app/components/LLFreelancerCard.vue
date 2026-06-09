@@ -3,12 +3,14 @@ import type { FreelancerDTO } from '#shared/dto/profile.dto.js'
 
 import { COUNTRY_LABELS, SKILL_LABELS } from '~/utils/labels'
 
-defineProps<{ profile: FreelancerDTO }>()
+defineProps<{
+  profile: FreelancerDTO
+}>()
 </script>
 
 <template>
   <UCard
-    class="hover:ring-primary-500 cursor-pointer transition-all hover:ring-2"
+    class="hover:ring-primary-500 w-full cursor-pointer transition-all hover:ring-2"
     @click="navigateTo(`/profiles/${profile.userId}`)"
   >
     <div class="space-y-2">

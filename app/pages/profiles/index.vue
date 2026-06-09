@@ -35,14 +35,12 @@ const filteredProfiles = computed(() => {
         <p class="mt-1">{{ freelancers?.length }} results found</p>
       </header>
 
-      <div class="grid gap-4">
-        <!-- <div
-          v-for="profile in filteredProfiles" :key="profile.firstName"
-          @click="navigateTo(`/profiles/${profile.userId}`)"
-        >
-          {{ profile.firstName }}
-        </div> -->
-        <LLFreelancerCard v-for="profile in filteredProfiles" :key="profile.userId" :profile="profile" />
+      <div class="grid gap-4 md:grid-cols-2">
+        <LLFreelancerCard
+          v-for="profile in filteredProfiles"
+          :key="profile.userId"
+          :profile="profile"
+        />
       </div>
     </UPageBody>
   </UPage>

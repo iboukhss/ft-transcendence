@@ -8,7 +8,7 @@ http:
   url: https://localhost:3000/api/v1/jobs/company/2
   headers:
     - name: x-api-key
-      value: some-secret-key-2
+      value: secret-key-0784900d-528c-4391-a088-abf85c4710fd
   auth: inherit
 
 settings:

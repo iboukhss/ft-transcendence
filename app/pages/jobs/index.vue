@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import type { JobResponseDTO } from '#shared/dto/job.dto'
-
-const { data: jobs } = await useFetch<JobResponseDTO[]>('/api/jobs/public')
+const { data: jobs } = useFetch('/api/jobs/public')
 const search = ref('')
 
 const filteredJobs = computed(() => {

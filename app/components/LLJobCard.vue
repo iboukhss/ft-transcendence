@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { JobResponseDTO } from '#shared/dto/job.dto'
+import type { JobDTO } from '#shared/dto/job.dto'
 
 import { WORKPLACE_LABELS, JOB_CATEGORY_LABELS, SKILL_LABELS, COUNTRY_LABELS } from '~/utils/labels'
 
-defineProps<{ job: JobResponseDTO }>()
+defineProps<{ job: JobDTO }>()
 </script>
 
 <template>

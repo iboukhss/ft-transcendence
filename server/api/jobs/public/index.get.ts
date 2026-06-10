@@ -1,6 +1,5 @@
-import { getJobsAll } from '#server/services/jobs/public/get-jobs-all.service.js'
-import { db } from '#server/utils/db'
+import { getJobsAll } from '#server/services/jobs/public/get-jobs-all.service'
 
 export default defineEventHandler(async () => {
-  return (getJobsAll(db))
+  return getJobsAll()
 })

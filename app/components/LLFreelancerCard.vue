@@ -13,7 +13,7 @@ defineProps<{
     class="hover:ring-primary-500 w-full cursor-pointer transition-all hover:ring-2"
     @click="navigateTo(`/profiles/${profile.userId}`)"
   >
-    <div class="space-y-2">
+    <div class="-m-1 space-y-2">
       <UUser
         :name="profile.firstName + ' ' + profile.lastName"
         :avatar="{
@@ -29,10 +29,10 @@ defineProps<{
           </div>
         </template>
       </UUser>
-      <div class="text-sm">
+      <div class="line-clamp-2 h-[2lh] text-sm">
         {{ profile.bio }}
       </div>
-      <div class="flex gap-1">
+      <div class="flex h-lh gap-1">
         <UBadge
           v-for="skill in profile.skills"
           :key="skill"

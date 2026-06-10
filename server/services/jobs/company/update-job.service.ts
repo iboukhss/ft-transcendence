@@ -1,11 +1,11 @@
 import { eq, and } from 'drizzle-orm'
 
 import type { DB, Tables } from '#server/utils/db'
-import type { JobDTO } from '#shared/dto/job.dto.js'
+import type { CreateJobDTO } from '#shared/dto/job.dto.js'
 
 import { toJobDTO } from '#server/dto/job.dto.js'
 
-export async function updateJob(db: DB, tables: Tables, userId: number, jobId: number, dto: JobDTO) {
+export async function updateJob(db: DB, tables: Tables, userId: number, jobId: number, dto: CreateJobDTO) {
   const [updatedJob] = await db
     .update(tables.jobs)
     .set({

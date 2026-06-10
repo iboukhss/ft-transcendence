@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 import { JOB_CATEGORY_KEYS, WORKPLACE_KEYS, SKILL_KEYS, COUNTRY_KEYS, JOB_STATUS_KEYS } from '#shared/constants/enums'
 
-export const jobSchema = z.object({
+export const createJobSchema = z.object({
   title: z.string().min(1, 'Must provide a job title'),
   description: z.string().min(30, 'Description is too short'),
   category: z.enum(JOB_CATEGORY_KEYS, 'Please select a category'),
@@ -14,10 +14,11 @@ export const jobSchema = z.object({
   status: z.enum(JOB_STATUS_KEYS, 'Please select a status')
 })
 
-export type JobDTO = z.infer<typeof jobSchema>
+export const jobSchema = createJobSchema.extend({
+  id: z.number(),
+  createdAt: z.coerce.string(),
+  updatedAt: z.coerce.string()
+})
 
-export type JobResponseDTO = JobDTO & {
-  id: string | number
-  createdAt: string
-  updatedAt: string
-}
+export type CreateJobDTO = z.infer<typeof createJobSchema>
+export type JobDTO = z.infer<typeof jobSchema>

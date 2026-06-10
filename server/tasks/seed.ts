@@ -86,12 +86,14 @@ export default defineTask({
           })
           .returning()
 
-        const [apiKeys] = await db
+        await db
           .insert(tables.apiKeys)
           .values({
-
+            userId: insertedUser.id,
+            key: `secret-key-${faker.string.uuid()}`,
+            name: `${faker.company.name().split(' ')[0]} Integration Key`,
+            isActive: true
           })
-          .returning()
 
         const [insertedCompany] = await db
           .insert(tables.companyProfiles)

@@ -4,7 +4,7 @@ import tailwind from 'eslint-plugin-tailwindcss'
 
 import withNuxt from './.nuxt/eslint.config.mjs'
 
-export default withNuxt({
+const config = withNuxt({
   plugins: {
     perfectionist,
     tailwind
@@ -21,5 +21,18 @@ export default withNuxt({
     }],
 
     'tailwind/classnames-order': 'warn'
+  },
+  settings: {
+    tailwindcss: {
+      config: {}
+    }
   }
 })
+
+// This is pretty stupid but we have to undo some default ignores.
+// https://github.com/nuxt/eslint/issues/453
+config.append({
+  ignores: ['!server/**/public/**']
+})
+
+export default config

@@ -42,7 +42,7 @@ const filteredProfiles = computed(() => {
     <UPageBody>
       <header class="mb-8">
         <h1 class="text-3xl font-bold">Available profiles</h1>
-        <p class="mt-1">{{ freelancers?.length }} results found</p>
+        <p class="mt-1">{{ filteredProfiles.length }} results found</p>
       </header>
 
       <div class="grid gap-4 md:grid-cols-2">
@@ -51,6 +51,10 @@ const filteredProfiles = computed(() => {
           :key="profile.userId"
           :profile="profile"
         />
+      </div>
+
+      <div v-if="filteredProfiles.length === 0" class="py-20 text-center italic">
+        No profiles found.
       </div>
     </UPageBody>
   </UPage>

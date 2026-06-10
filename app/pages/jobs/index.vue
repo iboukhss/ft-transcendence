@@ -32,7 +32,7 @@ const filteredJobs = computed(() => {
     <UPageBody>
       <header class="mb-8">
         <h1 class="text-3xl font-bold">Available jobs</h1>
-        <p class="mt-1">{{ jobs?.length }} results found</p>
+        <p class="mt-1">{{ filteredJobs?.length }} results found</p>
       </header>
 
       <div class="grid gap-4">

@@ -8,9 +8,19 @@ const filteredProfiles = computed(() => {
   if (!freelancers.value) {
     return []
   }
-  return freelancers.value.filter(j =>
-    j.firstName.toLowerCase().includes(search.value.toLowerCase())
-  )
+  const query = search.value.toLowerCase().trim()
+  if (!query) {
+    return freelancers.value
+  }
+
+  return freelancers.value.filter((j) => {
+    const firstName = j.firstName.toLowerCase()
+    const lastName = j.lastName.toLowerCase()
+    const fullName = `${firstName} ${lastName}`
+    return firstName.includes(query)
+      || lastName.includes(query)
+      || fullName.includes(query)
+  })
 })
 </script>
 

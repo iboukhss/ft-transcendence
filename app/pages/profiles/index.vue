@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { FreelancerDTO } from '#shared/dto/profile.dto'
 
+import LLSkillsFilter from '~/components/LLSkillsFilter.vue'
+
 const { data: freelancers } = await useFetch<FreelancerDTO[]>('/api/profiles/freelancers')
 const search = ref('')
 
@@ -8,6 +10,7 @@ const filteredProfiles = computed(() => {
   if (!freelancers.value) {
     return []
   }
+
   const query = search.value.toLowerCase().trim()
   if (!query) {
     return freelancers.value
@@ -27,15 +30,17 @@ const filteredProfiles = computed(() => {
 <template>
   <UPage>
     <template #left>
-      <UPageAside>
+      <UPageAside class="gap-1">
         <h2 class="mb-4 text-sm font-semibold uppercase">Filters</h2>
         <UFormField label="Search profiles">
           <UInput
             v-model="search"
             icon="i-lucide-search"
             autofocus
+            class="mb-3"
           />
         </UFormField>
+        <LLSkillsFilter />
       </UPageAside>
     </template>
 

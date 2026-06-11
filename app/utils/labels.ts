@@ -24,14 +24,25 @@ export const JOB_CATEGORY_LABELS: Record<typeof JOB_CATEGORY_KEYS[number], strin
 
 export const SKILL_LABELS: Record<typeof SKILL_KEYS[number], string> = {
   c: 'C',
-  csharp: 'C#',
+  cobol: 'COBOL',
   cpp: 'C++',
+  csharp: 'C#',
+  css: 'CSS',
+  dart: 'Dart',
   golang: 'Go',
+  html: 'HTML',
   java: 'Java',
   javascript: 'JavaScript',
+  kotlin: 'Kotlin',
+  lua: 'Lua',
   php: 'PHP',
   python: 'Python',
+  r: 'R',
+  ruby: 'Ruby',
   rust: 'Rust',
+  scala: 'Scala',
+  sql: 'SQL',
+  swift: 'Swift',
   typescript: 'TypeScript'
 } as const
 

@@ -70,7 +70,8 @@ export default defineTask({
             lastName: faker.person.lastName(),
             country: faker.helpers.arrayElement(COUNTRY_KEYS),
             avatar: faker.image.urlLoremFlickr({ width: 300, height: 300, category: 'kitten' }),
-            bio: faker.person.bio()
+            bio: faker.person.bio(),
+            skills: faker.helpers.arrayElements(SKILL_KEYS, { min: 1, max: 5 })
           }))
       }
 

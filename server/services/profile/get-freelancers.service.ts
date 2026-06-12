@@ -8,7 +8,7 @@ export async function getFreelancerProfiles(page: number): Promise<ProfileDTO[]>
   const records = await db
     .select()
     .from(tables.freelancerProfiles)
-    .offset(page * data_limit)
+    .offset((page - 1) * data_limit)
     .limit(data_limit)
   return records.map((profileData) => {
     return profileSchema.parse({

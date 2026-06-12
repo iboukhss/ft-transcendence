@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import type { SelectMenuItem, RadioGroupItem } from '@nuxt/ui'
 
-import type { JobDTO } from '#shared/dto/job.dto'
+import type { CreateJobDTO } from '#shared/dto/job.dto'
 
 import { JOB_CATEGORY_KEYS, WORKPLACE_KEYS, SKILL_KEYS, COUNTRY_KEYS } from '#shared/constants/enums'
-import { jobSchema } from '#shared/dto/job.dto'
+import { createJobSchema } from '#shared/dto/job.dto'
 import { JOB_CATEGORY_LABELS, SKILL_LABELS, WORKPLACE_LABELS, COUNTRY_LABELS } from '~/utils/labels'
 
-const state = reactive<Partial<JobDTO>>({
+const state = reactive<Partial<CreateJobDTO>>({
   title: '',
   category: undefined,
   skills: [],
@@ -86,7 +86,7 @@ async function onSubmit() {
       <USeparator />
 
       <UForm
-        :schema="jobSchema"
+        :schema="createJobSchema"
         :state="state"
         class="space-y-6"
         @submit="onSubmit"

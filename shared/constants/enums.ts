@@ -16,14 +16,25 @@ export const BOOKING_STATUS_KEYS = ['upcoming', 'ongoing', 'completed', 'cancell
 
 export const SKILL_KEYS = [
   'c',
-  'csharp',
+  'cobol',
   'cpp',
+  'csharp',
+  'css',
+  'dart',
   'golang',
+  'html',
   'java',
   'javascript',
+  'kotlin',
+  'lua',
   'php',
   'python',
+  'r',
+  'ruby',
   'rust',
+  'scala',
+  'sql',
+  'swift',
   'typescript'
 ] as const
 

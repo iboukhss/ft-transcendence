@@ -1,0 +1,18 @@
+info:
+  name: "[id].get.ts"
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: https://localhost:3000/api/v1/jobs/company/2
+  headers:
+    - name: x-api-key
+      value: secret-key-0784900d-528c-4391-a088-abf85c4710fd
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

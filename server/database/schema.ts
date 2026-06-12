@@ -1,4 +1,4 @@
-import { pgTable, unique, serial, text, pgEnum, timestamp, integer, real } from 'drizzle-orm/pg-core'
+import { pgTable, unique, serial, text, pgEnum, timestamp, integer, real, boolean } from 'drizzle-orm/pg-core'
 
 import {
   ROLE_KEYS,
@@ -142,4 +142,20 @@ export const offers = pgTable('offers', {
   return {
     oncePerOffer: unique().on(table.jobId, table.sellerId)
   }
+})
+
+export const apiKeys = pgTable('api_keys', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  key: text('key').notNull().unique(),
+  name: text('name').notNull().default('Default Key'),
+
+  isActive: boolean('is_active').notNull().default(true),
+  lastUsedAt: timestamp('last_used_at'),
+  expiresAt: timestamp('expires_at'),
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull()
 })

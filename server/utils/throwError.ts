@@ -14,6 +14,14 @@ export function throw400(statusMessage: string) {
   })
 }
 
+export function throw401(statusMessage: string) {
+  throw createError({
+    statusCode: 401,
+    message: 'Unauthorized',
+    statusMessage: statusMessage
+  })
+}
+
 export function throw403(statusMessage: string) {
   throw createError({
     statusCode: 403,
@@ -26,6 +34,14 @@ export function throw404(statusMessage: string) {
   throw createError({
     statusCode: 404,
     message: 'Not found or not allowed',
+    statusMessage: statusMessage
+  })
+}
+
+export function throw429(statusMessage: string) {
+  throw createError({
+    statusCode: 404,
+    message: 'Too Many Requests',
     statusMessage: statusMessage
   })
 }

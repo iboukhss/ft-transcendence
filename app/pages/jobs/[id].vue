@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import type { JobResponseDTO } from '#shared/dto/job.dto.js'
-
 import { JOB_CATEGORY_LABELS, SKILL_LABELS, WORKPLACE_LABELS, COUNTRY_LABELS } from '~/utils/labels'
 
 const route = useRoute()
 const jobId = route.params.id
 
-const { data: job } = await useFetch<JobResponseDTO>(`/api/jobs/public/${jobId}`)
+const { data: job } = useFetch(`/api/jobs/public/${jobId}`)
 </script>
 
 <template>

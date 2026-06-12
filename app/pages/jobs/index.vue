@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import type { JobResponseDTO } from '#shared/dto/job.dto'
-
-const { data: jobs } = await useFetch<JobResponseDTO[]>('/api/jobs/public')
+const { data: jobs } = useFetch('/api/jobs/public')
 const search = ref('')
 
 const filteredJobs = computed(() => {
@@ -32,7 +30,7 @@ const filteredJobs = computed(() => {
     <UPageBody>
       <header class="mb-8">
         <h1 class="text-3xl font-bold">Available jobs</h1>
-        <p class="mt-1">{{ jobs?.length }} results found</p>
+        <p class="mt-1">{{ filteredJobs?.length }} results found</p>
       </header>
 
       <div class="grid gap-4">

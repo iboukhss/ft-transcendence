@@ -1,11 +1,11 @@
 import { eq, and } from 'drizzle-orm'
 
 import type { DB, Tables, Transaction } from '#server/utils/db'
-import type { JobDTO } from '#shared/dto/job.dto'
+import type { CreateJobDTO } from '#shared/dto/job.dto'
 
 import { toJobDTO } from '#server/dto/job.dto'
 
-export async function createJob(db: DB, tables: Tables, userId: number, dto: JobDTO) {
+export async function createJob(db: DB, tables: Tables, userId: number, dto: CreateJobDTO) {
   const existingJob = await db.query.jobs.findFirst({
     where: and(eq(tables.jobs.userId, userId), eq(tables.jobs.title, dto.title))
   })

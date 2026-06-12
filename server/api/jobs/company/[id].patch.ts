@@ -2,7 +2,7 @@ import { updateJob } from '#server/services/jobs/company/update-job.service.js'
 import { db, tables } from '#server/utils/db'
 import { requireCompany } from '#server/utils/permission-utils.js'
 import { validateOrThrow } from '#server/utils/validateOrThrow'
-import { jobSchema } from '#shared/dto/job.dto.js'
+import { createJobSchema } from '#shared/dto/job.dto.js'
 
 export default defineEventHandler(async (event) => {
   const session = await requireUserSession(event)
@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
 
   const body = await readBody(event)
 
-  const result = jobSchema.safeParse(body)
+  const result = createJobSchema.safeParse(body)
 
   const validData = await validateOrThrow(result)
 

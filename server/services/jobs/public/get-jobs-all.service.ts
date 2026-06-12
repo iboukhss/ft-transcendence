@@ -1,12 +1,12 @@
-import { toJobsResponseDTO } from '#server/dto/job.dto.js'
-import type { DB } from '#server/utils/db'
+import { z } from 'zod'
 
-export async function getJobsAll(db : DB) {
+import type { JobDTO } from '#shared/dto/job.dto'
+
+import { db } from '#server/utils/db'
+import { jobSchema } from '#shared/dto/job.dto'
+
+export async function getJobsAll(): Promise<JobDTO[]> {
   const jobs = await db.query.jobs.findMany()
 
-  if (jobs.length === 0) { // @Iboukhss: do you want me throwing an error or returning an empty response ?
-    return []
-  }
-
-  return toJobsResponseDTO(jobs)
+  return z.array(jobSchema).parse(jobs)
 }

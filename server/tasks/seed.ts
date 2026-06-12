@@ -31,7 +31,7 @@ export default defineTask({
       const [insertedAdmin] = await db
         .insert(tables.users)
         .values({
-          email: 'admin@luxlink.com',
+          email: 'admin@luxlink.lu',
           password: ADMIN_HASHED_PASSWORD,
           accountType: 'company',
           role: 'admin',
@@ -40,11 +40,12 @@ export default defineTask({
         .returning()
 
       await db
-        .insert(tables.profiles)
+        .insert(tables.companyProfiles)
         .values({
           userId: insertedAdmin.id,
-          firstName: 'Admin',
-          lastName: 'Admin',
+          contactFirstName: 'Admin',
+          contactLastName: 'Admin',
+          companyName: 'Administrator',
           country: 'fr'
         })
 
@@ -69,7 +70,8 @@ export default defineTask({
             lastName: faker.person.lastName(),
             country: faker.helpers.arrayElement(COUNTRY_KEYS),
             avatar: faker.image.urlLoremFlickr({ width: 300, height: 300, category: 'kitten' }),
-            bio: faker.person.bio()
+            bio: faker.person.bio(),
+            skills: faker.helpers.arrayElements(SKILL_KEYS, { min: 1, max: 5 })
           }))
       }
 
@@ -85,6 +87,15 @@ export default defineTask({
             createdAt: new Date()
           })
           .returning()
+
+        await db
+          .insert(tables.apiKeys)
+          .values({
+            userId: insertedUser.id,
+            key: `secret-key-${faker.string.uuid()}`,
+            name: `${faker.company.name().split(' ')[0]} Integration Key`,
+            isActive: true
+          })
 
         const [insertedCompany] = await db
           .insert(tables.companyProfiles)

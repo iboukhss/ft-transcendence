@@ -76,6 +76,16 @@ async function onSubmit(event: FormSubmitEvent<LoginDTO>) {
         <UButton type="submit" :loading="isLoading" :disabled="isLoading" block size="lg">
           Log In
         </UButton>
+        <UButton
+          to="https://localhost:3000/api/oauth/google"
+          block
+          size="lg"
+          color="neutral"
+          variant="outline"
+          icon="logos:google-icon"
+        >
+          Continue with Google
+        </UButton>
       </UForm>
     </UPageBody>
   </UPage>

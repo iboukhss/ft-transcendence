@@ -12,15 +12,6 @@ const skillsArray = Object.entries(SKILL_LABELS).map(([key, label]) => ({
 
 <template>
   <div class="flex flex-col gap-2">
-    <!-- <UCheckbox
-      v-for="skill in skillsArray"
-      :key="skill.key"
-      v-model="selectedSkills"
-      :name="skill.key"
-      :value="skill.key"
-      :label="skill.label"
-      class="gap-1"
-    /> -->
     <UCheckboxGroup
       v-model="selectedSkills"
       :items="skillsArray"

@@ -6,8 +6,6 @@ export default defineEventHandler(async (event) => {
   const session = await requireUserSession(event)
 
   requireCompany(session.user)
-
   const jobs = await getJobs(db, tables, session.user.id)
-
   return jobs
 })

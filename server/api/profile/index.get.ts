@@ -1,12 +1,7 @@
-import { getProfile } from '#server/services/profile/get-profile.service.js'
-import { db, tables } from '#server/utils/db'
+import { getProfileById } from '#server/services/profile/get-profile-by-id.service.js'
 
 export default defineEventHandler(async (event) => {
   const session = await requireUserSession(event)
-  return await getProfile(
-    db,
-    tables,
-    session.user.id,
-    session.user.accountType
-  )
+
+  return await getProfileById(session.user.id)
 })

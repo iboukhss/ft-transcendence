@@ -16,7 +16,7 @@ const isEditing = ref(false)
 const isLoading = ref(false)
 const toast = useToast()
 
-const { data: profile } = await useFetch<ProfileDTO>('/api/profile')
+const { data: profile } = await useFetch('/api/profile')
 
 const identityState = ref<ProfileIdentityDTO | null>(
   profile.value ? profileIdentitySchema.parse(profile.value) : null

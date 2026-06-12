@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import type { FreelancerDTO } from '#shared/dto/profile.dto'
 
+import LLLocationFilter from '~/components/LLLocationFilter.vue'
 import LLSkillsFilter from '~/components/LLSkillsFilter.vue'
+import { useLocationsFilter } from '~/composables/useLocationsFilter'
 import { useSkillsFilter } from '~/composables/useSkillsFilter'
 
 const { data: freelancers } = await useFetch<FreelancerDTO[]>('/api/profiles/freelancers')
 const search = ref('')
 
-const { selectedSkills, verifyCheckboxes } = useSkillsFilter()
+const { selectedSkills, verifySkillCheckboxes } = useSkillsFilter()
+
+const { selectedLocations, verifyLocationCheckboxes } = useLocationsFilter()
 
 const filteredProfiles = computed(() => {
   if (!freelancers.value) {
@@ -27,7 +31,8 @@ const filteredProfiles = computed(() => {
         || fullName.includes(query)
     })
   }
-  return verifyCheckboxes(nameMatches)
+  nameMatches = verifyLocationCheckboxes(nameMatches)
+  return verifySkillCheckboxes(nameMatches)
 })
 </script>
 
@@ -49,6 +54,10 @@ const filteredProfiles = computed(() => {
           <h2 class="text-default block text-sm font-medium">Skills</h2>
         </div>
         <LLSkillsFilter v-model="selectedSkills" />
+        <div class="mb-1 flex content-center items-center justify-between">
+          <h2 class="text-default block text-sm font-medium">Locations</h2>
+        </div>
+        <LLLocationFilter v-model="selectedLocations" />
       </UPageAside>
     </template>
 

@@ -91,7 +91,7 @@ export const profiles = pgTable('profiles', {
 
 export const jobs = pgTable('jobs', {
   id: serial('id').primaryKey(),
-  userId: integer('user_id').notNull().references(() => users.id),
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   title: text('title').notNull(),
   description: text('description').notNull(),
   category: categoryEnum('category').notNull(),

@@ -15,9 +15,6 @@ const filteredProfiles = computed(() => {
   }
 
   const query = search.value.toLowerCase().trim()
-  // if (!query) {
-  //   return freelancers.value
-  // }
   let nameMatches = freelancers.value
 
   if (query) {
@@ -47,7 +44,6 @@ const filteredProfiles = computed(() => {
             class="mb-3"
           />
         </UFormField>
-        <pre>Active Filters Debug: {{ selectedSkills }}</pre>
         <LLSkillsFilter v-model="selectedSkills" />
       </UPageAside>
     </template>

@@ -2,9 +2,12 @@
 import type { FreelancerDTO } from '#shared/dto/profile.dto'
 
 import LLSkillsFilter from '~/components/LLSkillsFilter.vue'
+import { useSkillsFilter } from '~/composables/useSkillsFilter'
 
 const { data: freelancers } = await useFetch<FreelancerDTO[]>('/api/profiles/freelancers')
 const search = ref('')
+
+const { selectedSkills, verifyCheckboxes } = useSkillsFilter()
 
 const filteredProfiles = computed(() => {
   if (!freelancers.value) {
@@ -12,18 +15,22 @@ const filteredProfiles = computed(() => {
   }
 
   const query = search.value.toLowerCase().trim()
-  if (!query) {
-    return freelancers.value
-  }
+  // if (!query) {
+  //   return freelancers.value
+  // }
+  let nameMatches = freelancers.value
 
-  return freelancers.value.filter((j) => {
-    const firstName = j.firstName.toLowerCase()
-    const lastName = j.lastName.toLowerCase()
-    const fullName = `${firstName} ${lastName}`
-    return firstName.includes(query)
-      || lastName.includes(query)
-      || fullName.includes(query)
-  })
+  if (query) {
+    nameMatches = freelancers.value.filter((j) => {
+      const firstName = j.firstName.toLowerCase()
+      const lastName = j.lastName.toLowerCase()
+      const fullName = `${firstName} ${lastName}`
+      return firstName.includes(query)
+        || lastName.includes(query)
+        || fullName.includes(query)
+    })
+  }
+  return verifyCheckboxes(nameMatches)
 })
 </script>
 
@@ -40,7 +47,8 @@ const filteredProfiles = computed(() => {
             class="mb-3"
           />
         </UFormField>
-        <LLSkillsFilter />
+        <pre>Active Filters Debug: {{ selectedSkills }}</pre>
+        <LLSkillsFilter v-model="selectedSkills" />
       </UPageAside>
     </template>
 

@@ -23,11 +23,21 @@ if (!isExpanded.value)
 </script>
 
 <template>
-  <div class="flex flex-col gap-2">
+  <div class="mb-4 flex flex-col gap-1">
     <UCheckboxGroup
       v-model="selectedSkills"
       :items="visibleSkills"
+      :ui="{
+        fieldset: 'space-y-1'
+      }"
     />
-    <UButton label="View more" @click="isExpanded = !isExpanded" />
+    <UButton
+      label="View more"
+      color="primary"
+      variant="ghost"
+      :icon="isExpanded ? 'i-lucide-chevron-up' : 'i-lucide-chevron-down'"
+      class="-ms-2"
+      @click="isExpanded = !isExpanded"
+    />
   </div>
 </template>

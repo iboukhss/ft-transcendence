@@ -41,9 +41,13 @@ const filteredProfiles = computed(() => {
             v-model="search"
             icon="i-lucide-search"
             autofocus
-            class="mb-3"
+            class="mb-4"
           />
         </UFormField>
+
+        <div class="mb-1 flex content-center items-center justify-between">
+          <h2 class="text-default block text-sm font-medium">Skills</h2>
+        </div>
         <LLSkillsFilter v-model="selectedSkills" />
       </UPageAside>
     </template>

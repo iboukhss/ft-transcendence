@@ -16,14 +16,7 @@ const filteredJobs = computed(() => {
   <UPage>
     <template #left>
       <UPageAside>
-        <h2 class="mb-4 text-sm font-semibold uppercase">Filters</h2>
-        <UFormField label="Search jobs">
-          <UInput
-            v-model="search"
-            icon="i-lucide-search"
-            autofocus
-          />
-        </UFormField>
+        <LLSearchFilter v-model="search" label="Search jobs" />
       </UPageAside>
     </template>
 

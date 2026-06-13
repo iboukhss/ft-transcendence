@@ -35,7 +35,7 @@ if (!isExpanded.value)
       }"
     />
     <UButton
-      label="View more"
+      :label="isExpanded ? 'View less' : 'View more'"
       color="primary"
       variant="ghost"
       :icon="isExpanded ? 'i-lucide-chevron-up' : 'i-lucide-chevron-down'"

@@ -2,6 +2,7 @@
 import { useCategoriesFilter } from '~/composables/useCategoriesFilter'
 import { useLocationsFilter } from '~/composables/useLocationsFilter'
 import { useSkillsFilter } from '~/composables/useSkillsFilter'
+import { useWorkplacesFilter } from '~/composables/useWorkplacesFilter'
 
 const { data: jobs } = useFetch('/api/jobs/public')
 const search = ref('')
@@ -9,6 +10,7 @@ const search = ref('')
 const { selectedSkills, verifySkillCheckboxes } = useSkillsFilter()
 const { selectedLocations, verifyLocationCheckboxes } = useLocationsFilter()
 const { selectedCategories, verifyCategoryCheckboxes } = useCategoriesFilter()
+const { selectedWorkplaces, verifyWorkplaceCheckboxes } = useWorkplacesFilter()
 
 const filteredJobs = computed(() => {
   if (!jobs.value) {
@@ -25,7 +27,8 @@ const filteredJobs = computed(() => {
   }
   jobMatches = verifySkillCheckboxes(jobMatches)
   jobMatches = verifyLocationCheckboxes(jobMatches)
-  return verifyCategoryCheckboxes(jobMatches)
+  jobMatches = verifyCategoryCheckboxes(jobMatches)
+  return verifyWorkplaceCheckboxes(jobMatches)
 })
 </script>
 
@@ -40,6 +43,8 @@ const filteredJobs = computed(() => {
         <LLLocationFilter v-model="selectedLocations" />
 
         <LLCategoryFilter v-model="selectedCategories" />
+
+        <LLWorkplaceFilter v-model="selectedWorkplaces" />
       </UPageAside>
     </template>
 

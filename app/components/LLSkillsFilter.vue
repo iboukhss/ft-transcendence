@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { SKILL_LABELS } from '~/utils/labels'
 
-// const selectedSkills = ref<string[]>([])
 const selectedSkills = defineModel<string[]>({ default: () => [] })
 const isExpanded = ref(false)
 

@@ -1,14 +1,16 @@
-import type { FreelancerDTO } from '#shared/dto/profile.dto.js'
+interface hasSkills {
+  skills: string[]
+}
 
 export function useSkillsFilter() {
   const selectedSkills = ref<string[]>([])
 
-  function verifySkillCheckboxes(freelancers: FreelancerDTO[]): FreelancerDTO[] {
+  function verifySkillCheckboxes<T extends hasSkills>(items: T[]): T[] {
     if (selectedSkills.value.length === 0) {
-      return freelancers
+      return items
     }
 
-    return freelancers.filter((freelancer) => {
+    return items.filter((freelancer) => {
       const skills = freelancer.skills || []
       return selectedSkills.value.every(skillKey => skills.includes(skillKey))
     })

@@ -28,8 +28,7 @@ const freelancerIsConnected = computed(() => isOnline(props.profile.userId))
           :chip="{
             inset: true,
             position: 'top-left',
-            color: freelancerIsConnected ? 'success' : 'neutral',
-            size: 'md'
+            color: freelancerIsConnected ? 'success' : 'neutral'
           }"
           :alt="profile.firstName"
           size="4xl"

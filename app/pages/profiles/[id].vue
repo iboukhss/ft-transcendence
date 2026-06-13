@@ -7,14 +7,16 @@ const { data: profile, error, pending } = await useFetch(`/api/profiles/${profil
 
 <template>
   <UPage v-if="profile">
-    <LLFreelancerView
-      v-if="profile.type === 'freelancer'"
-      :profile="profile"
-    />
+    <UPageBody>
+      <LLFreelancerView
+        v-if="profile.type === 'freelancer'"
+        :profile="profile"
+      />
 
-    <LLCompanyView
-      v-else
-      :profile="profile"
-    />
+      <LLCompanyView
+        v-else
+        :profile="profile"
+      />
+    </UPageBody>
   </UPage>
 </template>

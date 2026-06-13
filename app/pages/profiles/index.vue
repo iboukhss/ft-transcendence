@@ -39,24 +39,11 @@ const filteredProfiles = computed(() => {
 <template>
   <UPage>
     <template #left>
-      <UPageAside class="gap-1">
-        <h2 class="mb-4 text-sm font-semibold uppercase">Filters</h2>
-        <UFormField label="Search profiles">
-          <UInput
-            v-model="search"
-            icon="i-lucide-search"
-            autofocus
-            class="mb-4"
-          />
-        </UFormField>
+      <UPageAside>
+        <LLSearchFilter v-model="search" label="Search profiles" />
 
-        <div class="mb-1 flex content-center items-center justify-between">
-          <h2 class="text-default block text-sm font-medium">Skills</h2>
-        </div>
         <LLSkillsFilter v-model="selectedSkills" />
-        <div class="mb-1 flex content-center items-center justify-between">
-          <h2 class="text-default block text-sm font-medium">Locations</h2>
-        </div>
+
         <LLLocationFilter v-model="selectedLocations" />
       </UPageAside>
     </template>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
-// import LLLocationFilter from '~/components/LLLocationFilter.vue'
-// import LLSkillsFilter from '~/components/LLSkillsFilter.vue'
+import { useCategoriesFilter } from '~/composables/useCategoriesFilter'
 import { useLocationsFilter } from '~/composables/useLocationsFilter'
 import { useSkillsFilter } from '~/composables/useSkillsFilter'
 
@@ -8,8 +7,8 @@ const { data: jobs } = useFetch('/api/jobs/public')
 const search = ref('')
 
 const { selectedSkills, verifySkillCheckboxes } = useSkillsFilter()
-
 const { selectedLocations, verifyLocationCheckboxes } = useLocationsFilter()
+const { selectedCategories, verifyCategoryCheckboxes } = useCategoriesFilter()
 
 const filteredJobs = computed(() => {
   if (!jobs.value) {
@@ -24,8 +23,9 @@ const filteredJobs = computed(() => {
       return j.title.toLowerCase().includes(query)
     })
   }
+  jobMatches = verifySkillCheckboxes(jobMatches)
   jobMatches = verifyLocationCheckboxes(jobMatches)
-  return verifySkillCheckboxes(jobMatches)
+  return verifyCategoryCheckboxes(jobMatches)
 })
 </script>
 
@@ -38,6 +38,8 @@ const filteredJobs = computed(() => {
         <LLSkillsFilter v-model="selectedSkills" />
 
         <LLLocationFilter v-model="selectedLocations" />
+
+        <LLCategoryFilter v-model="selectedCategories" />
       </UPageAside>
     </template>
 

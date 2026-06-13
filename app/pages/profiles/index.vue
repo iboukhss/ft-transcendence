@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import type { FreelancerDTO } from '#shared/dto/profile.dto'
 
-// import LLLocationFilter from '~/components/LLLocationFilter.vue'
-// import LLSkillsFilter from '~/components/LLSkillsFilter.vue'
 import { useLocationsFilter } from '~/composables/useLocationsFilter'
 import { useSkillsFilter } from '~/composables/useSkillsFilter'
 

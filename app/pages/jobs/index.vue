@@ -45,6 +45,8 @@ const filteredJobs = computed(() => {
         <LLCategoryFilter v-model="selectedCategories" />
 
         <LLWorkplaceFilter v-model="selectedWorkplaces" />
+
+        <!-- <LLSalaryFilter v-model="" /> -->
       </UPageAside>
     </template>
 

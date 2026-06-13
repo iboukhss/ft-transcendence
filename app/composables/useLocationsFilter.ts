@@ -11,8 +11,8 @@ export function useLocationsFilter() {
       return items
     }
 
-    return items.filter((freelancer) => {
-      return selectedLocations.value.includes(freelancer.country)
+    return items.filter((item) => {
+      return selectedLocations.value.includes(item.country || item.location)
     })
   }
   return {

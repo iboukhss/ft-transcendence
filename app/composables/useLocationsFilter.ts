@@ -1,14 +1,17 @@
-import type { FreelancerDTO } from '#shared/dto/profile.dto.js'
+interface hasCountry {
+  country?: string
+  location?: string
+}
 
 export function useLocationsFilter() {
   const selectedLocations = ref<string[]>([])
 
-  function verifyLocationCheckboxes(freelancers: FreelancerDTO[]): FreelancerDTO[] {
+  function verifyLocationCheckboxes<T extends hasCountry>(items: T[]): T[] {
     if (selectedLocations.value.length === 0) {
-      return freelancers
+      return items
     }
 
-    return freelancers.filter((freelancer) => {
+    return items.filter((freelancer) => {
       return selectedLocations.value.includes(freelancer.country)
     })
   }

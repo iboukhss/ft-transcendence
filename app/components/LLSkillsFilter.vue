@@ -23,24 +23,23 @@ if (!isExpanded.value)
 </script>
 
 <template>
-  <div class="mb-1 flex content-center items-center justify-between">
-    <h2 class="text-default block text-sm font-medium">Skills</h2>
-  </div>
-  <div class="mb-4 flex flex-col gap-1">
-    <UCheckboxGroup
-      v-model="selectedSkills"
-      :items="visibleSkills"
-      :ui="{
-        fieldset: 'space-y-1'
-      }"
-    />
-    <UButton
-      :label="isExpanded ? 'View less' : 'View more'"
-      color="primary"
-      variant="ghost"
-      :icon="isExpanded ? 'i-lucide-chevron-up' : 'i-lucide-chevron-down'"
-      class="-ms-2"
-      @click="isExpanded = !isExpanded"
-    />
-  </div>
+  <LLFilterCollapsible label="Skills">
+    <div class="mb-4 flex flex-col gap-1">
+      <UCheckboxGroup
+        v-model="selectedSkills"
+        :items="visibleSkills"
+        :ui="{
+          fieldset: 'space-y-1'
+        }"
+      />
+      <UButton
+        :label="isExpanded ? 'View less' : 'View more'"
+        color="primary"
+        variant="ghost"
+        :icon="isExpanded ? 'i-lucide-chevron-up' : 'i-lucide-chevron-down'"
+        class="-ms-2"
+        @click="isExpanded = !isExpanded"
+      />
+    </div>
+  </LLFilterCollapsible>
 </template>

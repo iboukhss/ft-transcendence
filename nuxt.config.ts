@@ -29,7 +29,8 @@ export default defineNuxtConfig({
   compatibilityDate: '2026-04-01',
   nitro: {
     experimental: {
-      tasks: true
+      tasks: true,
+      websocket: true
     },
     storage: {
       cache: {

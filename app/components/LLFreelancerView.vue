@@ -1,12 +1,22 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 import type { ProfileDTO } from '#shared/dto/profile.dto'
 
+import { usePresence } from '~/composables/usePresence'
 import { COUNTRY_LABELS } from '~/utils/labels'
 
-defineProps<{
+const props = defineProps<{
   profile: Extract<ProfileDTO, { type: 'freelancer' }>
   isOwnProfile?: boolean
 }>()
+
+// 1. Grab the dynamic check function from your updated usePresence composable
+const { isOnline } = usePresence()
+
+// 2. Bind it to a reactive computed property.
+// Because the underlying global Set is replaced on socket events, Vue tracks this dependencies chain perfectly!
+const freelancerIsConnected = computed(() => isOnline(props.profile.userId))
 </script>
 
 <template>
@@ -17,7 +27,9 @@ defineProps<{
           :src="profile.avatar ?? undefined"
           :chip="{
             inset: true,
-            position: 'top-left'
+            position: 'top-left',
+            color: freelancerIsConnected ? 'success' : 'neutral',
+            size: 'md'
           }"
           :alt="profile.firstName"
           size="4xl"

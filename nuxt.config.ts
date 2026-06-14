@@ -30,7 +30,22 @@ export default defineNuxtConfig({
   nitro: {
     experimental: {
       tasks: true,
-      websocket: true
+      websocket: true,
+      openAPI: true
+    },
+    openAPI: {
+      production: 'runtime',
+      route: '/api/_openapi.json',
+      ui: {
+        scalar: {
+          route: '/api/docs',
+          theme: 'nuxt'
+        }
+      },
+      meta: {
+        title: 'LuxLink Public API Docs',
+        version: '1.0.0'
+      }
     },
     storage: {
       cache: {

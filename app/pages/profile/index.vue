@@ -23,7 +23,7 @@ async function onProfileUpdate(payload: PatchProfileDTO, done: (success: boolean
 
     toast.add({
       title: 'Profile updated',
-      description: 'Your changes have been saved sucessfully.',
+      description: 'Your profile has been updated sucessfully.',
       color: 'success',
       icon: 'i-lucide-circle-check'
     })
@@ -32,7 +32,7 @@ async function onProfileUpdate(payload: PatchProfileDTO, done: (success: boolean
   catch (err: any) {
     toast.add({
       title: 'Update failed',
-      description: 'Something went wrong while saving your profile.',
+      description: 'Something went wrong while updating your profile.',
       color: 'error',
       icon: 'i-lucide-circle-x'
     })

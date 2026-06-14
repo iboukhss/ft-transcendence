@@ -18,6 +18,7 @@ const isLoading = ref(false)
 const toast = useToast()
 
 const { data: profile } = await useFetch('/api/profile')
+const { fetch: fetchUserSession } = useUserSession()
 
 const freelancerIdentitySchema = freelancerProfileSchema.pick({
   type: true,
@@ -61,10 +62,11 @@ const saveIdentity = async (event: FormSubmitEvent<ProfileIdentityDTO>) => {
     })
 
     profile.value = response
+    await fetchUserSession()
 
     toast.add({
       title: 'Profile updated',
-      description: 'Your changes have been saved sucessfully.',
+      description: 'Your profile has been updated sucessfully.',
       color: 'success',
       icon: 'i-lucide-circle-check'
     })
@@ -72,7 +74,7 @@ const saveIdentity = async (event: FormSubmitEvent<ProfileIdentityDTO>) => {
   catch (err) {
     toast.add({
       title: 'Update failed',
-      description: 'Something went wrong while saving your profile.',
+      description: 'Something went wrong while updating your profile.',
       color: 'error',
       icon: 'i-lucide-circle-x'
     })
@@ -113,10 +115,11 @@ const onAvatarUpload = async (event: FormSubmitEvent<UploadAvatarDTO>) => {
       }
 
       avatarState.avatar = undefined
+      await fetchUserSession()
 
       toast.add({
-        title: 'Success',
-        description: 'Your profile picture has been updated.',
+        title: 'Avatar uploaded',
+        description: 'Your avatar has been uploaded successfully.',
         color: 'success',
         icon: 'i-lucide-circle-check'
       })
@@ -125,7 +128,7 @@ const onAvatarUpload = async (event: FormSubmitEvent<UploadAvatarDTO>) => {
   catch (err: any) {
     toast.add({
       title: 'Upload failed',
-      description: 'Something went wrong while uploading.',
+      description: 'Something went wrong while uploading your avatar.',
       color: 'error',
       icon: 'i-lucide-circle-x'
     })

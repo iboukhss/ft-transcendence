@@ -12,5 +12,14 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  return uploadAvatar(sessionUser, formData)
+  const result = await uploadAvatar(sessionUser, formData)
+
+  await setUserSession(event, {
+    user: {
+      ...session.user,
+      avatarUrl: result.avatarUrl
+    }
+  })
+
+  return result
 })

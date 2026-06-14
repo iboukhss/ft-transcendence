@@ -1,13 +1,8 @@
-import type { DBUser } from '#server/utils/db'
+import { z } from 'zod'
 
-export interface ChangeEmailResponseDTO {
-  id: string | number
-  updatedAt: string
-}
+export const emailUpdateResponseSchema = z.object({
+  id: z.number(),
+  updatedAt: z.date().transform(val => val.toISOString())
+})
 
-export function toEmailDTO(user: DBUser): ChangeEmailResponseDTO {
-  return {
-    id: user.id,
-    updatedAt: (user.updatedAt instanceof Date ? user.updatedAt : new Date()).toISOString()
-  }
-}
+export type EmailUpdateResponseDTO = z.infer<typeof emailUpdateResponseSchema>

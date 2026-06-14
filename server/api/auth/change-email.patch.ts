@@ -1,6 +1,5 @@
-import { changeEmail } from '#server/services/auth/change-email.service.js'
-import { db, tables } from '#server/utils/db'
-import { validateOrThrow } from '#server/utils/validateOrThrow.js'
+import { changeEmail } from '#server/services/auth/change-email.service'
+import { validateOrThrow } from '#server/utils/validateOrThrow'
 import { emailSchema } from '#shared/dto/email.dto'
 
 export default defineEventHandler(async (event) => {
@@ -12,7 +11,8 @@ export default defineEventHandler(async (event) => {
 
   const validData = await validateOrThrow(result)
 
-  const changedEmail = await changeEmail(db, tables, session.user.id, validData)
-
-  return changedEmail
+  return await changeEmail(
+    session.user.id,
+    validData
+  )
 })

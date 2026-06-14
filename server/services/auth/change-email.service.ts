@@ -1,39 +1,26 @@
 import { eq } from 'drizzle-orm'
 
-import type { DB, Tables } from '#server/utils/db'
 import type { EmailDTO } from '#shared/dto/email.dto'
 
-import { toEmailDTO } from '#server/dto/email.dto'
+import { throw404, throw500 } from '#imports'
+import { emailUpdateResponseSchema } from '#server/dto/email.dto'
 
-export async function changeEmail(db: DB, tables: Tables, userId: number, dto: EmailDTO) {
-  // check that oldPassword hash matches db
+export async function changeEmail(userId: number, dto: EmailDTO) {
   const user = await db.query.users.findFirst({
     where: eq(tables.users.id, userId)
   })
-
-  if (!user) {
-    throw createError({
-      statusCode: 404,
-      message: 'Not found',
-      statusMessage: 'User not found'
-    })
-  }
+  if (!user) return throw404('user not found')
 
   const [changedEmail] = await db
     .update(tables.users)
     .set({
-      ...dto,
+      email: dto.email,
       updatedAt: new Date()
     })
     .where(eq(tables.users.id, userId))
     .returning()
 
-  if (!changedEmail) {
-    throw createError({
-      statusCode: 500,
-      message: 'Internal server error',
-      statusMessage: 'Update failed'
-    })
-  }
-  return toEmailDTO(changedEmail)
+  if (!changedEmail) throw500('Email could not be updated')
+
+  return emailUpdateResponseSchema.parse(changedEmail)
 }

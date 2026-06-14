@@ -28,6 +28,8 @@ erDiagram
     COMPANY_PROFILES {
         serial id PK
         integer user_id FK, UK
+        text contact_first_name
+        text contact_last_name
         text company_name
         countryEnum country
         text website
@@ -72,9 +74,9 @@ erDiagram
 
     OFFERS {
         serial id PK
-        integer job_id FK
+        integer job_id FK "UK: job_id + seller_id"
         integer buyer_id FK
-        integer seller_id FK
+        integer seller_id FK "UK: job_id + seller_id"
         offerStatusEnum status
         text motivation_letter
         real proposed_hourly_rate
@@ -103,13 +105,26 @@ erDiagram
         timestamp updated_at
     }
 
-    USERS ||--|| FREELANCER_PROFILES : "has one"
-    USERS ||--|| COMPANY_PROFILES : "has one"
-    USERS ||--|| PROFILES : "has one"
-    USERS ||--o{ JOBS : "posts"
-    USERS ||--o{ OFFERS : "interacts"
-    USERS ||--o{ BOOKINGS : "interacts"
+    API_KEYS {
+        serial id PK
+        integer user_id FK
+        text key UK
+        text name
+        boolean is_active
+        timestamp last_used_at
+        timestamp expires_at
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    USERS ||--|| FREELANCER_PROFILES : "has one (onDelete: cascade)"
+    USERS ||--|| COMPANY_PROFILES : "has one (onDelete: cascade)"
+    USERS ||--|| PROFILES : "has one (onDelete: cascade)"
+    USERS ||--o{ JOBS : "posts (onDelete: cascade)"
+    USERS ||--o{ OFFERS : "interacts as buyer/seller"
+    USERS ||--o{ BOOKINGS : "interacts as buyer/seller"
+    USERS ||--o{ API_KEYS : "owns (onDelete: cascade)"
     JOBS ||--o{ OFFERS : "has"
     JOBS ||--o{ BOOKINGS : "has"
-    OFFERS ||--|| BOOKINGS : "converts"
+    OFFERS ||--|| BOOKINGS : "converts to (1:1 via UK)"
 ```

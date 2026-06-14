@@ -8,8 +8,8 @@ import { LANGUAGE_KEYS, SKILL_KEYS, COUNTRY_KEYS } from '#shared/constants/enums
 
 export const baseProfileSchema = z.object({
   userId: z.number(),
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date()
+  createdAt: z.coerce.string(),
+  updatedAt: z.coerce.string()
 })
 
 export const freelancerProfileSchema = baseProfileSchema.extend({

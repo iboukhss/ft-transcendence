@@ -37,7 +37,7 @@ defineProps<{
           v-for="skill in profile.skills"
           :key="skill"
           variant="soft"
-          color="neutral"
+          color="secondary"
         >
           {{ SKILL_LABELS[skill] }}
         </UBadge>

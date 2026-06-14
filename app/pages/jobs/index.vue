@@ -37,7 +37,7 @@ const filteredJobs = computed(() => {
         <LLJobCard v-for="job in filteredJobs" :key="job.id" :job="job" />
       </div>
 
-      <div v-if="filteredJobs.length === 0" class="py-20 text-center italic">
+      <div v-if="filteredJobs.length === 0" class="text-muted py-20 text-center italic">
         No jobs found.
       </div>
     </UPageBody>

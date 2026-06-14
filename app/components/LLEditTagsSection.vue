@@ -74,13 +74,13 @@ const onSave = () => {
           v-for="tag in tags"
           :key="tag"
           variant="soft"
-          color="neutral"
+          color="secondary"
           size="lg"
         >
           {{ labels[tag] || tag }}
         </UBadge>
       </template>
-      <p v-else class="text-muted text-sm italic">None added yet.</p>
+      <p v-else class="text-muted italic">{{ placeholder || 'None added yet.' }}</p>
     </div>
   </div>
 </template>

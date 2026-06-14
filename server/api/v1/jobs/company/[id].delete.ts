@@ -14,3 +14,11 @@ export default defineEventHandler(async (event) => {
 
   return deletedJob
 })
+
+defineRouteMeta({
+  openAPI: {
+    tags: ['v1'],
+    description: 'API route used to delete a job by passing the respective job id as parameter',
+    security: [{ ApiKeyAuth: [] }]
+  }
+})

@@ -45,6 +45,16 @@ export default defineNuxtConfig({
       meta: {
         title: 'LuxLink Public API Docs',
         version: '1.0.0'
+      },
+      components: {
+        securitySchemes: {
+          ApiKeyAuth: {
+            type: 'apiKey',
+            in: 'header',
+            name: 'x-api-key',
+            description: 'Enter your public LuxLink API key to authenticate requests.'
+          }
+        }
       }
     },
     storage: {

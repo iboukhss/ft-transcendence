@@ -23,6 +23,8 @@ export type Transaction = Parameters<Parameters<DB['transaction']>[0]>[0]
 
 export type DBUser = InferSelectModel<typeof schema.users>
 export type DBJob = InferSelectModel<typeof schema.jobs>
-export type DBProfile = InferSelectModel<typeof schema.profiles>
+export type DBFreelancer = InferSelectModel<typeof schema.freelancerProfiles>
+export type DBCompany = InferSelectModel<typeof schema.companyProfiles>
+export type DBProfile = DBFreelancer | DBCompany
 export type DBOffer = InferSelectModel<typeof schema.offers>
 export type DBBooking = InferSelectModel<typeof schema.bookings>

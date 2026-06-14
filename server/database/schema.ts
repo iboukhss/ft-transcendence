@@ -72,23 +72,6 @@ export const companyProfiles = pgTable('company_profiles', {
   updatedAt: timestamp('updated_at').defaultNow().notNull()
 })
 
-export const profiles = pgTable('profiles', {
-  id: serial('id').primaryKey(),
-  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }).unique(),
-  firstName: text('first_name').notNull(),
-  lastName: text('last_name').notNull(),
-  houseNumber: integer('house_number'),
-  street: text('street'),
-  zip: text('zip'),
-  country: countryEnum('country').notNull(),
-  avatar: text('avatar'),
-  about: text('about'),
-  skills: skillsEnum('skills').array(),
-  languages: languageEnum('languages').array(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull()
-})
-
 export const jobs = pgTable('jobs', {
   id: serial('id').primaryKey(),
   userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),

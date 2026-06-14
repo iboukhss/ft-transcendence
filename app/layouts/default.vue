@@ -49,29 +49,16 @@ const userMenuItems = computed<DropdownMenuItem[][]>(() => [
 
 const { loggedIn, user, clear } = useUserSession()
 
-// NOTE(isma): I wasted 2 hours on this -_-
-const { data: profile, pending, error } = await useFetch('/api/profile', {
-  watch: [loggedIn]
-})
-
 const userDisplayName = computed(() => {
-  if (!profile.value) {
-    return ''
-  }
+  if (!user.value) return ''
 
-  return profile.value.type === 'freelancer'
-    ? profile.value.firstName
-    : profile.value.contactFirstName
+  return user.value.firstName
 })
 
 const userAvatarUrl = computed(() => {
-  if (!profile.value) {
-    return undefined
-  }
+  if (!user.value) return undefined
 
-  return profile.value.type === 'freelancer'
-    ? profile.value.avatar
-    : profile.value.logo
+  return user.value.avatarUrl
 })
 
 const logout = async () => {
@@ -93,9 +80,9 @@ const logout = async () => {
 
       <template #right>
         <div class="flex items-center gap-4">
-          <template v-if="loggedIn">
+          <template v-if="loggedIn && user">
             <UButton
-              v-if="user?.accountType === 'company'"
+              v-if="user.accountType === 'company'"
               label="Post a job offer"
               to="/jobs/create"
               variant="subtle"

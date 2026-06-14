@@ -8,8 +8,8 @@ import { LANGUAGE_KEYS, SKILL_KEYS, COUNTRY_KEYS } from '#shared/constants/enums
 
 export const baseProfileSchema = z.object({
   userId: z.number(),
-  createdAt: z.date(),
-  updatedAt: z.date()
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date()
 })
 
 export const freelancerProfileSchema = baseProfileSchema.extend({
@@ -19,8 +19,8 @@ export const freelancerProfileSchema = baseProfileSchema.extend({
   country: z.enum(COUNTRY_KEYS, 'Please select your country'),
   avatar: z.string().nullable(),
   bio: z.string().nullable(),
-  skills: z.array(z.enum(SKILL_KEYS)).default([]),
-  languages: z.array(z.enum(LANGUAGE_KEYS)).default([]),
+  skills: z.array(z.enum(SKILL_KEYS)),
+  languages: z.array(z.enum(LANGUAGE_KEYS)),
   hourlyRate: z.number().nullable()
 })
 
@@ -42,42 +42,29 @@ export const profileSchema = z.discriminatedUnion('type', [
 
 // Edit profile information
 
-export const patchFreelancerSchema = freelancerProfileSchema.partial().extend({
-  type: z.literal('freelancer')
-})
+export const patchFreelancerSchema = freelancerProfileSchema
+  .omit({ createdAt: true, updatedAt: true, avatar: true })
+  .partial()
+  .extend({
+    userId: z.number(),
+    type: z.literal('freelancer')
+  })
 
-export const patchCompanySchema = companyProfileSchema.partial().extend({
-  type: z.literal('company')
-})
+export const patchCompanySchema = companyProfileSchema
+  .omit({ createdAt: true, updatedAt: true, logo: true })
+  .partial()
+  .extend({
+    userId: z.number(),
+    type: z.literal('company')
+  })
 
 export const patchProfileSchema = z.discriminatedUnion('type', [
   patchFreelancerSchema,
   patchCompanySchema
 ])
 
-export const freelancerIdentitySchema = freelancerProfileSchema.pick({
-  type: true,
-  firstName: true,
-  lastName: true,
-  country: true
-})
-
-export const companyIdentitySchema = companyProfileSchema.pick({
-  type: true,
-  contactFirstName: true,
-  contactLastName: true,
-  companyName: true,
-  country: true
-})
-
-export const profileIdentitySchema = z.discriminatedUnion('type', [
-  freelancerIdentitySchema,
-  companyIdentitySchema
-])
-
 export type ProfileDTO = z.infer<typeof profileSchema>
 export type PatchProfileDTO = z.infer<typeof patchProfileSchema>
-export type ProfileIdentityDTO = z.infer<typeof profileIdentitySchema>
 
 export type FreelancerDTO = z.infer<typeof freelancerProfileSchema>
 

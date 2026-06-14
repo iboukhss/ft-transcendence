@@ -1,35 +1,33 @@
 import { eq } from 'drizzle-orm'
 
-import type { DB, Tables } from '#server/utils/db'
-import type { ProfileDTO, PatchProfileDTO } from '#shared/dto/profile.dto'
+import type { PatchProfileDTO, ProfileDTO } from '#shared/dto/profile.dto'
 
-import { profileSchema } from '#shared/dto/profile.dto'
+import { getProfileById } from '#server/services/profile/get-profile-by-id.service.js'
+import { db, tables } from '#server/utils/db'
 
-export async function patchProfile(db: DB, tables: Tables, userId: number, dto: PatchProfileDTO): Promise<ProfileDTO> {
-  const table = dto.type === 'freelancer'
-    ? tables.freelancerProfiles
-    : tables.companyProfiles
+export async function patchProfile(dto: PatchProfileDTO): Promise<ProfileDTO> {
+  if (dto.type === 'freelancer') {
+    const { userId, type, ...profileData } = dto
 
-  const { type, ...dbFields } = dto
+    await db
+      .update(tables.freelancerProfiles)
+      .set({
+        ...profileData,
+        updatedAt: new Date()
+      })
+      .where(eq(tables.freelancerProfiles.userId, dto.userId))
+  }
+  else {
+    const { type, userId, ...profileData } = dto
 
-  const [profile] = await db
-    .update(table)
-    .set({
-      ...dbFields,
-      updatedAt: new Date()
-    })
-    .where(eq(table.userId, userId))
-    .returning()
-
-  if (!profile) {
-    throw createError({
-      statusCode: 404,
-      message: 'Profile not found'
-    })
+    await db
+      .update(tables.companyProfiles)
+      .set({
+        ...profileData,
+        updatedAt: new Date()
+      })
+      .where(eq(tables.companyProfiles.userId, dto.userId))
   }
 
-  return profileSchema.parse({
-    type: dto.type,
-    ...profile
-  })
+  return getProfileById(dto.userId)
 }

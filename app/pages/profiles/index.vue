@@ -65,7 +65,7 @@ const filteredProfiles = computed(() => {
         />
       </div>
 
-      <div v-if="filteredProfiles.length === 0" class="py-20 text-center italic">
+      <div v-if="filteredProfiles.length === 0" class="text-muted py-20 text-center italic">
         No profiles found.
       </div>
     </UPageBody>

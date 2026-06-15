@@ -1,3 +1,5 @@
+// DEPRECATED
+
 import { z } from 'zod'
 
 export const emailUpdateResponseSchema = z.object({

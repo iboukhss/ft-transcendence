@@ -96,6 +96,7 @@ async function onSubmit(event: FormSubmitEvent<RegisterDTO>) {
         v-if="accountType === 'freelancer'"
         :schema="registerSchema"
         :state="freelancerState"
+        :validate-on="[]"
         class="space-y-6"
         @submit="onSubmit"
       >
@@ -148,6 +149,7 @@ async function onSubmit(event: FormSubmitEvent<RegisterDTO>) {
         v-else
         :schema="registerSchema"
         :state="companyState"
+        :validate-on="[]"
         class="space-y-6"
         @submit="onSubmit"
       >

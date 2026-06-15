@@ -6,13 +6,17 @@ export default defineEventHandler(async (event) => {
   const session = await requireUserSession(event)
 
   const body = await readBody(event)
+  const result = emailSchema.safeParse(body)
+  const validData = validateOrThrow(result)
 
-  const result = await emailSchema.safeParse(body)
+  const serviceResult = await changeEmail(session.user.id, validData)
 
-  const validData = await validateOrThrow(result)
+  await setUserSession(event, {
+    user: {
+      ...session.user,
+      email: validData.email
+    }
+  })
 
-  return await changeEmail(
-    session.user.id,
-    validData
-  )
+  return serviceResult
 })

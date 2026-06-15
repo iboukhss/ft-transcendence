@@ -62,7 +62,13 @@ async function onSubmit(event: FormSubmitEvent<LoginDTO>) {
 
       <USeparator />
 
-      <UForm :schema="loginSchema" :state="state" class="space-y-6" @submit="onSubmit">
+      <UForm
+        :schema="loginSchema"
+        :state="state"
+        :validate-on="[]"
+        class="space-y-6"
+        @submit="onSubmit"
+      >
         <UFormField label="Email" name="email">
           <UInput v-model="state.email" placeholder="jane@example.com" class="w-full" />
         </UFormField>

@@ -4,11 +4,12 @@ import type { PasswordDTO } from '#shared/dto/password.dto.js'
 import { passwordSchema } from '#shared/dto/password.dto.js'
 
 const toast = useToast()
+const { user } = useUserSession()
 
 const isUpdatingPassword = ref(false)
 
 const emailState = ref({
-  email: 'jane@example.com'
+  email: ''
 })
 
 const passwordState = reactive<PasswordDTO>({
@@ -57,7 +58,11 @@ async function onPasswordSubmit() {
         description="Your email will be used for login and notifications"
       >
         <UFormField>
-          <UInput v-model="emailState.email" />
+          <UInput
+            v-model="emailState.email"
+            :placeholder="user?.email ?? 'your@email.com'"
+            color="neutral"
+          />
         </UFormField>
 
         <template #footer>

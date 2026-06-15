@@ -12,7 +12,12 @@ const items = computed<NavigationMenuItem[]>(() => [
   }
 ])
 
-const { loggedIn, user, clear } = useUserSession()
+const { loggedIn, user, clear, fetch } = useUserSession()
+
+const router = useRouter()
+router.afterEach(async () => {
+  if (loggedIn.value) await fetch()
+})
 
 const userDisplayName = computed(() => {
   if (!user.value) return ''
@@ -100,6 +105,14 @@ const userMenuItems = computed<DropdownMenuItem[][]>(() => {
       </template>
 
       <UNavigationMenu :items="items" />
+
+      <template #panel>
+        <UNavigationMenu
+          :items="items"
+          orientation="vertical"
+          class="p-4"
+        />
+      </template>
 
       <template #right>
         <div class="flex items-center gap-4">

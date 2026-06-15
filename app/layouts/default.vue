@@ -12,15 +12,55 @@ const items = computed<NavigationMenuItem[]>(() => [
   }
 ])
 
-const userMenuItems = computed<DropdownMenuItem[][]>(() => [
-  [
+const { loggedIn, user, clear } = useUserSession()
+
+const userDisplayName = computed(() => {
+  if (!user.value) return ''
+
+  return user.value.firstName
+})
+
+const userAvatarUrl = computed(() => {
+  if (!user.value) return undefined
+
+  return user.value.avatarUrl ?? undefined
+})
+
+const logout = async () => {
+  await clear()
+  await navigateTo('/')
+}
+
+const userMenuItems = computed<DropdownMenuItem[][]>(() => {
+  if (!loggedIn.value || !user.value) {
+    return []
+  }
+
+  const groups: DropdownMenuItem[][] = []
+
+  groups.push([
     {
-      label: 'My account',
-      slot: 'account',
-      disabled: true
+      label: `${user.value.firstName} ${user.value.lastName}`,
+      avatar: {
+        src: user.value.avatarUrl ?? undefined,
+        alt: user.value.firstName
+      },
+      type: 'label'
     }
-  ],
-  [
+  ])
+
+  if (user.value.role === 'admin') {
+    groups.push([
+      {
+        label: 'Admin panel',
+        icon: 'i-lucide-shield',
+        color: 'error',
+        to: '/admin'
+      }
+    ])
+  }
+
+  groups.push([
     {
       label: 'Profile',
       icon: 'i-lucide-user',
@@ -36,35 +76,18 @@ const userMenuItems = computed<DropdownMenuItem[][]>(() => [
       icon: 'i-lucide-settings',
       to: '/settings'
     }
-  ],
-  [
+  ])
+
+  groups.push([
     {
       label: 'Log out',
       icon: 'i-lucide-log-out',
-      color: 'error',
       onSelect: logout
     }
-  ]
-])
+  ])
 
-const { loggedIn, user, clear } = useUserSession()
-
-const userDisplayName = computed(() => {
-  if (!user.value) return ''
-
-  return user.value.firstName
+  return groups
 })
-
-const userAvatarUrl = computed(() => {
-  if (!user.value) return undefined
-
-  return user.value.avatarUrl
-})
-
-const logout = async () => {
-  await clear()
-  await navigateTo('/')
-}
 </script>
 
 <template>
@@ -92,7 +115,7 @@ const logout = async () => {
             <UDropdownMenu :items="userMenuItems">
               <UButton variant="ghost" color="neutral">
                 <UAvatar
-                  :src="userAvatarUrl || ''"
+                  :src="userAvatarUrl"
                   :alt="userDisplayName"
                 />
                 <span>{{ userDisplayName }}</span>

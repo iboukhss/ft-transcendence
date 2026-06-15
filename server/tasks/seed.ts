@@ -44,8 +44,8 @@ export default defineTask({
         .values({
           userId: insertedAdmin.id,
           contactFirstName: 'Admin',
-          contactLastName: 'Admin',
-          companyName: 'Administrator',
+          contactLastName: 'User',
+          companyName: 'Administrator account',
           country: 'fr'
         })
 

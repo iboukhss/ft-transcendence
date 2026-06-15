@@ -34,7 +34,7 @@ export default defineNuxtConfig({
       openAPI: true
     },
     openAPI: {
-      production: 'runtime',
+      production: false,
       route: '/api/_openapi.json',
       ui: {
         scalar: {

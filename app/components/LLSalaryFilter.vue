@@ -1,20 +1,18 @@
 <script setup lang="ts">
-const minSalary = defineModel<number>({ default: 1 })
-const maxSalary = defineModel<number>({ default: 500 })
-
-const sliderValue = computed({
-  get() {
-    return [minSalary.value, maxSalary.value] as [number, number]
-  },
-  set(newValue) {
-    minSalary.value = newValue[0]
-    maxSalary.value = newValue[1]
-  }
-})
+const salaryRange = defineModel<[number, number]>({ default: () => [1, 500] })
 </script>
 
 <template>
   <LLFilterCollapsible label="Salary">
-    <USlider v-model="sliderValue" />
+    <USlider
+      v-model="salaryRange"
+      :min="1"
+      :max="500"
+      :tooltip="{
+        content: { side: 'bottom', sideOffset: 12 },
+        open: true
+      }"
+      class="mx-1 my-2 mb-12"
+    />
   </LLFilterCollapsible>
 </template>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useCategoriesFilter } from '~/composables/useCategoriesFilter'
 import { useLocationsFilter } from '~/composables/useLocationsFilter'
+import { useSalaryFilter } from '~/composables/useSalaryFilter'
 import { useSkillsFilter } from '~/composables/useSkillsFilter'
 import { useWorkplacesFilter } from '~/composables/useWorkplacesFilter'
 
@@ -11,6 +12,7 @@ const { selectedSkills, verifySkillCheckboxes } = useSkillsFilter()
 const { selectedLocations, verifyLocationCheckboxes } = useLocationsFilter()
 const { selectedCategories, verifyCategoryCheckboxes } = useCategoriesFilter()
 const { selectedWorkplaces, verifyWorkplaceCheckboxes } = useWorkplacesFilter()
+const { selectedSalary, verifySalarySliders } = useSalaryFilter()
 
 const filteredJobs = computed(() => {
   if (!jobs.value) {
@@ -28,7 +30,8 @@ const filteredJobs = computed(() => {
   jobMatches = verifySkillCheckboxes(jobMatches)
   jobMatches = verifyLocationCheckboxes(jobMatches)
   jobMatches = verifyCategoryCheckboxes(jobMatches)
-  return verifyWorkplaceCheckboxes(jobMatches)
+  jobMatches = verifyWorkplaceCheckboxes(jobMatches)
+  return verifySalarySliders(jobMatches)
 })
 </script>
 
@@ -42,11 +45,11 @@ const filteredJobs = computed(() => {
 
         <LLLocationFilter v-model="selectedLocations" />
 
+        <LLSalaryFilter v-model="selectedSalary" />
+
         <LLCategoryFilter v-model="selectedCategories" />
 
         <LLWorkplaceFilter v-model="selectedWorkplaces" />
-
-        <!-- <LLSalaryFilter v-model="" /> -->
       </UPageAside>
     </template>
 

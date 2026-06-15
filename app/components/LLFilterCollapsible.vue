@@ -5,7 +5,7 @@ defineProps<{
 </script>
 
 <template>
-  <UCollapsible class="flex flex-col gap-1" default-open>
+  <UCollapsible class="flex w-50 flex-col gap-2" default-open>
     <UButton
       class="group -ml-3"
       :label="label"
@@ -20,7 +20,9 @@ defineProps<{
     />
 
     <template #content>
-      <slot />
+      <div class="flex flex-col gap-1 pr-4">
+        <slot />
+      </div>
     </template>
   </UCollapsible>
 </template>

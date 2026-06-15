@@ -4,6 +4,7 @@ import { useLocationsFilter } from '~/composables/useLocationsFilter'
 import { useSalaryFilter } from '~/composables/useSalaryFilter'
 import { useSkillsFilter } from '~/composables/useSkillsFilter'
 import { useWorkplacesFilter } from '~/composables/useWorkplacesFilter'
+import { COUNTRY_LABELS, JOB_CATEGORY_LABELS, WORKPLACE_LABELS } from '~/utils/labels'
 
 const { data: jobs } = useFetch('/api/jobs/public')
 const search = ref('')
@@ -43,13 +44,25 @@ const filteredJobs = computed(() => {
 
         <LLSkillsFilter v-model="selectedSkills" />
 
-        <LLLocationFilter v-model="selectedLocations" />
+        <LLFilterCheckboxGroup
+          v-model="selectedLocations"
+          label="Locations"
+          :raw-labels-map="COUNTRY_LABELS"
+        />
 
         <LLSalaryFilter v-model="selectedSalary" />
 
-        <LLCategoryFilter v-model="selectedCategories" />
+        <LLFilterCheckboxGroup
+          v-model="selectedCategories"
+          label="Categories"
+          :raw-labels-map="JOB_CATEGORY_LABELS"
+        />
 
-        <LLWorkplaceFilter v-model="selectedWorkplaces" />
+        <LLFilterCheckboxGroup
+          v-model="selectedWorkplaces"
+          label="Workplace"
+          :raw-labels-map="WORKPLACE_LABELS"
+        />
       </UPageAside>
     </template>
 

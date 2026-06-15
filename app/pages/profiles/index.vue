@@ -3,6 +3,7 @@ import type { FreelancerDTO } from '#shared/dto/profile.dto'
 
 import { useLocationsFilter } from '~/composables/useLocationsFilter'
 import { useSkillsFilter } from '~/composables/useSkillsFilter'
+import { COUNTRY_LABELS } from '~/utils/labels'
 
 const { data: freelancers } = await useFetch<FreelancerDTO[]>('/api/profiles/freelancers')
 const search = ref('')
@@ -42,7 +43,11 @@ const filteredProfiles = computed(() => {
 
         <LLSkillsFilter v-model="selectedSkills" />
 
-        <LLLocationFilter v-model="selectedLocations" />
+        <LLFilterCheckboxGroup
+          v-model="selectedLocations"
+          label="Locations"
+          :raw-labels-map="COUNTRY_LABELS"
+        />
       </UPageAside>
     </template>
 

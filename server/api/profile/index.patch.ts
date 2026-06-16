@@ -1,19 +1,53 @@
-import { patchProfile } from '#server/services/profile/patch-profile.service.js'
-import { db, tables } from '#server/utils/db'
+import type { SessionUserDTO } from '#shared/dto/user.dto'
+
+import { patchProfile } from '#server/services/profile/patch-profile.service'
 import { patchProfileSchema } from '#shared/dto/profile.dto'
 
 export default defineEventHandler(async (event) => {
   const session = await requireUserSession(event)
+
   const body = await readBody(event)
-
   const result = patchProfileSchema.safeParse(body)
-
   const validData = validateOrThrow(result)
 
-  return await patchProfile(
-    db,
-    tables,
-    session.user.id,
-    validData
-  )
+  if (validData.userId !== session.user.id) {
+    throw createError({ statusCode: 403, message: 'Payload authentification spoofing detected.' })
+  }
+
+  if (validData.type !== session.user.accountType) {
+    throw createError({ statusCode: 403, message: 'Payload authentification spoofing detected.' })
+  }
+
+  const updatedProfile = await patchProfile(validData)
+
+  let updatedSessionUser: SessionUserDTO
+
+  if (updatedProfile.type === 'freelancer') {
+    updatedSessionUser = {
+      id: session.user.id,
+      email: session.user.email,
+      role: session.user.role,
+      accountType: session.user.accountType,
+      firstName: updatedProfile.firstName,
+      lastName: updatedProfile.lastName,
+      avatarUrl: updatedProfile.avatar
+    }
+  }
+  else {
+    updatedSessionUser = {
+      id: session.user.id,
+      email: session.user.email,
+      role: session.user.role,
+      accountType: session.user.accountType,
+      firstName: updatedProfile.contactFirstName,
+      lastName: updatedProfile.contactLastName,
+      avatarUrl: updatedProfile.logo
+    }
+  }
+
+  await setUserSession(event, {
+    user: updatedSessionUser
+  })
+
+  return updatedProfile
 })

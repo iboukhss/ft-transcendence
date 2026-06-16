@@ -1,3 +1,5 @@
+// DEPRECATED
+
 import type { DBUser } from '#server/utils/db'
 
 export interface ChangePasswordResponseDTO {

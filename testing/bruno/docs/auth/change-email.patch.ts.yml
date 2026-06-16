@@ -1,0 +1,21 @@
+info:
+  name: change-email.patch.ts
+  type: http
+  seq: 6
+
+http:
+  method: PATCH
+  url: https://localhost:3000/api/auth/change-email
+  body:
+    type: json
+    data: |-
+      {
+        "email": "newEmail3@gmail.com"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,12 +1,22 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 import type { ProfileDTO } from '#shared/dto/profile.dto'
 
-import { COUNTRY_LABELS } from '~/utils/labels'
+import { usePresence } from '~/composables/usePresence'
+import { COUNTRY_LABELS, SKILL_LABELS } from '~/utils/labels'
 
-defineProps<{
+const props = defineProps<{
   profile: Extract<ProfileDTO, { type: 'freelancer' }>
   isOwnProfile?: boolean
 }>()
+
+// 1. Grab the dynamic check function from your updated usePresence composable
+const { isOnline } = usePresence()
+
+// 2. Bind it to a reactive computed property.
+// Because the underlying global Set is replaced on socket events, Vue tracks this dependencies chain perfectly!
+const freelancerIsConnected = computed(() => isOnline(props.profile.userId))
 </script>
 
 <template>
@@ -17,7 +27,8 @@ defineProps<{
           :src="profile.avatar ?? undefined"
           :chip="{
             inset: true,
-            position: 'top-left'
+            position: 'top-left',
+            color: freelancerIsConnected ? 'success' : 'neutral'
           }"
           :alt="profile.firstName"
           size="4xl"
@@ -54,10 +65,11 @@ defineProps<{
 
     <slot name="about">
       <section>
-        <h2 class="text-xl font-semibold">About</h2>
-        <p class="leading-relaxed whitespace-pre-line">
-          {{ profile.bio || 'No bio provided yet.' }}
+        <h2 class="mb-3 text-xl font-semibold">About</h2>
+        <p v-if="profile.bio" class="leading-relaxed whitespace-pre-line">
+          {{ profile.bio }}
         </p>
+        <p v-else class="text-muted italic">No bio provided yet.</p>
       </section>
     </slot>
 
@@ -65,9 +77,19 @@ defineProps<{
 
     <slot name="skills">
       <section>
-        <h2 class="text-xl font-semibold">Skills</h2>
-        <p v-if="profile.skills.length">{{ profile.skills.join(', ') }}</p>
-        <p v-else>No skills provided yet.</p>
+        <h2 class="mb-3 text-xl font-semibold">Skills</h2>
+        <div v-if="profile.skills.length" class="flex flex-wrap gap-2">
+          <UBadge
+            v-for="tag in profile.skills"
+            :key="tag"
+            variant="soft"
+            color="secondary"
+            size="lg"
+          >
+            {{ SKILL_LABELS[tag] }}
+          </UBadge>
+        </div>
+        <p v-else class="text-muted italic">No skills provided yet.</p>
       </section>
     </slot>
 
@@ -75,9 +97,9 @@ defineProps<{
 
     <slot name="languages">
       <section>
-        <h2 class="text-xl font-semibold">Languages</h2>
+        <h2 class="mb-3 text-xl font-semibold">Languages</h2>
         <p v-if="profile.languages.length">{{ profile.languages.join(', ') }}</p>
-        <p v-else>No languages provided yet.</p>
+        <p v-else class="text-muted italic">No languages provided yet.</p>
       </section>
     </slot>
   </div>

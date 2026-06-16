@@ -1,62 +1,40 @@
 import { eq } from 'drizzle-orm'
 
-import type { UserSession } from '#auth-utils'
-import type { DB, Tables } from '#server/utils/db'
 import type { PasswordDTO } from '#shared/dto/password.dto'
 
-import { toPasswordResponseDTO } from '#server/dto/password.dto.js'
+import { db, tables } from '#server/utils/db'
 
-export async function changePassword(db: DB, tables: Tables, session: UserSession, dto: PasswordDTO) {
-  if (!session.user?.id) {
-    throw createError({
-      statusCode: 401,
-      message: 'Unauthorized',
-      statusMessage: 'User not logged in'
-    })
-  }
-
-  const userId = session.user.id
-
-  // check that oldPassword hash matches db
+export async function changePassword(userId: number, dto: PasswordDTO) {
   const user = await db.query.users.findFirst({
     where: eq(tables.users.id, userId)
   })
 
   if (!user) {
-    throw createError({
-      statusCode: 404,
-      message: 'Not found',
-      statusMessage: 'User not found'
-    })
+    throw createError({ statusCode: 404, statusMessage: 'User account not found' })
   }
 
   const valid = await verifyPassword(user.password, dto.oldPassword)
 
   if (!valid) {
-    throw createError({
-      statusCode: 401,
-      message: 'Unauthorized',
-      statusMessage: 'Invalid current password'
-    })
+    throw createError({ statusCode: 401, statusMessage: 'Invalid current password' })
   }
 
   const newPasswordHash = await hashPassword(dto.newPassword)
 
-  const [changedPassword] = await db
+  const changedPassword = await db
     .update(tables.users)
     .set({
       password: newPasswordHash,
       updatedAt: new Date()
     })
     .where(eq(tables.users.id, userId))
-    .returning()
 
   if (!changedPassword) {
-    throw createError({
-      statusCode: 500,
-      message: 'Internal server error',
-      statusMessage: 'Update failed'
-    })
+    throw createError({ statusCode: 500, statusMessage: 'Failed to update user credentials' })
   }
-  return toPasswordResponseDTO(changedPassword)
+
+  return {
+    success: true,
+    message: 'Password updated successfully'
+  }
 }

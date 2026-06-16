@@ -8,3 +8,11 @@ export default defineEventHandler(async (event) => {
 
   return jobs
 })
+
+defineRouteMeta({
+  openAPI: {
+    tags: ['v1'],
+    description: 'API route used to get all posted jobs',
+    security: [{ ApiKeyAuth: [] }]
+  }
+})

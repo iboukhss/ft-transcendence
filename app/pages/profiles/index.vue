@@ -1,26 +1,37 @@
 <script setup lang="ts">
 import type { FreelancerDTO } from '#shared/dto/profile.dto'
 
+import { useLocationsFilter } from '~/composables/useLocationsFilter'
+import { useSkillsFilter } from '~/composables/useSkillsFilter'
+import { COUNTRY_LABELS } from '~/utils/labels'
+
 const { data: freelancers } = await useFetch<FreelancerDTO[]>('/api/profiles/freelancers')
 const search = ref('')
+
+const { selectedSkills, verifySkillCheckboxes } = useSkillsFilter()
+
+const { selectedLocations, verifyLocationCheckboxes } = useLocationsFilter()
 
 const filteredProfiles = computed(() => {
   if (!freelancers.value) {
     return []
   }
-  const query = search.value.toLowerCase().trim()
-  if (!query) {
-    return freelancers.value
-  }
 
-  return freelancers.value.filter((j) => {
-    const firstName = j.firstName.toLowerCase()
-    const lastName = j.lastName.toLowerCase()
-    const fullName = `${firstName} ${lastName}`
-    return firstName.includes(query)
-      || lastName.includes(query)
-      || fullName.includes(query)
-  })
+  const query = search.value.toLowerCase().trim()
+  let nameMatches = freelancers.value
+
+  if (query) {
+    nameMatches = freelancers.value.filter((j) => {
+      const firstName = j.firstName.toLowerCase()
+      const lastName = j.lastName.toLowerCase()
+      const fullName = `${firstName} ${lastName}`
+      return firstName.includes(query)
+        || lastName.includes(query)
+        || fullName.includes(query)
+    })
+  }
+  nameMatches = verifyLocationCheckboxes(nameMatches)
+  return verifySkillCheckboxes(nameMatches)
 })
 </script>
 
@@ -28,14 +39,15 @@ const filteredProfiles = computed(() => {
   <UPage>
     <template #left>
       <UPageAside>
-        <h2 class="mb-4 text-sm font-semibold uppercase">Filters</h2>
-        <UFormField label="Search profiles">
-          <UInput
-            v-model="search"
-            icon="i-lucide-search"
-            autofocus
-          />
-        </UFormField>
+        <LLSearchFilter v-model="search" label="Search profiles" />
+
+        <LLSkillsFilter v-model="selectedSkills" />
+
+        <LLFilterCheckboxGroup
+          v-model="selectedLocations"
+          label="Locations"
+          :raw-labels-map="COUNTRY_LABELS"
+        />
       </UPageAside>
     </template>
 
@@ -53,7 +65,7 @@ const filteredProfiles = computed(() => {
         />
       </div>
 
-      <div v-if="filteredProfiles.length === 0" class="py-20 text-center italic">
+      <div v-if="filteredProfiles.length === 0" class="text-muted py-20 text-center italic">
         No profiles found.
       </div>
     </UPageBody>

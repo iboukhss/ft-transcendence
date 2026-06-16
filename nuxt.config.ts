@@ -29,7 +29,33 @@ export default defineNuxtConfig({
   compatibilityDate: '2026-04-01',
   nitro: {
     experimental: {
-      tasks: true
+      tasks: true,
+      websocket: true,
+      openAPI: true
+    },
+    openAPI: {
+      production: false,
+      route: '/api/_openapi.json',
+      ui: {
+        scalar: {
+          route: '/api/docs',
+          theme: 'nuxt'
+        }
+      },
+      meta: {
+        title: 'LuxLink Public API Docs',
+        version: '1.0.0'
+      },
+      components: {
+        securitySchemes: {
+          ApiKeyAuth: {
+            type: 'apiKey',
+            in: 'header',
+            name: 'x-api-key',
+            description: 'Enter your public LuxLink API key to authenticate requests.'
+          }
+        }
+      }
     },
     storage: {
       cache: {

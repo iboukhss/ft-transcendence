@@ -12,15 +12,55 @@ const items = computed<NavigationMenuItem[]>(() => [
   }
 ])
 
-const userMenuItems = computed<DropdownMenuItem[][]>(() => [
-  [
+const { loggedIn, user, clear } = useUserSession()
+
+const userDisplayName = computed(() => {
+  if (!user.value) return ''
+
+  return user.value.firstName
+})
+
+const userAvatarUrl = computed(() => {
+  if (!user.value) return undefined
+
+  return user.value.avatarUrl ?? undefined
+})
+
+const logout = async () => {
+  await clear()
+  await navigateTo('/')
+}
+
+const userMenuItems = computed<DropdownMenuItem[][]>(() => {
+  if (!loggedIn.value || !user.value) {
+    return []
+  }
+
+  const groups: DropdownMenuItem[][] = []
+
+  groups.push([
     {
-      label: 'My account',
-      slot: 'account',
-      disabled: true
+      label: `${user.value.firstName} ${user.value.lastName}`,
+      avatar: {
+        src: user.value.avatarUrl ?? undefined,
+        alt: user.value.firstName
+      },
+      type: 'label'
     }
-  ],
-  [
+  ])
+
+  if (user.value.role === 'admin') {
+    groups.push([
+      {
+        label: 'Admin panel',
+        icon: 'i-lucide-shield',
+        color: 'error',
+        to: '/admin'
+      }
+    ])
+  }
+
+  groups.push([
     {
       label: 'Profile',
       icon: 'i-lucide-user',
@@ -36,48 +76,18 @@ const userMenuItems = computed<DropdownMenuItem[][]>(() => [
       icon: 'i-lucide-settings',
       to: '/settings'
     }
-  ],
-  [
+  ])
+
+  groups.push([
     {
       label: 'Log out',
       icon: 'i-lucide-log-out',
-      color: 'error',
       onSelect: logout
     }
-  ]
-])
+  ])
 
-const { loggedIn, user, clear } = useUserSession()
-
-// NOTE(isma): I wasted 2 hours on this -_-
-const { data: profile, pending, error } = await useFetch('/api/profile', {
-  watch: [loggedIn]
+  return groups
 })
-
-const userDisplayName = computed(() => {
-  if (!profile.value) {
-    return ''
-  }
-
-  return profile.value.type === 'freelancer'
-    ? profile.value.firstName
-    : profile.value.contactFirstName
-})
-
-const userAvatarUrl = computed(() => {
-  if (!profile.value) {
-    return undefined
-  }
-
-  return profile.value.type === 'freelancer'
-    ? profile.value.avatar
-    : profile.value.logo
-})
-
-const logout = async () => {
-  await clear()
-  await navigateTo('/')
-}
 </script>
 
 <template>
@@ -93,9 +103,9 @@ const logout = async () => {
 
       <template #right>
         <div class="flex items-center gap-4">
-          <template v-if="loggedIn">
+          <template v-if="loggedIn && user">
             <UButton
-              v-if="user?.accountType === 'company'"
+              v-if="user.accountType === 'company'"
               label="Post a job offer"
               to="/jobs/create"
               variant="subtle"
@@ -105,7 +115,7 @@ const logout = async () => {
             <UDropdownMenu :items="userMenuItems">
               <UButton variant="ghost" color="neutral">
                 <UAvatar
-                  :src="userAvatarUrl || ''"
+                  :src="userAvatarUrl"
                   :alt="userDisplayName"
                 />
                 <span>{{ userDisplayName }}</span>

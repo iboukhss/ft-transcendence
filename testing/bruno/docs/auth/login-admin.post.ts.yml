@@ -1,0 +1,22 @@
+info:
+  name: login-admin.post.ts
+  type: http
+  seq: 7
+
+http:
+  method: POST
+  url: https://localhost:3000/api/auth/login
+  body:
+    type: json
+    data: |-
+      {
+        "email": "admin@luxlink.com",
+        "password": "admin"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

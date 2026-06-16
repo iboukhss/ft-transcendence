@@ -23,15 +23,16 @@ defineProps<{ job: JobDTO }>()
         </div>
 
         <div class="flex gap-2">
-          <UBadge>{{ WORKPLACE_LABELS[job.workplace] }}</UBadge>
-          <UBadge>{{ JOB_CATEGORY_LABELS[job.category] }}</UBadge>
+          <UBadge variant="subtle">{{ WORKPLACE_LABELS[job.workplace] }}</UBadge>
+          <UBadge variant="subtle" color="neutral">{{ JOB_CATEGORY_LABELS[job.category] }}</UBadge>
         </div>
 
         <div class="flex gap-1">
           <UBadge
             v-for="skill in job.skills"
             :key="skill"
-            variant="outline"
+            variant="soft"
+            color="secondary"
           >
             {{ SKILL_LABELS[skill] }}
           </UBadge>

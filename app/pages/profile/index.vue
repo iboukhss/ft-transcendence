@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { PatchProfileDTO, ProfileDTO } from '#shared/dto/profile.dto'
+import type { PatchProfileDTO } from '#shared/dto/profile.dto'
 
 import { SKILL_KEYS } from '#shared/constants/enums'
 import { SKILL_LABELS } from '~/utils/labels'
 
-const { data: profile } = await useFetch<ProfileDTO>('/api/profile')
+const { data: profile } = await useFetch('/api/profile')
 const toast = useToast()
 
 const skillOptions = SKILL_KEYS.map(k => ({
@@ -14,17 +14,28 @@ const skillOptions = SKILL_KEYS.map(k => ({
 
 async function onProfileUpdate(payload: PatchProfileDTO, done: (success: boolean) => void) {
   try {
-    const response = await $fetch<ProfileDTO>('/api/profile', {
+    const response = await $fetch('/api/profile', {
       method: 'PATCH',
       body: payload
     })
 
     profile.value = response
-    toast.add({ title: 'Success', description: 'Profile updated.', color: 'success' })
+
+    toast.add({
+      title: 'Profile updated',
+      description: 'Your profile has been updated sucessfully.',
+      color: 'success',
+      icon: 'i-lucide-circle-check'
+    })
     done(true)
   }
   catch (err: any) {
-    toast.add({ title: 'Error', description: 'Failed to update profile.', color: 'error' })
+    toast.add({
+      title: 'Update failed',
+      description: 'Something went wrong while updating your profile.',
+      color: 'error',
+      icon: 'i-lucide-circle-x'
+    })
     done(false)
   }
 }
@@ -42,7 +53,7 @@ async function onProfileUpdate(payload: PatchProfileDTO, done: (success: boolean
           <LLEditAboutSection
             v-model="profile.bio"
             placeholder="Tell us about your background..."
-            @save="(val, done) => onProfileUpdate({ type: 'freelancer', bio: val }, done)"
+            @save="(val, done) => onProfileUpdate({ userId: profile.userId, type: 'freelancer', bio: val }, done)"
           />
         </template>
 
@@ -52,8 +63,8 @@ async function onProfileUpdate(payload: PatchProfileDTO, done: (success: boolean
             title="Skills"
             :options="skillOptions"
             :labels="SKILL_LABELS"
-            placeholder="Choose your core skills..."
-            @save="(tags, done) => onProfileUpdate({ type: 'freelancer', skills: tags }, done)"
+            placeholder="Choose your skills..."
+            @save="(tags, done) => onProfileUpdate({ userId: profile.userId, type: 'freelancer', skills: tags }, done)"
           />
         </template>
       </LLFreelancerView>
@@ -67,7 +78,7 @@ async function onProfileUpdate(payload: PatchProfileDTO, done: (success: boolean
           <LLEditAboutSection
             v-model="profile.description"
             placeholder="Describe your company mission..."
-            @save="(val, done) => onProfileUpdate({ type: 'company', description: val }, done)"
+            @save="(val, done) => onProfileUpdate({ userId: profile.userId, type: 'company', description: val }, done)"
           />
         </template>
       </LLCompanyView>

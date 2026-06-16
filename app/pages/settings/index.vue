@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import type { FormSubmitEvent, SelectMenuItem } from '@nuxt/ui'
 
-import type { ProfileIdentityDTO, ProfileDTO, UploadAvatarDTO } from '#shared/dto/profile.dto.js'
+import { z } from 'zod'
+
+import type { ProfileDTO, UploadAvatarDTO } from '#shared/dto/profile.dto.js'
 
 import { COUNTRY_KEYS } from '#shared/constants/enums'
-import { profileIdentitySchema, uploadAvatarSchema } from '#shared/dto/profile.dto'
+import { freelancerProfileSchema, companyProfileSchema, uploadAvatarSchema } from '#shared/dto/profile.dto'
 import { COUNTRY_LABELS } from '~/utils/labels'
 
 const countryOptions: SelectMenuItem[] = COUNTRY_KEYS.map(k => ({
@@ -12,11 +14,35 @@ const countryOptions: SelectMenuItem[] = COUNTRY_KEYS.map(k => ({
   label: COUNTRY_LABELS[k]
 }))
 
-const isEditing = ref(false)
 const isLoading = ref(false)
 const toast = useToast()
 
-const { data: profile } = await useFetch<ProfileDTO>('/api/profile')
+const { data: profile } = await useFetch('/api/profile')
+const { fetch: fetchUserSession } = useUserSession()
+
+const freelancerIdentitySchema = freelancerProfileSchema.pick({
+  type: true,
+  userId: true,
+  firstName: true,
+  lastName: true,
+  country: true
+})
+
+const companyIdentitySchema = companyProfileSchema.pick({
+  type: true,
+  userId: true,
+  contactFirstName: true,
+  contactLastName: true,
+  companyName: true,
+  country: true
+})
+
+const profileIdentitySchema = z.discriminatedUnion('type', [
+  freelancerIdentitySchema,
+  companyIdentitySchema
+])
+
+type ProfileIdentityDTO = z.infer<typeof profileIdentitySchema>
 
 const identityState = ref<ProfileIdentityDTO | null>(
   profile.value ? profileIdentitySchema.parse(profile.value) : null
@@ -30,17 +56,17 @@ const saveIdentity = async (event: FormSubmitEvent<ProfileIdentityDTO>) => {
   isLoading.value = true
 
   try {
-    const response = await $fetch<ProfileDTO>('/api/profile', {
+    const response = await $fetch('/api/profile', {
       method: 'PATCH',
       body: event.data
     })
 
     profile.value = response
-    isEditing.value = false
+    await fetchUserSession()
 
     toast.add({
       title: 'Profile updated',
-      description: 'Your changes have been saved sucessfully.',
+      description: 'Your profile has been updated sucessfully.',
       color: 'success',
       icon: 'i-lucide-circle-check'
     })
@@ -48,7 +74,7 @@ const saveIdentity = async (event: FormSubmitEvent<ProfileIdentityDTO>) => {
   catch (err) {
     toast.add({
       title: 'Update failed',
-      description: 'Something went wrong while saving your profile.',
+      description: 'Something went wrong while updating your profile.',
       color: 'error',
       icon: 'i-lucide-circle-x'
     })
@@ -89,10 +115,11 @@ const onAvatarUpload = async (event: FormSubmitEvent<UploadAvatarDTO>) => {
       }
 
       avatarState.avatar = undefined
+      await fetchUserSession()
 
       toast.add({
-        title: 'Success',
-        description: 'Your profile picture has been updated.',
+        title: 'Avatar uploaded',
+        description: 'Your avatar has been uploaded successfully.',
         color: 'success',
         icon: 'i-lucide-circle-check'
       })
@@ -101,7 +128,7 @@ const onAvatarUpload = async (event: FormSubmitEvent<UploadAvatarDTO>) => {
   catch (err: any) {
     toast.add({
       title: 'Upload failed',
-      description: 'Something went wrong while uploading.',
+      description: 'Something went wrong while uploading your avatar.',
       color: 'error',
       icon: 'i-lucide-circle-x'
     })

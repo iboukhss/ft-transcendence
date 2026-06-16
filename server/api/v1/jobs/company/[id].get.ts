@@ -14,3 +14,11 @@ export default defineEventHandler(async (event) => {
 
   return job
 })
+
+defineRouteMeta({
+  openAPI: {
+    tags: ['v1'],
+    description: 'API route used to retrieve a job by passing the respective job id as parameter',
+    security: [{ ApiKeyAuth: [] }]
+  }
+})

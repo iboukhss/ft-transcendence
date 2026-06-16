@@ -3,17 +3,17 @@ const toast = useToast()
 const isExporting = ref(false)
 
 const contactState = reactive({
-	subject: '',
-	message: ''
+  subject: '',
+  message: ''
 })
 
 const subjectOptions = [
-{ label: 'Right to rectification (Art. 16 GDPR) — correct inaccurate or incomplete data', value: 'Art. 16 GDPR - Right to rectification' },
+  { label: 'Right to rectification (Art. 16 GDPR) — correct inaccurate or incomplete data', value: 'Art. 16 GDPR - Right to rectification' },
   { label: 'Right to erasure (Art. 17 GDPR) — right to be forgotten', value: 'Art. 17 GDPR - Right to erasure' },
   { label: 'Right to restriction of processing (Art. 18 GDPR)', value: 'Art. 18 GDPR - Right to restriction of processing' },
   { label: 'Right to object (Art. 21 GDPR) — object to processing based on legitimate interests', value: 'Art. 21 GDPR - Right to object' },
   { label: 'Right to withdraw consent', value: 'Withdrawal of consent' }
-  ]
+]
 
 async function onExportData() {
   if (isExporting.value) return
@@ -26,7 +26,6 @@ async function onExportData() {
       $fetch('/api/bookings')
     ])
 
-    
     const [offers, jobs] = await Promise.allSettled([
       $fetch('/api/offers/freelancer'),
       $fetch('/api/jobs/company')
@@ -85,17 +84,17 @@ function onContactSubmit() {
     return
   }
 
-const mailto = `mailto:contact@luxlink.lu?subject=${encodeURIComponent(contactState.subject)}&body=${encodeURIComponent(contactState.message)}`
+  const mailto = `mailto:contact@luxlink.lu?subject=${encodeURIComponent(contactState.subject)}&body=${encodeURIComponent(contactState.message)}`
   window.location.href = mailto
 }
 </script>
 
 <template>
   <UPageBody class="space-y-8">
-  <div class="px-2 text-3xl font-bold tracking-tight">
+    <div class="px-2 text-3xl font-bold tracking-tight">
       <h1>Data & Privacy</h1>
     </div>
-    
+
     <UCard
       title="Export your data"
       description="Download a copy of all personal data LuxLink holds about you, in accordance with your right to data portability (Art. 20 GDPR)."
@@ -110,7 +109,7 @@ const mailto = `mailto:contact@luxlink.lu?subject=${encodeURIComponent(contactSt
         />
       </template>
     </UCard>
-  <UCard
+    <UCard
       title="Exercise your rights"
       description="Submit a request to our team regarding your personal data. We will respond within 30 days as required by GDPR."
     >

@@ -27,7 +27,7 @@ const items: NavigationMenuItem[][] = [
     {
       label: 'Delete account',
       icon: 'i-lucide-trash',
-      to: '/settings/delete'
+      to: '/settings/delete-account'
     }
   ]
 ]

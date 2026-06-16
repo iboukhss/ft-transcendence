@@ -63,9 +63,9 @@ const { data: job } = useFetch(`/api/jobs/public/${jobId}`)
             <UBadge
               v-for="skill in job.skills"
               :key="skill"
-              variant="outline"
+              variant="soft"
+              color="secondary"
               size="lg"
-              color="neutral"
             >
               {{ SKILL_LABELS[skill] }}
             </UBadge>

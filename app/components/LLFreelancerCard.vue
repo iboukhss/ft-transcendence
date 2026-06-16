@@ -11,7 +11,7 @@ defineProps<{
 <template>
   <UCard
     class="hover:ring-primary-500 w-full cursor-pointer transition-all hover:ring-2"
-    @click="navigateTo(`/profiles/${profile.userId}`)"
+    @click="navigateTo(`/public/profiles/${profile.userId}`)"
   >
     <div class="-m-1 space-y-2">
       <UUser

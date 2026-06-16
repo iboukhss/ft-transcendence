@@ -147,7 +147,7 @@ const onAvatarUpload = async (event: FormSubmitEvent<UploadAvatarDTO>) => {
       </div>
 
       <UButton
-        to="/profile"
+        to="/me"
         label="Go back to profile"
         variant="subtle"
         color="neutral"

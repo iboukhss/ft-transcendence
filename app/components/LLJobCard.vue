@@ -9,7 +9,7 @@ defineProps<{ job: JobDTO }>()
 <template>
   <UCard
     class="hover:ring-primary-500 cursor-pointer transition-all hover:ring-2"
-    @click="navigateTo(`/jobs/${job.id}`)"
+    @click="navigateTo(`/public/jobs/${job.id}`)"
   >
     <div class="flex items-start justify-between">
       <div class="space-y-3">

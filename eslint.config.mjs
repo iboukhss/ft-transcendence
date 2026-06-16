@@ -32,7 +32,11 @@ const config = withNuxt({
 // This is pretty stupid but we have to undo some default ignores.
 // https://github.com/nuxt/eslint/issues/453
 config.append({
-  ignores: ['!server/**/public/**']
+  ignores: [
+    '!server/**/public/**',
+    '!app/**/public/**',
+    '!shared/**/public/**'
+  ]
 })
 
 export default config

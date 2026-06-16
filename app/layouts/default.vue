@@ -4,11 +4,13 @@ import type { NavigationMenuItem, DropdownMenuItem } from '@nuxt/ui'
 const items = computed<NavigationMenuItem[]>(() => [
   {
     label: 'Find talents',
-    to: '/profiles'
+    to: '/public/profiles',
+    icon: 'i-lucide-search'
   },
   {
     label: 'Find work',
-    to: '/jobs'
+    to: '/public/jobs',
+    icon: 'i-lucide-briefcase'
   }
 ])
 
@@ -36,47 +38,77 @@ const userMenuItems = computed<DropdownMenuItem[][]>(() => {
     return []
   }
 
-  const groups: DropdownMenuItem[][] = []
-
-  groups.push([
-    {
-      label: `${user.value.firstName} ${user.value.lastName}`,
-      avatar: {
-        src: user.value.avatarUrl ?? undefined,
-        alt: user.value.firstName
-      },
-      type: 'label'
-    }
-  ])
+  const groups: DropdownMenuItem[][] = [
+    [
+      {
+        label: `${user.value.firstName} ${user.value.lastName}`,
+        avatar: {
+          src: user.value.avatarUrl ?? undefined,
+          alt: user.value.firstName
+        },
+        type: 'label'
+      }
+    ]
+  ]
 
   if (user.value.role === 'admin') {
     groups.push([
       {
         label: 'Admin panel',
-        icon: 'i-lucide-shield',
+        icon: 'i-lucide-shield-alert',
         color: 'error',
         to: '/admin'
       }
     ])
   }
 
-  groups.push([
+  const navigationGroup: DropdownMenuItem[] = [
     {
       label: 'Profile',
       icon: 'i-lucide-user',
-      to: '/profile'
+      to: '/me'
+    }
+  ]
+
+  if (user.value.accountType === 'freelancer') {
+    navigationGroup.push({
+      label: 'Sent applications',
+      icon: 'i-lucide-send',
+      to: '/freelancer/offers'
     },
     {
-      label: 'My jobs',
+      label: 'My contracts',
       icon: 'i-lucide-briefcase',
-      to: '/my-jobs'
+      to: '/freelancer/bookings'
+    })
+  }
+  else {
+    navigationGroup.push({
+      label: 'Job postings',
+      icon: 'i-lucide-layers',
+      to: '/company/jobs'
     },
+    {
+      label: 'Incoming offers',
+      icon: 'i-lucide-inbox',
+      to: '/company/offers'
+    },
+    {
+      label: 'Active contracts',
+      icon: 'i-lucide-handshake',
+      to: '/company/bookings'
+    })
+  }
+
+  navigationGroup.push(
     {
       label: 'Settings',
       icon: 'i-lucide-settings',
       to: '/settings'
     }
-  ])
+  )
+
+  groups.push(navigationGroup)
 
   groups.push([
     {
@@ -106,8 +138,9 @@ const userMenuItems = computed<DropdownMenuItem[][]>(() => {
           <template v-if="loggedIn && user">
             <UButton
               v-if="user.accountType === 'company'"
-              label="Post a job offer"
-              to="/jobs/create"
+              label="Post a job"
+              to="/company/jobs/create"
+              icon="i-lucide-plus"
               variant="subtle"
               color="primary"
             />

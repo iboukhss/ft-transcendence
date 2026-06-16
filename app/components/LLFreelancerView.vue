@@ -25,12 +25,12 @@ const freelancerIsConnected = computed(() => isOnline(props.profile.userId))
       <div class="flex items-center gap-6">
         <UAvatar
           :src="profile.avatar ?? undefined"
+          :alt="profile.firstName"
           :chip="{
             inset: true,
             position: 'top-left',
             color: freelancerIsConnected ? 'success' : 'neutral'
           }"
-          :alt="profile.firstName"
           size="4xl"
         />
 

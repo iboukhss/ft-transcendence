@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { JobDTO } from '#shared/dto/job.dto'
+
 import { JOB_CATEGORY_LABELS, SKILL_LABELS, WORKPLACE_LABELS, COUNTRY_LABELS } from '~/utils/labels'
 
 const route = useRoute()
@@ -46,7 +48,11 @@ const { data: job } = useFetch(`/api/jobs/public/${jobId}`)
       </template>
 
       <template #links>
-        <UButton label="Apply for this job" icon="i-lucide-send" />
+        <UButton
+          label="Apply for this job"
+          icon="i-lucide-send"
+          :to="`/freelancer/jobs/${jobId}/apply`"
+        />
       </template>
     </UPageHeader>
 

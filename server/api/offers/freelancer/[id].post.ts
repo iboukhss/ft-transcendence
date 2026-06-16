@@ -2,7 +2,7 @@ import { createOffer } from '#server/services/offers/freelancer/create-offer.ser
 // post application to jobId
 import { db, tables } from '#server/utils/db'
 import { getRouterParamAsNumber } from '#server/utils/router.js'
-import { offerSchema } from '#shared/dto/offer.dto'
+import { createOfferSchema } from '#shared/dto/offer.dto'
 
 export default defineEventHandler(async (event) => {
   const session = await requireUserSession(event)
@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
 
   const body = await readBody(event)
 
-  const result = offerSchema.safeParse(body)
+  const result = createOfferSchema.safeParse(body)
 
   const validData = validateOrThrow(result)
 

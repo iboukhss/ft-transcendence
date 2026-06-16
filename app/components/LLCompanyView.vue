@@ -15,6 +15,7 @@ defineProps<{
       <div class="flex items-center gap-6">
         <UAvatar
           :src="profile.logo ?? undefined"
+          :alt="profile.contactFirstName"
           :chip="{
             inset: true,
             position: 'top-left'

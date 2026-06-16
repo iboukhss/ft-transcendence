@@ -1,11 +1,11 @@
 import { eq } from 'drizzle-orm'
 
 import type { DB, Tables } from '#server/utils/db'
-import type { OfferDTO } from '#shared/dto/offer.dto'
+import type { CreateOfferDTO } from '#shared/dto/offer.dto'
 
 import { toOfferResponseDTO } from '#server/dto/offer.dto'
 
-export async function createOffer(db: DB, tables: Tables, userId: number, dto: OfferDTO, jobId: number) {
+export async function createOffer(db: DB, tables: Tables, userId: number, dto: CreateOfferDTO, jobId: number) {
   const job = await db.query.jobs.findFirst({
     where: eq(tables.jobs.id, jobId)
   })

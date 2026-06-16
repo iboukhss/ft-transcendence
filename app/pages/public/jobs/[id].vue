@@ -6,7 +6,7 @@ import { JOB_CATEGORY_LABELS, SKILL_LABELS, WORKPLACE_LABELS, COUNTRY_LABELS } f
 const route = useRoute()
 const jobId = route.params.id
 
-const { data: job } = useFetch(`/api/jobs/public/${jobId}`)
+const { data: job } = useFetch<JobDTO>(`/api/jobs/${jobId}`)
 </script>
 
 <template>

@@ -50,24 +50,26 @@ async function onSubmit() {
   isLoading.value = true
 
   try {
-    await $fetch('/api/jobs/company', {
+    await $fetch('/api/jobs', {
       method: 'POST',
       body: state
     })
 
-    toast.add({
-      title: 'Success',
-      description: 'Your job offer has been posted',
-      color: 'success'
-    })
+    await navigateTo('/company/jobs')
 
-    await navigateTo('/jobs')
+    toast.add({
+      title: 'Job posted',
+      description: 'Your job has been posted successfully.',
+      color: 'success',
+      icon: 'i-lucide-circle-check'
+    })
   }
   catch (err: any) {
     toast.add({
       title: 'Error',
-      description: err.data?.message || 'Something went wrong',
-      color: 'error'
+      description: err.data?.message || 'Something went wrong while posting your job.',
+      color: 'error',
+      icon: 'i-lucide-circle-x'
     })
   }
   finally {

@@ -3,7 +3,10 @@ import type { TableColumn } from '@nuxt/ui'
 
 import type { JobDTO } from '#shared/dto/job.dto'
 
-const { data: jobs } = useFetch('/api/jobs/company')
+const { user } = useUserSession()
+const { data: jobs } = useFetch('/api/jobs', {
+  query: { userId: user.value?.id ?? undefined }
+})
 
 const columns: TableColumn<JobDTO>[] = [
   {

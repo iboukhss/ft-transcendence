@@ -48,11 +48,13 @@ const { data: job } = useFetch<JobDTO>(`/api/jobs/${jobId}`)
       </template>
 
       <template #links>
-        <UButton
-          label="Apply for this job"
-          icon="i-lucide-send"
-          :to="`/freelancer/jobs/${jobId}/apply`"
-        />
+        <div v-if="profile?.type === 'freelancer' || !profile">
+          <UButton
+            label="Apply for this job"
+            icon="i-lucide-send"
+            :to="!profile ? '/login' : undefined"
+          />
+        </div>
       </template>
     </UPageHeader>
 

@@ -7,7 +7,7 @@ export const createJobSchema = z.object({
   description: z.string().min(30, 'Description is too short'),
   category: z.enum(JOB_CATEGORY_KEYS, 'Please select a category'),
   skills: z.array(z.enum(SKILL_KEYS)).min(1, 'Please select at least one skill'),
-  hourlyRate: z.number().positive('Rate must be positive'),
+  hourlyRate: z.number().positive('Rate must be positive').max(500, 'Hourly rate cannot exceed €500'),
   duration: z.number().int().min(1, 'Please indicate the mission\'s duration').max(12),
   workplace: z.enum(WORKPLACE_KEYS, 'Please select a workplace'),
   location: z.enum(COUNTRY_KEYS, 'Please select a location'),

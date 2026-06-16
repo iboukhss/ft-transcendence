@@ -15,6 +15,7 @@ const countryOptions: SelectMenuItem[] = COUNTRY_KEYS.map(k => ({
 }))
 
 const isLoading = ref(false)
+const isDeleteModalOpen = ref(false)
 const toast = useToast()
 
 const { data: profile } = await useFetch('/api/profile')
@@ -136,6 +137,10 @@ const onAvatarUpload = async (event: FormSubmitEvent<UploadAvatarDTO>) => {
   finally {
     isUploading.value = false
   }
+}
+
+const handleDeleteModal = () => {
+  isDeleteModalOpen.value = false
 }
 </script>
 
@@ -267,13 +272,27 @@ const onAvatarUpload = async (event: FormSubmitEvent<UploadAvatarDTO>) => {
         </div>
 
         <template #footer>
-          <div>
+          <div class="flex gap-2">
             <UButton
               type="submit"
               label="Upload new picture"
               variant="outline"
               :loading="isUploading"
             />
+            <UModal
+              v-model:open="isDeleteModalOpen"
+              :dismissible="false"
+              :close="false"
+              title="Are you sure you want to delete your avatar?"
+            >
+              <template #footer>
+                <div class="flex gap-2">
+                  <UButton color="neutral" label="Cancel" variant="subtle" @click="isDeleteModalOpen = false" />
+                  <UButton color="error" label="Delete" @click="handleDeleteModal" />
+                </div>
+              </template>
+              <UButton color="error" label="Delete picture" variant="outline" />
+            </UModal>
           </div>
         </template>
       </UCard>

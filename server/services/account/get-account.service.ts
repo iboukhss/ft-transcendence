@@ -19,9 +19,6 @@ export async function getAccount(db: DB, tables: Tables, userId: number) {
   }
 
   return {
-    email: user.email,
-    houseNumber: null,
-    street: null,
-    zip: null
+    email: user.email
   }
 }

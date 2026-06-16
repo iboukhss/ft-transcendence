@@ -1,6 +1,18 @@
 <script setup lang="ts">
 import type { ButtonProps } from '@nuxt/ui'
 
+//For fun :D
+onMounted(() => {
+  setTimeout(() => {
+    toast.add({
+      title: "🎟️ Exclusive offer!",
+      description: "Free tickets to the World Cup Final under the keyboard ;)",
+      color: "success",
+      duration: 6000
+    })
+  }, 1500)
+})
+
 const links = ref<ButtonProps[]>([
   {
     label: 'Hire top talents',

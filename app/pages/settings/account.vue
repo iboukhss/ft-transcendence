@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import type { PasswordDTO } from '#shared/dto/password.dto.js'
-
 import { passwordSchema } from '#shared/dto/password.dto.js'
+import { emailSchema } from '#shared/dto/email.dto.js'
 
 const toast = useToast()
-const { user } = useUserSession()
+const { user, fetch } = useUserSession()
 
+const isUpdatingEmail = ref(false)
 const isUpdatingPassword = ref(false)
 
-const emailState = ref({
+const emailState = reactive({
   email: ''
 })
 
@@ -18,26 +19,58 @@ const passwordState = reactive<PasswordDTO>({
   confirmPassword: ''
 })
 
-async function onPasswordSubmit() {
-  isUpdatingPassword.value = true
-
+async function onEmailSubmit() {
+  isUpdatingEmail.value = true
   try {
-    await $fetch('/api/auth/change-password', {
-      method: 'PUT',
-      body: passwordState
+    await $fetch('/api/auth/change-email', {
+      method: 'PATCH',
+      body: emailState
     })
-
+    await fetch() // refresh session with new email
     toast.add({
       title: 'Success',
-      description: 'Password updated sucessfully.',
-      color: 'success'
+      description: 'Email updated successfully.',
+      color: 'success',
+      icon: 'i-lucide-circle-check'
     })
+    emailState.email = ''
   }
   catch (err: any) {
     toast.add({
       title: 'Error',
       description: err.data?.message || 'Something went wrong',
-      color: 'error'
+      color: 'error',
+      icon: 'i-lucide-circle-x'
+    })
+  }
+  finally {
+    isUpdatingEmail.value = false
+  }
+}
+
+async function onPasswordSubmit() {
+  isUpdatingPassword.value = true
+  try {
+    await $fetch('/api/auth/change-password', {
+      method: 'PATCH',
+      body: passwordState
+    })
+    toast.add({
+      title: 'Success',
+      description: 'Password updated successfully.',
+      color: 'success',
+      icon: 'i-lucide-circle-check'
+    })
+    passwordState.oldPassword = ''
+    passwordState.newPassword = ''
+    passwordState.confirmPassword = ''
+  }
+  catch (err: any) {
+    toast.add({
+      title: 'Error',
+      description: err.data?.message || 'Something went wrong',
+      color: 'error',
+      icon: 'i-lucide-circle-x'
     })
   }
   finally {
@@ -52,14 +85,19 @@ async function onPasswordSubmit() {
       <h1>Account security</h1>
     </div>
 
-    <UForm>
+    <UForm
+      :schema="emailSchema"
+      :state="emailState"
+      @submit="onEmailSubmit"
+    >
       <UCard
         title="Email"
         description="Your email will be used for login and notifications"
       >
-        <UFormField>
+        <UFormField name="email">
           <UInput
             v-model="emailState.email"
+            type="email"
             :placeholder="user?.email ?? 'your@email.com'"
             color="neutral"
           />
@@ -70,6 +108,7 @@ async function onPasswordSubmit() {
             type="submit"
             label="Change email"
             variant="outline"
+            :loading="isUpdatingEmail"
           />
         </template>
       </UCard>

@@ -139,7 +139,39 @@ const onAvatarUpload = async (event: FormSubmitEvent<UploadAvatarDTO>) => {
   }
 }
 
-const handleDeleteModal = () => {
+async function onDeleteAvatar() {
+  if (!profile.value)
+    return
+  try {
+    const response = await $fetch('/api/profile/avatar', {
+      method: 'DELETE'
+    })
+    if (response.success) {
+      if (profile.value.type === 'freelancer') {
+        profile.value.avatar = null
+      }
+      else {
+        profile.value.logo = null
+      }
+    }
+
+    await fetchUserSession()
+
+    toast.add({
+      title: 'Avatar deleted',
+      description: 'Your avatar has been permanently deleted.',
+      color: 'success',
+      icon: 'i-lucide-circle-check'
+    })
+  }
+  catch (err: any) {
+    toast.add({
+      title: 'Deletion failed',
+      description: err.data?.message || 'Something went wrong. Please try again.',
+      color: 'error',
+      icon: 'i-lucide-circle-x'
+    })
+  }
   isDeleteModalOpen.value = false
 }
 </script>
@@ -288,7 +320,7 @@ const handleDeleteModal = () => {
               <template #footer>
                 <div class="flex gap-2">
                   <UButton color="neutral" label="Cancel" variant="subtle" @click="isDeleteModalOpen = false" />
-                  <UButton color="error" label="Delete" @click="handleDeleteModal" />
+                  <UButton color="error" label="Delete" @click="onDeleteAvatar" />
                 </div>
               </template>
               <UButton color="error" label="Delete picture" variant="outline" />

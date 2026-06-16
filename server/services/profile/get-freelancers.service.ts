@@ -1,9 +1,11 @@
+import { count } from 'drizzle-orm'
+
 import type { ProfileDTO } from '#shared/dto/profile.dto.js'
 
 import { profileSchema } from '#shared/dto/profile.dto.js'
 
 export async function getFreelancerProfiles(page: number): Promise<ProfileDTO[]> {
-  const data_limit = 4
+  const data_limit = 10
 
   const records = await db
     .select()
@@ -16,4 +18,11 @@ export async function getFreelancerProfiles(page: number): Promise<ProfileDTO[]>
       ...profileData
     })
   })
+}
+
+export async function getFreelancerAccountSize(): Promise<number> {
+  const [res] = await db
+    .select({ count: count() })
+    .from(tables.freelancerProfiles)
+  return res!.count
 }

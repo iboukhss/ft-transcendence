@@ -6,7 +6,7 @@ import { useSkillsFilter } from '~/composables/useSkillsFilter'
 import { useWorkplacesFilter } from '~/composables/useWorkplacesFilter'
 import { COUNTRY_LABELS, JOB_CATEGORY_LABELS, WORKPLACE_LABELS } from '~/utils/labels'
 
-const { data: jobs } = useFetch('/api/jobs/public')
+const { data: jobs } = useFetch('/api/jobs/public?page=1')
 const search = ref('')
 
 const { selectedSkills, verifySkillCheckboxes } = useSkillsFilter()

@@ -5,8 +5,21 @@ import { useLocationsFilter } from '~/composables/useLocationsFilter'
 import { useSkillsFilter } from '~/composables/useSkillsFilter'
 import { COUNTRY_LABELS } from '~/utils/labels'
 
-const { data: freelancers } = await useFetch<FreelancerDTO[]>('/api/profiles/freelancers')
+const page = ref(1)
+
+const { data: freelancers, refresh } = await useFetch<FreelancerDTO[]>(
+  () => `/api/profiles/freelancers?page=${page.value}`
+)
+
+watch(page, () => {
+  refresh()
+})
+
 const search = ref('')
+const response = await fetch('https://localhost:3000/api/profiles/freelancers')
+const data = await response.json()
+const max_page: number = parseInt(data.freelancerAmount)
+console.log('freelancer amount : ', max_page)
 
 const { selectedSkills, verifySkillCheckboxes } = useSkillsFilter()
 
@@ -67,6 +80,10 @@ const filteredProfiles = computed(() => {
 
       <div v-if="filteredProfiles.length === 0" class="text-muted py-20 text-center italic">
         No profiles found.
+      </div>
+      <div class="mt-8 flex justify-center">
+        <p>Current page: {{ page }}</p>
+        <UPagination v-model:page="page" :page-count="10" :total="max_page" />
       </div>
     </UPageBody>
   </UPage>

@@ -6,7 +6,20 @@ import { useSkillsFilter } from '~/composables/useSkillsFilter'
 import { useWorkplacesFilter } from '~/composables/useWorkplacesFilter'
 import { COUNTRY_LABELS, JOB_CATEGORY_LABELS, WORKPLACE_LABELS } from '~/utils/labels'
 
-const { data: jobs } = useFetch('/api/jobs/public?page=1')
+const page = ref(1)
+
+const response = await fetch('https://localhost:3000/api/jobs/public')
+const data = await response.json()
+const total_jobs: number = parseInt(data.JobsAmount)
+console.log('jobs amount : ', total_jobs)
+
+const { data: jobs, refresh } = await useFetch(
+  () => `/api/jobs/public?page=${page.value}`
+)
+
+watch(page, () => {
+  refresh()
+})
 const search = ref('')
 
 const { selectedSkills, verifySkillCheckboxes } = useSkillsFilter()
@@ -78,6 +91,9 @@ const filteredJobs = computed(() => {
 
       <div v-if="filteredJobs.length === 0" class="text-muted py-20 text-center italic">
         No jobs found.
+      </div>
+      <div class="mt-8 flex justify-center">
+        <UPagination v-model:page="page" :page-count="10" :total="total_jobs" />
       </div>
     </UPageBody>
   </UPage>

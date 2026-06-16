@@ -82,7 +82,6 @@ const filteredProfiles = computed(() => {
         No profiles found.
       </div>
       <div class="mt-8 flex justify-center">
-        <p>Current page: {{ page }}</p>
         <UPagination v-model:page="page" :page-count="10" :total="max_page" />
       </div>
     </UPageBody>

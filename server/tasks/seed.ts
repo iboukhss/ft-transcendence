@@ -50,7 +50,7 @@ export default defineTask({
         })
 
       console.log('Generating 12 freelancer accounts...')
-      for (let i = 0; i < 12; i++) {
+      for (let i = 0; i < 40; i++) {
         const [insertedUser] = await db
           .insert(tables.users)
           .values({

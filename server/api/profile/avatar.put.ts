@@ -1,4 +1,6 @@
-import { uploadAvatar } from '#server/services/profile/upload-avatar.service.js'
+import { deleteAvatar } from '#server/services/profile/delete-avatar.service.js'
+import { putAvatar } from '#server/services/profile/put-avatar.service.js'
+import { db, tables } from '#server/utils/db.js'
 
 export default defineEventHandler(async (event) => {
   const session = await requireUserSession(event)
@@ -12,7 +14,14 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const result = await uploadAvatar(sessionUser, formData)
+  try {
+    await deleteAvatar(db, tables, session.user.id, session.user.accountType)
+  }
+  catch (err) {
+    console.warn('[PUT avatar] failed to delete existing avatar:', err)
+  }
+
+  const result = await putAvatar(sessionUser, formData)
 
   await setUserSession(event, {
     user: {

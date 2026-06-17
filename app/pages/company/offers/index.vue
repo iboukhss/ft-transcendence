@@ -7,6 +7,10 @@ const { data: offers, refresh } = await useFetch('/api/offers')
 
 const columns: TableColumn<OfferDTO>[] = [
   {
+    id: 'applicant',
+    header: 'Applicant'
+  },
+  {
     accessorKey: 'jobId',
     header: 'Job ID'
   },
@@ -27,6 +31,17 @@ const columns: TableColumn<OfferDTO>[] = [
     header: 'Actions'
   }
 ]
+const { data: freelancers } = await useFetch('/api/profiles/freelancers')
+
+const freelancerNameMap = computed(() => {
+  if (!freelancers.value) return {}
+  return Object.fromEntries(
+    freelancers.value.map((f: any) => [
+      f.userId,
+      `${f.firstName} ${f.lastName}`
+    ])
+  )
+})
 
 async function submitHandshake(offerId: number, action: 'accept' | 'decline') {
   try {
@@ -65,10 +80,33 @@ function getStatusProps(status: OfferDTO['status']) {
           :data="offers?? []"
           :columns="columns"
         >
+          <template #empty>
+            <div class="text-muted text-sm italic ">
+              No applications received yet.
+            </div>
+          </template>
+
+          <template #applicant-cell="{ row }">
+            <NuxtLink
+              :to="`/public/profiles/${row.original.sellerId}`"
+              class="text-primary font-medium hover:underline"
+            >
+              {{ freelancerNameMap[row.original.sellerId] ?? `Freelancer #${row.original.sellerId}` }}
+            </NuxtLink>
+          </template>
+
+          <template #proposedHourlyRate-cell="{ row }">
+            €{{ row.original.proposedHourlyRate }}/hr
+          </template>
+
           <template #status-cell="{ row }">
             <UBadge
               v-bind="getStatusProps(row.original.status)"
             />
+          </template>
+
+          <template #createdAt-cell="{ row }">
+            {{ new Date(row.original.createdAt).toLocaleDateString() }}
           </template>
 
           <template #actions-cell="{ row }">

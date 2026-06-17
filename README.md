@@ -1,4 +1,4 @@
-# Transcendence
+# Transcendence - LuxLink
 
 ## Stack
 - **Framework:** Nuxt 4 (full-stack)

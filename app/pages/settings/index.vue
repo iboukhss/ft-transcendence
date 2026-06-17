@@ -103,7 +103,7 @@ const onAvatarUpload = async (event: FormSubmitEvent<UploadAvatarDTO>) => {
     formData.append('avatar', event.data.avatar)
 
     const response = await $fetch('/api/profile/avatar', {
-      method: 'POST',
+      method: 'PUT',
       body: formData
     })
 

@@ -6,7 +6,7 @@ import type { SessionUserDTO } from '#shared/dto/user.dto'
 
 import { AVATAR_ALLOWED_MIME_TYPES, AVATAR_MAX_SIZE } from '#shared/dto/profile.dto'
 
-export async function uploadAvatar(sessionUser: SessionUserDTO, formData: MultiPartData[]) {
+export async function putAvatar(sessionUser: SessionUserDTO, formData: MultiPartData[]) {
   const file = formData.find(item => item.name === 'avatar')
 
   if (!file || !file.data) {

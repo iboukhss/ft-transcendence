@@ -6,6 +6,7 @@ import { JOB_CATEGORY_LABELS, SKILL_LABELS, WORKPLACE_LABELS, COUNTRY_LABELS } f
 const route = useRoute()
 const jobId = route.params.id
 
+const { user } = useUserSession()
 const { data: job } = useFetch<JobDTO>(`/api/jobs/${jobId}`)
 </script>
 
@@ -48,11 +49,11 @@ const { data: job } = useFetch<JobDTO>(`/api/jobs/${jobId}`)
       </template>
 
       <template #links>
-        <div v-if="profile?.type === 'freelancer' || !profile">
+        <div v-if="user?.accountType === 'freelancer' || !user">
           <UButton
             label="Apply for this job"
             icon="i-lucide-send"
-            :to="!profile ? '/login' : undefined"
+            :to="!user ? '/login' : `/freelancer/jobs/${jobId}/apply`"
           />
         </div>
       </template>

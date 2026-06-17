@@ -39,7 +39,17 @@ async function registerUser(db: DB, tables: Tables, user: googleUserData) {
       country: 'fr',
       avatar: user.picture ?? ''
     })
-    return sessionUserSchema.parse(newUser)
+
+    const shemaUser = {
+      id: newUser.id,
+      email: newUser.email,
+      role: newUser.role,
+      accountType: newUser.accountType,
+      firstName: user.given_name ?? 'user',
+      lastName: user.family_name ?? 'noname',
+      avatarUrl: user.picture ?? null
+    }
+    return sessionUserSchema.parse(shemaUser)
   })
 }
 
@@ -50,10 +60,30 @@ async function userExists(db: DB, tables: Tables, user: googleUserData) {
   return (existingUser)
 }
 
+async function getUserPicture(db: DB, tables: Tables, id: number) {
+  const res = await db
+    .select({ avatar: tables.freelancerProfiles.avatar })
+    .from(tables.freelancerProfiles)
+    .where(eq(tables.freelancerProfiles.userId, id))
+    .limit(1)
+
+  return res[0]?.avatar
+}
+
 export async function handleOauthUser(db: DB, tables: Tables, user: googleUserData) {
   const c_user = await userExists(db, tables, user)
   if (c_user) {
-    return (sessionUserSchema.parse(c_user))
+    const user_pic = (await getUserPicture(db, tables, c_user.id))
+    const shemaUser = {
+      id: c_user.id,
+      email: c_user.email,
+      role: c_user.role,
+      accountType: c_user.accountType,
+      firstName: user.given_name ?? 'user',
+      lastName: user.family_name ?? 'noname',
+      avatarUrl: user_pic ?? null
+    }
+    return (sessionUserSchema.parse(shemaUser))
   }
   const res = await registerUser(db, tables, user)
   return (res)

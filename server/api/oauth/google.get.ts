@@ -13,9 +13,12 @@ export default defineOAuthGoogleEventHandler({
     await setUserSession(event, {
       user: {
         id: google_user.id,
-        accountType: 'freelancer',
         email: user.email,
-        role: 'user'
+        role: 'user',
+        accountType: 'freelancer',
+        firstName: user.given_name ?? 'guestname',
+        lastName: user.family_name ?? 'noname',
+        avatarUrl: (google_user.avatarUrl ?? user.picture) ?? null
       }
     })
     return sendRedirect(event, '/')

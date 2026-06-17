@@ -13,6 +13,7 @@ const { data: jobs, refresh } = useFetch(() => `/api/jobs?page=${page.value}`)
 
 watch(page, async () => {
   await refresh()
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 })
 const search = ref('')
 

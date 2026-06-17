@@ -1,4 +1,4 @@
-import { eq, count } from 'drizzle-orm'
+import { eq, count, and, or, arrayContains } from 'drizzle-orm'
 import { z } from 'zod'
 
 import type { JobDTO } from '#shared/dto/job.dto'
@@ -8,7 +8,16 @@ import { jobSchema } from '#shared/dto/job.dto'
 
 // DOCS: https://orm.drizzle.team/docs/guides/conditional-filters-in-query
 
-export async function getJobs(filters?: { userId?: number, page?: number }): Promise<JobDTO[]> {
+type filter_data = {
+  skills?: string[]
+  location?: string
+  categories?: string[]
+  workplace?: string
+  salaryStart?: number
+  salaryEnd?: number
+}
+
+export async function getJobs(query_filter: filter_data, filters?: { userId?: number, page?: number }): Promise<JobDTO[]> {
   const data_limit = 10
   const jobs = await db.query.jobs.findMany({
     where: filters?.userId ? eq(tables.jobs.userId, filters.userId) : undefined,
@@ -19,7 +28,7 @@ export async function getJobs(filters?: { userId?: number, page?: number }): Pro
   return z.array(jobSchema).parse(jobs)
 }
 
-export async function getJobsAmount() {
+export async function getJobsAmount(query_filter: filter_data) {
   const result = await db
     .select({ amount: count() })
     .from(tables.jobs)

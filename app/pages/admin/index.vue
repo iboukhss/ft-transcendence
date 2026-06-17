@@ -31,7 +31,7 @@ function formatDate(date: string) {
           <h1 class="text-3xl font-bold tracking-tight">Admin Panel</h1>
           <p class="text-muted mt-1 text-sm">Manage user accounts</p>
         </div>
-        <UBadge color="error" variant="subtle" label="Admin access" icon="i-lucide-shield" />
+        <UBadge color="error" variant="subtle" label="Admin access" icon="i-lucide-shield-alert" />
       </div>
 
       <!-- Search -->

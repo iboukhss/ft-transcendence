@@ -1,10 +1,9 @@
-import { getJobs } from '#server/services/jobs/company/get-jobs.service.js'
-import { db, tables } from '#server/utils/db'
+import { getJobs } from '#server/services/jobs/get-jobs.service.js'
 
 export default defineEventHandler(async (event) => {
   const companyUser = event.context.auth.user // middleware already verified that the API Key belongs to company user
 
-  const jobs = await getJobs(db, tables, companyUser.id)
+  const jobs = await getJobs({ userId: companyUser.id })
 
   return jobs
 })

@@ -1,4 +1,3 @@
-import { getQuery } from 'h3'
 import { z } from 'zod'
 
 import { getJobs, getJobsAmount } from '#server/services/jobs/get-jobs.service.js'
@@ -10,7 +9,6 @@ const querySchema = z.object({
 })
 
 export default defineEventHandler(async (event) => {
-  console.log(getQuery(event))
   const query = await getValidatedQuery(event, querySchema.parse)
   if (!query.page) {
     const amount = await getJobsAmount()

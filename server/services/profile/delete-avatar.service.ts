@@ -18,12 +18,12 @@ export async function deleteAvatar(db: DB, tables: Tables, userId: number, userT
   const configMap = {
     company: {
       table: tables.companyProfiles,
-      column: 'icon',
+      column: 'logo' as const,
       relation: tables.companyProfiles.userId
     },
     freelancer: {
       table: tables.freelancerProfiles,
-      column: 'avatar',
+      column: 'avatar' as const,
       relation: tables.freelancerProfiles.userId
     }
   }
@@ -36,13 +36,28 @@ export async function deleteAvatar(db: DB, tables: Tables, userId: number, userT
     statusMessage: 'User not found'
   })
 
-  const [deletedAvatar] = await db
+  const [currentProfile] = await db
+    .select()
+    .from(activeConfig.table)
+    .where(eq(activeConfig.relation, userId))
+
+  const filenameToDelete = currentProfile ? currentProfile[activeConfig.column] : null
+
+  const [updatedProfile] = await db
     .update(activeConfig.table)
     .set({ [activeConfig.column]: null })
     .where(eq(activeConfig.relation, userId))
     .returning()
 
-  await useStorage('uploads').removeItem(activeConfig.column)
+  console.log('Looking for User ID:', userId)
+  console.log('Database Update Result:', updatedProfile)
 
-  return deletedAvatar
+  await useStorage('uploads').hasItem(filenameToDelete)
+  if (filenameToDelete) {
+    const cleanFilename = filenameToDelete.replace(/^\/?uploads\//, '')
+
+    await useStorage('uploads').removeItem(cleanFilename)
+  }
+
+  return updatedProfile
 }

@@ -139,14 +139,14 @@ const onAvatarUpload = async (event: FormSubmitEvent<UploadAvatarDTO>) => {
   }
 }
 
-async function onDeleteAvatar() {
+const onDeleteAvatar = async () => {
+  console.log('[delete] handler entered')
   if (!profile.value)
     return
+
   try {
-    const response = await $fetch('/api/profile/avatar', {
-      method: 'DELETE'
-    })
-    if (response.success) {
+    const result = await $fetch('/api/profile/avatar', { method: 'DELETE' })
+    if (result.success) {
       if (profile.value.type === 'freelancer') {
         profile.value.avatar = null
       }
@@ -156,7 +156,6 @@ async function onDeleteAvatar() {
     }
 
     await fetchUserSession()
-
     toast.add({
       title: 'Avatar deleted',
       description: 'Your avatar has been permanently deleted.',
@@ -172,7 +171,9 @@ async function onDeleteAvatar() {
       icon: 'i-lucide-circle-x'
     })
   }
-  isDeleteModalOpen.value = false
+  finally {
+    isDeleteModalOpen.value = false
+  }
 }
 </script>
 

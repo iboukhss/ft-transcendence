@@ -6,7 +6,8 @@ export default defineEventHandler(async (event) => {
 
   await deleteAvatar(db, tables, session.user.id, session.user.accountType)
 
-  await setUserSession(event, {
+  await replaceUserSession(event, {
+    ...session,
     user: {
       ...session.user,
       avatarUrl: null

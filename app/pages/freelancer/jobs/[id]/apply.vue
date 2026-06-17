@@ -6,13 +6,20 @@ import { createOfferSchema } from '#shared/dto/offer.dto'
 const route = useRoute()
 const jobId = route.params.id
 
-const { data: job } = useFetch(`/api/jobs/public/${jobId}`)
+const { data: job, error } = await useFetch(`/api/jobs/${jobId}`)
+
+if (error.value || !job.value) {
+  throw createError({
+    statusCode: error.value?.statusCode || 404,
+    statusMessage: error.value?.statusMessage || 'Job listing not found',
+    fatal: true
+  })
+}
 
 const state = reactive<CreateOfferDTO>({
+  jobId: job.value.id,
   motivationLetter: '',
-  proposedHourlyRate: undefined,
-  proposedDuration: undefined,
-  proposedWorkplace: undefined
+  proposedHourlyRate: job.value.hourlyRate
 })
 
 const toast = useToast()
@@ -22,7 +29,7 @@ async function onSubmit() {
   isLoading.value = true
 
   try {
-    await $fetch(`/api/offers/freelancer/${jobId}`, {
+    await $fetch('/api/offers', {
       method: 'POST',
       body: state
     })
@@ -33,6 +40,8 @@ async function onSubmit() {
       color: 'success',
       icon: 'i-lucide-circle-check'
     })
+
+    await navigateTo('/freelancer/offers')
   }
   catch (err: any) {
     toast.add({

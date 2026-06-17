@@ -55,14 +55,14 @@ async function onSubmit() {
       body: state
     })
 
-    await navigateTo('/company/jobs')
-
     toast.add({
       title: 'Job posted',
       description: 'Your job has been posted successfully.',
       color: 'success',
       icon: 'i-lucide-circle-check'
     })
+
+    await navigateTo('/company/jobs')
   }
   catch (err: any) {
     toast.add({

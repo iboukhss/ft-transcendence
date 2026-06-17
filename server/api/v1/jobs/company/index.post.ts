@@ -1,12 +1,12 @@
 import { createJob } from '#server/services/jobs/create-job.service.js'
 import { validateOrThrow } from '#server/utils/validateOrThrow'
-import { jobSchema } from '#shared/dto/job.dto'
+import { createJobSchema } from '#shared/dto/job.dto'
 
 export default defineEventHandler(async (event) => {
   const userId = event.context.auth.user.id
 
   const body = await readBody(event)
-  const result = jobSchema.safeParse(body)
+  const result = createJobSchema.safeParse(body)
   const validData = validateOrThrow(result)
 
   return createJob(userId, validData)

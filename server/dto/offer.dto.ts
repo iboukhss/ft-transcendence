@@ -9,9 +9,7 @@ export const offerResponseSchema = z.object({
   sellerId: z.number(),
   status: z.string(),
   motivationLetter: z.string(),
-  proposedHourlyRate: z.number().nullable(),
-  proposedDuration: z.number().nullable(),
-  proposedWorkplace: z.string().nullable(),
+  proposedHourlyRate: z.number(),
   sellerAgreed: z.date()
     .nullable()
     .transform(val => val?.toISOString() ?? null),
@@ -24,7 +22,6 @@ export const offerResponseSchema = z.object({
   buyerDeclined: z.date()
     .nullable()
     .transform(val => val?.toISOString() ?? null),
-
   createdAt: z.date().transform(val => val.toISOString()),
   updatedAt: z.date().transform(val => val.toISOString())
 }).strict()

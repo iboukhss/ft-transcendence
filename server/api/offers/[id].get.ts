@@ -1,21 +1,9 @@
-// get application to jobId
-import { getOfferById } from '#server/services/offers/get-offer.service.js'
-import { db, tables } from '#server/utils/db'
-import { getRouterParamAsNumber } from '#server/utils/router.js'
+import { getOfferById } from '#server/services/offers/get-offer-by-id.service'
 
 export default defineEventHandler(async (event) => {
   const session = await requireUserSession(event)
-  requireFreelancer(session.user)
 
-  const jobId = getRouterParamAsNumber(event)
+  const offerId = Number(getRouterParam(event, 'id'))
 
-  return (
-    await getOfferById(
-      db,
-      tables,
-      jobId,
-      session.user.id,
-      session.user.accountType as 'freelancer' | 'company' | 'admin'
-    )
-  )
+  return getOfferById(offerId, session.user)
 })

@@ -113,10 +113,6 @@ export const offers = pgTable('offers', {
   status: offerStatusEnum('status').default('pending').notNull(),
   motivationLetter: text('motivation_letter').notNull(),
   proposedHourlyRate: real('proposed_hourly_rate').notNull(),
-  buyerAgreed: timestamp('buyer_agreed'),
-  sellerAgreed: timestamp('seller_agreed'),
-  buyerDeclined: timestamp('buyer_declined'),
-  sellerDeclined: timestamp('seller_declined'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull()
 }, (table) => {

@@ -49,14 +49,11 @@ export async function deleteAvatar(db: DB, tables: Tables, userId: number, userT
     .where(eq(activeConfig.relation, userId))
     .returning()
 
-  console.log('Looking for User ID:', userId)
-  console.log('Database Update Result:', updatedProfile)
-
-  await useStorage('uploads').hasItem(filenameToDelete)
   if (filenameToDelete) {
     const cleanFilename = filenameToDelete.replace(/^\/?uploads\//, '')
 
-    await useStorage('uploads').removeItem(cleanFilename)
+    if (await useStorage('uploads').hasItem(cleanFilename))
+      await useStorage('uploads').removeItem(cleanFilename)
   }
 
   return updatedProfile

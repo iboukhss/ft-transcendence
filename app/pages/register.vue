@@ -63,6 +63,9 @@ async function onSubmit(event: FormSubmitEvent<RegisterDTO>) {
       color: 'success'
     })
 
+    const { fetch: refreshSession } = useUserSession()
+    await refreshSession()
+
     await navigateTo('/')
   }
   catch (err: any) {

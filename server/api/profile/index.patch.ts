@@ -1,6 +1,6 @@
 import type { SessionUserDTO } from '#shared/dto/user.dto'
 
-import { patchProfile } from '#server/services/profile/patch-profile.service'
+import { updateProfile } from '#server/services/profile/update-profile.service'
 import { patchProfileSchema } from '#shared/dto/profile.dto'
 
 export default defineEventHandler(async (event) => {
@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 403, message: 'Payload authentification spoofing detected.' })
   }
 
-  const updatedProfile = await patchProfile(validData)
+  const updatedProfile = await updateProfile(validData)
 
   let updatedSessionUser: SessionUserDTO
 

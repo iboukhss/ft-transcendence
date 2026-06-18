@@ -19,7 +19,8 @@ export const OFFER_STATUS_KEYS = [
   'pending',
   'company_accepted',
   'accepted',
-  'rejected',
+  'company_rejected',
+  'freelancer_rejected',
   'withdrawn'
 ] as const
 

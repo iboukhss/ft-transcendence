@@ -29,19 +29,20 @@ const columns: TableColumn<DashboardOfferDTO>[] = [
   }
 ]
 
+// Shoutout reddit: https://www.reddit.com/r/typescript/comments/1mvinj4/exhaustive_switch_expressions_in_typescript/n9tyv7n/
+
 function getStatusProps(status: OfferDTO['status']) {
   switch (status) {
     case 'pending': return { color: 'warning' as const, variant: 'subtle' as const, label: 'Pending review' }
     case 'company_accepted': return { color: 'info' as const, variant: 'subtle' as const, label: 'Offer received' }
     case 'accepted': return { color: 'success' as const, variant: 'subtle' as const, label: 'Contract booked' }
-    case 'rejected': return { color: 'error' as const, variant: 'subtle' as const, label: 'Offer declined' as const }
-    case 'withdrawn': return { color: 'neutral' as const, variant: 'subtle' as const, label: 'You withdrew' }
+    case 'company_rejected': return { color: 'error' as const, variant: 'subtle' as const, label: 'Company declined' as const }
+    case 'freelancer_rejected': return { color: 'error' as const, variant: 'subtle' as const, label: 'Freelancer declined' as const }
+    case 'withdrawn': return { color: 'neutral' as const, variant: 'subtle' as const, label: 'Offer withdrawn' }
+    default: {
+      status satisfies never
+    }
   }
-}
-
-// Edit — navigate programmatically
-function onEdit(offer: DashboardOfferDTO) {
-  navigateTo(`/freelancer/jobs/${offer.jobId}/apply?offerId=${offer.id}`)
 }
 
 // Delete — confirmation modal
@@ -88,8 +89,8 @@ async function confirmDelete() {
 
 async function submitHandshake(offerId: number, action: 'accept' | 'decline') {
   try {
-    await $fetch(`/api/offers/${offerId}`, {
-      method: 'PATCH',
+    await $fetch(`/api/offers/${offerId}/status`, {
+      method: 'POST',
       body: { action }
     })
 
@@ -152,7 +153,7 @@ async function submitHandshake(offerId: number, action: 'accept' | 'decline') {
                   variant="subtle"
                   color="neutral"
                   size="sm"
-                  @click="onEdit(row.original)"
+                  @click="navigateTo(`/freelancer/offers/${row.original.id}/edit`)"
                 />
                 <UButton
                   label="Withdraw"

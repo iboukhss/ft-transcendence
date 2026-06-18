@@ -5,7 +5,7 @@ import type { PatchProfileDTO, ProfileDTO } from '#shared/dto/profile.dto'
 import { getProfileById } from '#server/services/profile/get-profile-by-id.service.js'
 import { db, tables } from '#server/utils/db'
 
-export async function patchProfile(dto: PatchProfileDTO): Promise<ProfileDTO> {
+export async function updateProfile(dto: PatchProfileDTO): Promise<ProfileDTO> {
   if (dto.type === 'freelancer') {
     const { userId, type, ...profileData } = dto
 

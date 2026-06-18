@@ -18,14 +18,15 @@ export async function handleOfferHandshake(
   return await db.transaction(async (tx) => {
     const offer = await getOfferById(offerId, sessionUser, tx)
 
-    // Case 0: Offer is finalized already
-    if (offer.status === 'accepted' || offer.status === 'rejected' || offer.status === 'withdrawn') {
+    // State is terminal, no need to go further
+    const terminalStates = ['accepted', 'company_rejected', 'freelancer_rejected', 'withdrawn']
+    if (terminalStates.includes(offer.status)) {
       throw createError({ statusCode: 400, statusMessage: 'Offer is already finalized' })
     }
 
     const now = new Date()
 
-    // Case 1: A freelancer can only act if the company accepted the offer first
+    // Freelancer workflow
     if (sessionUser.accountType === 'freelancer') {
       if (offer.status !== 'company_accepted') {
         throw createError({ statusCode: 400, statusMessage: 'Waiting for company approval' })
@@ -33,7 +34,7 @@ export async function handleOfferHandshake(
 
       if (action === 'decline') {
         const [updatedOffer] = await tx.update(tables.offers)
-          .set({ status: 'rejected', updatedAt: now })
+          .set({ status: 'freelancer_rejected', updatedAt: now })
           .where(eq(tables.offers.id, offerId))
           .returning()
 
@@ -72,7 +73,7 @@ export async function handleOfferHandshake(
       return offerSchema.parse(updatedOffer)
     }
 
-    // Case 2: A company can only act if the offer is pending for approval
+    // Company workflow
     else {
       if (offer.status !== 'pending') {
         throw createError({ statusCode: 400, statusMessage: 'Company action window closed' })
@@ -80,7 +81,7 @@ export async function handleOfferHandshake(
 
       if (action === 'decline') {
         const [updatedOffer] = await tx.update(tables.offers)
-          .set({ status: 'rejected', updatedAt: now })
+          .set({ status: 'company_rejected', updatedAt: now })
           .where(eq(tables.offers.id, offerId))
           .returning()
 

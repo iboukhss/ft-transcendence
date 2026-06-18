@@ -10,6 +10,11 @@ export const createOfferSchema = z.object({
   proposedHourlyRate: z.number().positive('Rate must be positive')
 })
 
+export const updateOfferSchema = createOfferSchema.pick({
+  motivationLetter: true,
+  proposedHourlyRate: true
+})
+
 export const offerSchema = createOfferSchema.extend({
   id: z.number(),
   buyerId: z.number(),
@@ -32,6 +37,7 @@ export const dashboardOfferSchema = offerSchema.extend({
 })
 
 export type CreateOfferDTO = z.infer<typeof createOfferSchema>
+export type UpdateOfferDTO = z.infer<typeof updateOfferSchema>
 export type OfferDTO = z.infer<typeof offerSchema>
 
 export type DashboardOfferDTO = z.infer<typeof dashboardOfferSchema>

@@ -53,7 +53,7 @@ const { data: job } = useFetch<JobDTO>(`/api/jobs/${jobId}`)
           <UButton
             label="Apply for this job"
             icon="i-lucide-send"
-            :to="!user ? '/login' : `/freelancer/jobs/${jobId}/apply`"
+            :to="`/freelancer/offers/new?jobId=${jobId}`"
           />
         </div>
       </template>

@@ -36,15 +36,19 @@ function getStatusProps(status: OfferDTO['status']) {
     case 'pending': return { color: 'warning' as const, variant: 'subtle' as const, label: 'Pending review' }
     case 'company_accepted': return { color: 'info' as const, variant: 'subtle' as const, label: 'Awaiting response' }
     case 'accepted': return { color: 'success' as const, variant: 'subtle' as const, label: 'Contract booked' }
-    case 'rejected': return { color: 'error' as const, variant: 'subtle' as const, label: 'Offer declined' as const }
+    case 'company_rejected': return { color: 'error' as const, variant: 'subtle' as const, label: 'Company declined' as const }
+    case 'freelancer_rejected': return { color: 'error' as const, variant: 'subtle' as const, label: 'Freelancer declined' as const }
     case 'withdrawn': return { color: 'neutral' as const, variant: 'subtle' as const, label: 'Offer withdrawn' }
+    default: {
+      status satisfies never
+    }
   }
 }
 
 async function submitHandshake(offerId: number, action: 'accept' | 'decline') {
   try {
-    await $fetch(`/api/offers/${offerId}`, {
-      method: 'PATCH',
+    await $fetch(`/api/offers/${offerId}/status`, {
+      method: 'POST',
       body: { action }
     })
 

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { NavigationMenuItem, DropdownMenuItem } from '@nuxt/ui'
 
+const toast = useToast()
+
 const items = computed<NavigationMenuItem[]>(() => [
   {
     label: 'Find talents',
@@ -29,7 +31,24 @@ const userAvatarUrl = computed(() => {
 })
 
 const logout = async () => {
-  await clear()
+  try {
+    await clear()
+
+    toast.add({
+      title: 'Logged out',
+      description: 'See you later!',
+      color: 'success',
+      icon: 'i-lucide-circle-check'
+    })
+  }
+  catch (err: any) {
+    toast.add({
+      title: 'Log out failed',
+      description: err.data?.message || 'Something went wrong.',
+      color: 'error',
+      icon: 'i-lucide-circle-x'
+    })
+  }
   await navigateTo('/')
 }
 

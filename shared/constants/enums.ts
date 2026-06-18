@@ -8,7 +8,12 @@ export const WORKPLACE_KEYS = ['on_site', 'remote', 'hybrid'] as const
 
 export const LANGUAGE_KEYS = ['en', 'de', 'fr', 'lu'] as const
 
-export const JOB_STATUS_KEYS = ['active', 'paused', 'deleted', 'booked'] as const
+export const JOB_STATUS_KEYS = [
+  'active',
+  'paused',
+  'booked',
+  'deleted'
+] as const
 
 export const OFFER_STATUS_KEYS = [
   'pending',

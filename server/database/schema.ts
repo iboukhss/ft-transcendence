@@ -1,3 +1,4 @@
+import { relations } from 'drizzle-orm'
 import { pgTable, unique, serial, text, pgEnum, timestamp, integer, real, boolean } from 'drizzle-orm/pg-core'
 
 import {
@@ -136,3 +137,14 @@ export const apiKeys = pgTable('api_keys', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull()
 })
+
+export const offersRelations = relations(offers, ({ one }) => ({
+  job: one(jobs, {
+    fields: [offers.jobId],
+    references: [jobs.id]
+  }),
+  seller: one(freelancerProfiles, {
+    fields: [offers.sellerId],
+    references: [freelancerProfiles.userId]
+  })
+}))

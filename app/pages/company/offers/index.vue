@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import type { TableColumn } from '@nuxt/ui'
 
-import type { OfferDTO } from '#shared/dto/offer.dto'
+import type { DashboardOfferDTO, OfferDTO } from '#shared/dto/offer.dto'
 
 const { data: offers, refresh } = await useFetch('/api/offers')
 
-const columns: TableColumn<OfferDTO>[] = [
+const columns: TableColumn<DashboardOfferDTO>[] = [
   {
     id: 'applicant',
     header: 'Applicant'
   },
   {
-    accessorKey: 'jobId',
-    header: 'Job ID'
+    id: 'jobTitle',
+    header: 'Job'
   },
   {
     accessorKey: 'proposedHourlyRate',
@@ -27,21 +27,19 @@ const columns: TableColumn<OfferDTO>[] = [
     header: 'Received on'
   },
   {
-    id: 'actions',
-    header: 'Actions'
+    id: 'actions'
   }
 ]
-const { data: freelancers } = await useFetch('/api/profiles/freelancers')
 
-const freelancerNameMap = computed(() => {
-  if (!freelancers.value) return {}
-  return Object.fromEntries(
-    freelancers.value.map((f: any) => [
-      f.userId,
-      `${f.firstName} ${f.lastName}`
-    ])
-  )
-})
+function getStatusProps(status: OfferDTO['status']) {
+  switch (status) {
+    case 'pending': return { color: 'warning' as const, variant: 'subtle' as const, label: 'Pending review' }
+    case 'company_accepted': return { color: 'info' as const, variant: 'subtle' as const, label: 'Awaiting response' }
+    case 'accepted': return { color: 'success' as const, variant: 'subtle' as const, label: 'Contract booked' }
+    case 'rejected': return { color: 'error' as const, variant: 'subtle' as const, label: 'Offer declined' as const }
+    case 'withdrawn': return { color: 'neutral' as const, variant: 'subtle' as const, label: 'Offer withdrawn' }
+  }
+}
 
 async function submitHandshake(offerId: number, action: 'accept' | 'decline') {
   try {
@@ -54,16 +52,6 @@ async function submitHandshake(offerId: number, action: 'accept' | 'decline') {
   }
   catch (err: any) {
     alert(err.statusMessage || 'An error occured')
-  }
-}
-
-function getStatusProps(status: OfferDTO['status']) {
-  switch (status) {
-    case 'pending': return { color: 'primary' as const, variant: 'subtle' as const, label: 'Pending review' }
-    case 'company_accepted': return { color: 'warning' as const, variant: 'subtle' as const, label: 'Action required' }
-    case 'accepted': return { color: 'success' as const, variant: 'subtle' as const, label: 'Contract booked' }
-    case 'rejected': return { color: 'error' as const, variant: 'subtle' as const, label: 'Declined' as const }
-    case 'withdrawn': return { color: 'neutral' as const, variant: 'subtle' as const, label: 'Withdrawn' }
   }
 }
 </script>
@@ -81,56 +69,64 @@ function getStatusProps(status: OfferDTO['status']) {
           :columns="columns"
         >
           <template #empty>
-            <div class="text-muted text-sm italic ">
+            <div>
               No applications received yet.
             </div>
           </template>
 
           <template #applicant-cell="{ row }">
-            <NuxtLink
-              :to="`/public/profiles/${row.original.sellerId}`"
-              class="text-primary font-medium hover:underline"
-            >
-              {{ freelancerNameMap[row.original.sellerId] ?? `Freelancer #${row.original.sellerId}` }}
-            </NuxtLink>
+            <ULink :to="`/public/profiles/${row.original.sellerId}`">
+              {{ row.original.seller?.firstName }} {{ row.original.seller?.lastName }}
+            </ULink>
+          </template>
+
+          <template #jobTitle-cell="{ row }">
+            <ULink :to="`/public/jobs/${row.original.jobId}`">
+              {{ row.original.job.title }}
+            </ULink>
           </template>
 
           <template #proposedHourlyRate-cell="{ row }">
-            €{{ row.original.proposedHourlyRate }}/hr
+            €{{ row.original.proposedHourlyRate }} /hr
           </template>
 
           <template #status-cell="{ row }">
-            <UBadge
-              v-bind="getStatusProps(row.original.status)"
-            />
+            <UBadge v-bind="getStatusProps(row.original.status)" />
           </template>
 
           <template #createdAt-cell="{ row }">
             {{ new Date(row.original.createdAt).toLocaleDateString() }}
           </template>
 
-          <template #actions-cell="{ row }">
-            <div
-              v-if="row.original.status === 'pending'"
-              class="flex items-center gap-2"
-            >
-              <UButton
-                icon="i-heroicons-check-circle-20-solid"
-                color="success"
-                variant="ghost"
-                square
-                @click="submitHandshake(row.original.id, 'accept')"
-              />
-              <UButton
-                icon="i-heroicons-x-circle-20-solid"
-                color="error"
-                variant="ghost"
-                square
-                @click="submitHandshake(row.original.id, 'decline')"
-              />
-            </div>
+          <template #actions-header>
+            <div class="text-center">Actions</div>
+          </template>
 
-            <span v-else class="pl-3 text-xs text-neutral-400">—</span>
+          <template #actions-cell="{ row }">
+            <div class="flex w-full items-center justify-center gap-2">
+              <template
+                v-if="row.original.status === 'pending'"
+              >
+                <UButton
+                  label="Accept"
+                  icon="i-lucide-check"
+                  variant="subtle"
+                  color="success"
+                  size="sm"
+                  @click="submitHandshake(row.original.id, 'accept')"
+                />
+                <UButton
+                  label="Decline"
+                  icon="i-lucide-x"
+                  variant="subtle"
+                  color="error"
+                  size="sm"
+                  @click="submitHandshake(row.original.id, 'decline')"
+                />
+              </template>
+
+              <span v-else>—</span>
+            </div>
           </template>
         </UTable>
       </UCard>

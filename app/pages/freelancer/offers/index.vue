@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import type { TableColumn } from '@nuxt/ui'
 
-import type { OfferDTO } from '#shared/dto/offer.dto'
+import type { DashboardOfferDTO, OfferDTO } from '#shared/dto/offer.dto'
+
+const toast = useToast()
 
 const { data: offers, refresh } = await useFetch('/api/offers')
 
-const columns: TableColumn<OfferDTO>[] = [
+const columns: TableColumn<DashboardOfferDTO>[] = [
   {
     id: 'jobTitle',
     header: 'Job'
@@ -23,46 +25,50 @@ const columns: TableColumn<OfferDTO>[] = [
     header: 'Submitted on'
   },
   {
-    id: 'actions',
-    header: 'Actions'
+    id: 'actions'
   }
 ]
 
-const toast = useToast()
-
-const { data: jobs } = await useFetch('/api/jobs')
-
-const jobTitleMap = computed(() => {
-  if (!jobs.value) return {}
-  return Object.fromEntries(jobs.value.map((j: any) => [j.id, j.title]))
-})
+function getStatusProps(status: OfferDTO['status']) {
+  switch (status) {
+    case 'pending': return { color: 'warning' as const, variant: 'subtle' as const, label: 'Pending review' }
+    case 'company_accepted': return { color: 'info' as const, variant: 'subtle' as const, label: 'Offer received' }
+    case 'accepted': return { color: 'success' as const, variant: 'subtle' as const, label: 'Contract booked' }
+    case 'rejected': return { color: 'error' as const, variant: 'subtle' as const, label: 'Offer declined' as const }
+    case 'withdrawn': return { color: 'neutral' as const, variant: 'subtle' as const, label: 'You withdrew' }
+  }
+}
 
 // Edit — navigate programmatically
-function onEdit(offer: OfferDTO) {
+function onEdit(offer: DashboardOfferDTO) {
   navigateTo(`/freelancer/jobs/${offer.jobId}/apply?offerId=${offer.id}`)
 }
 
 // Delete — confirmation modal
 const showDeleteModal = ref(false)
-const offerToDelete = ref<number | null>(null)
+const offerToDelete = ref<DashboardOfferDTO | null>(null)
 const isDeleting = ref(false)
 
-function openDeleteModal(offerId: number) {
-  offerToDelete.value = offerId
+function openDeleteModal(offer: DashboardOfferDTO) {
+  offerToDelete.value = offer
   showDeleteModal.value = true
 }
 
 async function confirmDelete() {
   if (!offerToDelete.value) return
+
   isDeleting.value = true
+
   try {
-    await $fetch(`/api/offers/freelancer/${offerToDelete.value}`, { method: 'DELETE' })
+    await $fetch(`/api/offers/${offerToDelete.value.id}`, { method: 'DELETE' })
+
     toast.add({
       title: 'Application withdrawn',
-      description: 'Your application has been successfully withdrawn.',
+      description: 'Your application has been withdrawn successfully.',
       color: 'success',
       icon: 'i-lucide-circle-check'
     })
+
     showDeleteModal.value = false
     offerToDelete.value = null
     await refresh()
@@ -93,16 +99,6 @@ async function submitHandshake(offerId: number, action: 'accept' | 'decline') {
     alert(err.statusMessage || 'An error occured')
   }
 }
-
-function getStatusProps(status: OfferDTO['status']) {
-  switch (status) {
-    case 'pending': return { color: 'primary' as const, variant: 'subtle' as const, label: 'Pending review' }
-    case 'company_accepted': return { color: 'warning' as const, variant: 'subtle' as const, label: 'Action required' }
-    case 'accepted': return { color: 'success' as const, variant: 'subtle' as const, label: 'Contract booked' }
-    case 'rejected': return { color: 'error' as const, variant: 'subtle' as const, label: 'Declined' as const }
-    case 'withdrawn': return { color: 'neutral' as const, variant: 'subtle' as const, label: 'Withdrawn' }
-  }
-}
 </script>
 
 <template>
@@ -117,20 +113,22 @@ function getStatusProps(status: OfferDTO['status']) {
           :data="offers ?? []"
           :columns="columns"
         >
-          <template #empty-state>
-            <div class="text-muted text-sm italic">
+          <template #empty>
+            <div>
               You haven't submitted any applications yet.
             </div>
           </template>
 
           <template #jobTitle-cell="{ row }">
-            <span class="font-medium">
-              {{ jobTitleMap[row.original.jobId] ?? `Job #${row.original.jobId}` }}
-            </span>
+            <ULink
+              :to="`/public/jobs/${row.original.jobId}`"
+            >
+              {{ row.original.job.title }}
+            </ULink>
           </template>
 
           <template #proposedHourlyRate-cell="{ row }">
-            €{{ row.original.proposedHourlyRate }}/hr
+            <div>€{{ row.original.proposedHourlyRate }} /hr</div>
           </template>
 
           <template #status-cell="{ row }">
@@ -141,48 +139,53 @@ function getStatusProps(status: OfferDTO['status']) {
             {{ new Date(row.original.createdAt).toLocaleDateString() }}
           </template>
 
+          <template #actions-header>
+            <div class="text-center">Actions</div>
+          </template>
+
           <template #actions-cell="{ row }">
-            <div
-              class="flex items-center gap-2"
-            >
+            <div class="flex w-full items-center justify-center gap-2">
               <template v-if="row.original.status === 'pending'">
                 <UButton
-                  variant="solid"
-                  color="success"
-                  icon="i-lucide-pencil"
-                  size="sm"
                   label="Update"
+                  icon="i-lucide-pencil"
+                  variant="subtle"
+                  color="neutral"
+                  size="sm"
                   @click="onEdit(row.original)"
                 />
                 <UButton
-                  variant="outline"
+                  label="Withdraw"
+                  icon="i-lucide-file-x"
+                  variant="subtle"
                   color="error"
-                  icon="i-lucide-trash"
                   size="sm"
-                  label="Delete"
-                  @click="openDeleteModal(row.original.id)"
+                  @click="openDeleteModal(row.original)"
                 />
               </template>
+
               <template
                 v-else-if="row.original.status === 'company_accepted'"
               >
                 <UButton
-                  icon="i-heroicons-check-circle-20-solid"
+                  label="Accept"
+                  icon="i-lucide-check"
+                  variant="subtle"
                   color="success"
-                  variant="ghost"
-                  square
+                  size="sm"
                   @click="submitHandshake(row.original.id, 'accept')"
                 />
                 <UButton
-                  icon="i-heroicons-x-circle-20-solid"
+                  label="Decline"
+                  icon="i-lucide-x"
+                  variant="subtle"
                   color="error"
-                  variant="ghost"
-                  square
+                  size="sm"
                   @click="submitHandshake(row.original.id, 'decline')"
                 />
               </template>
 
-              <span v-else class="pl-3 text-xs text-neutral-400">—</span>
+              <span v-else>—</span>
             </div>
           </template>
         </UTable>
@@ -199,7 +202,7 @@ function getStatusProps(status: OfferDTO['status']) {
               <h3 class="font-semibold">Withdraw this application?</h3>
               <p class="text-muted mt-1 text-sm">
                 Are you sure you want to withdraw your application for
-                <strong>{{ jobTitleMap[offers?.find(o => o.id === offerToDelete)?.jobId ?? 0] ?? 'this job' }}</strong>?
+                <strong>{{ offerToDelete?.job?.title ?? 'this job' }}</strong>?
                 This action cannot be undone.
               </p>
             </div>
@@ -212,10 +215,11 @@ function getStatusProps(status: OfferDTO['status']) {
               color="neutral"
               @click="showDeleteModal = false"
             />
+
             <UButton
               label="Withdraw application"
               color="error"
-              icon="i-lucide-trash"
+              icon="i-lucide-file-x"
               :loading="isDeleting"
               @click="confirmDelete"
             />

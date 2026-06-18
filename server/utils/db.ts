@@ -12,6 +12,7 @@ import { env } from '#server/utils/env'
 
 export const queryClient = postgres(env.DATABASE_URL)
 export const tables = schema
+
 export const db = drizzle(queryClient, { schema })
 
 export type DB = PostgresJsDatabase<typeof schema>

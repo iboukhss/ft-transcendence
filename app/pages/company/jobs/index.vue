@@ -1,13 +1,51 @@
 <script setup lang="ts">
 import type { TableColumn } from '@nuxt/ui'
+
 import type { JobDTO } from '#shared/dto/job.dto'
+
+import { JOB_CATEGORY_LABELS } from '~/utils/labels'
 
 const toast = useToast()
 const { user } = useUserSession()
 
 const { data: jobs, refresh } = await useFetch('/api/jobs', {
-  query: { userId: user.value?.id ?? undefined }
+  query: { userId: user.value.id }
 })
+
+const columns: TableColumn<JobDTO>[] = [
+  {
+    id: 'jobTitle',
+    header: 'Job'
+  },
+  {
+    accessorKey: 'category',
+    header: 'Category'
+  },
+  {
+    accessorKey: 'hourlyRate',
+    header: 'Hourly rate'
+  },
+  {
+    accessorKey: 'duration',
+    header: 'Duration'
+  },
+  {
+    accessorKey: 'status',
+    header: 'Status'
+  },
+  {
+    id: 'actions'
+  }
+]
+
+function getStatusProps(status: JobDTO['status']) {
+  switch (status) {
+    case 'active': return { color: 'info' as const, variant: 'subtle' as const, label: 'Active' }
+    case 'paused': return { color: 'warning' as const, variant: 'subtle' as const, label: 'Paused' }
+    case 'booked': return { color: 'success' as const, variant: 'subtle' as const, label: 'Booked' as const }
+    case 'deleted': return { color: 'error' as const, variant: 'subtle' as const, label: 'Deleted' }
+  }
+}
 
 // Delete modal
 const showDeleteModal = ref(false)
@@ -21,23 +59,26 @@ function openDeleteModal(job: JobDTO) {
 
 async function confirmDelete() {
   if (!jobToDelete.value) return
+
   isDeleting.value = true
+
   try {
     await $fetch(`/api/jobs/company/${jobToDelete.value.id}`, { method: 'DELETE' })
     toast.add({
       title: 'Job deleted',
-      description: `"${jobToDelete.value.title}" has been permanently deleted.`,
+      description: 'Job has been deleted sucessfully.',
       color: 'success',
       icon: 'i-lucide-circle-check'
     })
+
     showDeleteModal.value = false
     jobToDelete.value = null
     await refresh()
   }
   catch (err: any) {
     toast.add({
-      title: 'Error',
-      description: err.data?.message || 'Something went wrong.',
+      title: 'Deletion failed',
+      description: err.data?.message || 'Something went while deleting your job.',
       color: 'error',
       icon: 'i-lucide-circle-x'
     })
@@ -46,15 +87,6 @@ async function confirmDelete() {
     isDeleting.value = false
   }
 }
-
-const columns: TableColumn<JobDTO>[] = [
-  { accessorKey: 'title', header: 'Job title' },
-  { accessorKey: 'category', header: 'Category' },
-  { accessorKey: 'hourlyRate', header: 'Hourly rate' },
-  { accessorKey: 'duration', header: 'Duration' },
-  { accessorKey: 'status', header: 'Status' },
-  { id: 'actions', header: 'Actions' }
-]
 </script>
 
 <template>
@@ -65,12 +97,32 @@ const columns: TableColumn<JobDTO>[] = [
         <UButton
           label="Post a new job"
           icon="i-lucide-plus"
+          variant="subtle"
           to="/company/jobs/create"
         />
       </div>
 
       <UCard>
-        <UTable :data="jobs ?? []" :columns="columns">
+        <UTable
+          :data="jobs ?? []"
+          :columns="columns"
+        >
+          <template #empty>
+            <div>You haven't posted any jobs yet.</div>
+          </template>
+
+          <template #jobTitle-cell="{ row }">
+            <ULink
+              :to="`/public/jobs/${row.original.id}`"
+            >
+              {{ row.original.title }}
+            </ULink>
+          </template>
+
+          <template #category-cell="{ row }">
+            <div>{{ JOB_CATEGORY_LABELS[row.original.category] }}</div>
+          </template>
+
           <template #hourlyRate-cell="{ row }">
             €{{ row.original.hourlyRate }}/hr
           </template>
@@ -80,49 +132,45 @@ const columns: TableColumn<JobDTO>[] = [
           </template>
 
           <template #status-cell="{ row }">
-            <UBadge
-              :color="row.original.status === 'active' ? 'success' : 'neutral'"
-              variant="subtle"
-              :label="row.original.status"
-            />
+            <UBadge v-bind="getStatusProps(row.original.status)" />
+          </template>
+
+          <template #actions-header>
+            <div class="text-center">Actions</div>
           </template>
 
           <template #actions-cell="{ row }">
-            <div class="flex items-center gap-2">
+            <div class="flex w-full items-center justify-center gap-2">
               <UButton
-                variant="solid"
-                color="success"
-                icon="i-lucide-pencil"
-                size="sm"
                 label="Update"
+                icon="i-lucide-pencil"
+                variant="subtle"
+                color="neutral"
+                size="sm"
                 @click="navigateTo(`/company/jobs/${row.original.id}/edit`)"
               />
               <UButton
-                variant="outline"
-                color="error"
-                icon="i-lucide-trash"
-                size="sm"
                 label="Delete"
+                icon="i-lucide-trash"
+                variant="subtle"
+                color="error"
+                size="sm"
                 @click="openDeleteModal(row.original)"
               />
             </div>
           </template>
         </UTable>
-
-        <div v-if="!jobs?.length" class="py-8 text-center text-muted text-sm">
-          You haven't posted any jobs yet.
-        </div>
       </UCard>
     </UPageBody>
 
     <UModal v-model:open="showDeleteModal">
       <template #content>
-        <div class="p-6 space-y-4">
+        <div class="space-y-4 p-6">
           <div class="flex items-start gap-3">
-            <UIcon name="i-lucide-triangle-alert" class="text-red-500 mt-0.5 shrink-0" size="20" />
+            <UIcon name="i-lucide-triangle-alert" class="mt-0.5 shrink-0 text-red-500" size="20" />
             <div>
               <h3 class="font-semibold">Delete this job posting?</h3>
-              <p class="text-muted text-sm mt-1">
+              <p class="text-muted mt-1 text-sm">
                 Are you sure you want to permanently delete
                 <strong>{{ jobToDelete?.title }}</strong>?
                 This will also remove all applications received for this job.
@@ -138,6 +186,7 @@ const columns: TableColumn<JobDTO>[] = [
               color="neutral"
               @click="showDeleteModal = false"
             />
+
             <UButton
               label="Delete job"
               color="error"

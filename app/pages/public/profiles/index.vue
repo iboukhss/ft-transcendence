@@ -12,6 +12,7 @@ const { data: freelancers, refresh } = await useFetch<FreelancerDTO[]>(
 
 watch(page, async () => {
   await refresh()
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 })
 const search = ref('')
 

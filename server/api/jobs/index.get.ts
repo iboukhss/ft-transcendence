@@ -37,9 +37,17 @@ export default defineEventHandler(async (event) => {
               )
           )
       : undefined,
-    location: countryEnum.enumValues.find(
-      country => country === query.location
-    ),
+    location: query.location
+      ? query.location
+          .split(',')
+          .map(s => s.trim().toLowerCase())
+          .filter(
+            (s): s is (typeof countryEnum.enumValues)[number] =>
+              countryEnum.enumValues.includes(
+                s as (typeof countryEnum.enumValues)[number]
+              )
+          )
+      : undefined,
     categories: query.categories
       ? query.categories
           .split(',')

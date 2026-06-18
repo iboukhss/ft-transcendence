@@ -122,18 +122,24 @@ async function onDeleteAccount() {
           />
         </UFormField>
 
-        <div class="flex items-center justify-start gap-6">
+        <div class="flex items-center justify-start gap-4">
           <UButton
             type="submit"
-            class="w-72"
             label="Permanently delete my account"
             :loading="isLoading"
             color="error"
             icon="i-lucide-trash"
           />
-          <ULink to="/settings" class="text-sm text-muted hover:text-primary">
+          <UButton
+            variant="solid"
+            color="neutral"
+            :ui="{
+              base: 'bg-white/90 text-neutral-900 hover:bg-white/80 dark:bg-neutral-100/85 dark:text-neutral-900'
+            }"
+            to="/settings"
+          >
             Cancel
-          </ULink>
+          </UButton>
         </div>
       </UForm>
     </UCard>

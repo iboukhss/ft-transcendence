@@ -24,7 +24,6 @@ const { selectedSalary, verifySalarySliders } = useSalaryFilter()
 
 export default defineEventHandler(async (event) => {
   const query = await getValidatedQuery(event, querySchema.parse)
-  console.log(`query before : ${query.skills}`)
   const filter_data = {
     skills: query.skills
       ? query.skills
@@ -67,13 +66,10 @@ export default defineEventHandler(async (event) => {
     filter_data.skills = undefined
   if (filter_data.categories && filter_data.categories?.length <= 0)
     filter_data.categories = undefined
-
-  console.log(`debuuuuuuuuggggggggggg: ${filter_data.skills}`)
   if (!query.page) {
     const amount = await getJobsAmount(filter_data)
     return (JSON.stringify({ JobsAmount: amount }))
   }
 
-  console.log(query)
   return getJobs(filter_data, { userId: query.userId, page: parseInt(query.page as string) })
 })

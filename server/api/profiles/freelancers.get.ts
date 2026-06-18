@@ -29,8 +29,6 @@ export default defineEventHandler(async (event) => {
       : undefined
   }
 
-  console.log(`location user : ${filter_data.location}.   skills user: ${filter_data.skills}`)
-
   if (filter_data.skills && filter_data.skills?.length <= 0)
     filter_data.skills = undefined
 

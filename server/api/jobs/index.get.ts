@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { categoryEnum, countryEnum, skillsEnum } from '#server/database/schema.js'
+import { categoryEnum, countryEnum, skillsEnum, workPlaceEnum } from '#server/database/schema.js'
 import { getJobs, getJobsAmount } from '#server/services/jobs/get-jobs.service.js'
 
 const querySchema = z.object({
@@ -58,7 +58,17 @@ export default defineEventHandler(async (event) => {
               )
           )
       : undefined,
-    workplace: query.workplace,
+    workplace: query.workplace
+      ? query.workplace
+          .split(',')
+          .map(s => s.trim().toLowerCase())
+          .filter(
+            (s): s is (typeof workPlaceEnum.enumValues)[number] =>
+              workPlaceEnum.enumValues.includes(
+                s as (typeof workPlaceEnum.enumValues)[number]
+              )
+          )
+      : undefined,
     salaryStart: query.salaryStart ? parseInt(query.salaryStart) : 1,
     salaryEnd: query.salaryEnd ? parseInt(query.salaryEnd) : 500
   }
@@ -68,7 +78,7 @@ export default defineEventHandler(async (event) => {
     filter_data.categories = undefined
   if (!query.page) {
     const amount = await getJobsAmount(filter_data)
-    return (JSON.stringify({ JobsAmount: amount }))
+    return { JobsAmount: amount }
   }
 
   return getJobs(filter_data, { userId: query.userId, page: parseInt(query.page as string) })

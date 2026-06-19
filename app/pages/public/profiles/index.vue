@@ -62,6 +62,7 @@ watch([selectedSkills, selectedLocations, page], async () => {
     skills: selectedSkills.value,
     location: selectedLocations.value
   }, false, 'https://localhost:3000/api/profiles/freelancers')
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 })
 </script>
 

@@ -12,7 +12,7 @@ type filter_data = {
   skills?: string[]
   location?: string[]
   categories?: string[]
-  workplace?: string
+  workplace?: string[]
   salaryStart?: number
   salaryEnd?: number
 }
@@ -21,7 +21,7 @@ export async function getJobs(query_filter: filter_data, filters?: { userId?: nu
   const data_limit = 10
   const jobs = await db.query.jobs.findMany({
     where: and(filters?.userId ? eq(tables.jobs.userId, filters.userId) : undefined,
-      query_filter.workplace ? eq(tables.jobs.workplace, query_filter.workplace) : undefined,
+      query_filter.workplace ? inArray(tables.jobs.workplace, query_filter.workplace) : undefined,
       query_filter.location ? inArray(tables.jobs.location, query_filter.location) : undefined,
       query_filter.skills ? arrayContains(tables.jobs.skills, query_filter.skills) : undefined,
       query_filter.categories ? inArray(tables.jobs.category, query_filter.categories) : undefined,
@@ -39,7 +39,7 @@ export async function getJobsAmount(query_filter: filter_data) {
     .from(tables.jobs)
     .where(
       and(
-        query_filter.workplace ? eq(tables.jobs.workplace, query_filter.workplace) : undefined,
+        query_filter.workplace ? inArray(tables.jobs.workplace, query_filter.workplace) : undefined,
         query_filter.location ? inArray(tables.jobs.location, query_filter.location) : undefined,
         query_filter.skills ? arrayContains(tables.jobs.skills, query_filter.skills) : undefined,
         query_filter.categories ? inArray(tables.jobs.category, query_filter.categories) : undefined,

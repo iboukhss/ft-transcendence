@@ -2,7 +2,7 @@ type query = {
   skills?: string[]
   location?: string[]
   categories?: string[]
-  workplace?: string
+  workplace?: string[]
   salaryStart?: number
   salaryEnd?: number
   page?: number
@@ -29,10 +29,17 @@ async function buildSalaryStartquery(salaryStart: number) {
   return (`salaryStart=${salaryStart}&`)
 }
 
-async function buildworkplacequery(workplace: string) {
-  if (!workplace)
+async function buildworkplacequery(workplace: string[]) {
+  if (!workplace || workplace.length <= 0)
     return ('')
-  return (`workplace=${workplace}&`)
+
+  let workplace_query = 'workplace='
+  for (const work of workplace) {
+    workplace_query += `${work},`
+  }
+  if (workplace_query[workplace.length - 1] === ',')
+    workplace_query = workplace_query.substring(0, workplace_query.length - 1)
+  return (workplace_query + '&')
 }
 
 async function buildCategoriesquery(categories: string[]) {
@@ -85,8 +92,5 @@ export async function urlQueryBuilder(data: query, includePage: boolean, urlStar
 
   if (urlQuery[urlQuery.length - 1] === '&' || urlQuery[urlQuery.length - 1] === '?')
     urlQuery = urlQuery.substring(0, urlQuery.length - 1)
-
-  console.log(`built query ${urlQuery}`)
-  console.log(`salary end ${data.salaryEnd}`)
   return (urlQuery)
 }

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { urlQueryBuilder } from '~/composables/urlQueryBuilder'
 import { useCategoriesFilter } from '~/composables/useCategoriesFilter'
 import { useLocationsFilter } from '~/composables/useLocationsFilter'
 import { useSalaryFilter } from '~/composables/useSalaryFilter'
@@ -6,22 +7,51 @@ import { useSkillsFilter } from '~/composables/useSkillsFilter'
 import { useWorkplacesFilter } from '~/composables/useWorkplacesFilter'
 import { COUNTRY_LABELS, JOB_CATEGORY_LABELS, WORKPLACE_LABELS } from '~/utils/labels'
 
-const response = await fetch('https://localhost:3000/api/jobs')
-const data = await response.json()
-const page = ref(1)
-const { data: jobs, refresh } = useFetch(() => `/api/jobs?page=${page.value}`)
+const { selectedSkills } = useSkillsFilter()
+const { selectedLocations } = useLocationsFilter()
+const { selectedCategories } = useCategoriesFilter()
+const { selectedWorkplaces } = useWorkplacesFilter()
+const { selectedSalary } = useSalaryFilter()
 
-watch(page, async () => {
-  await refresh()
+const JobsUrl = ref('https://localhost:3000/api/jobs?page=1')
+const JobAmountUrl = ref('https://localhost:3000/api/jobs')
+
+const { data } = await useFetch<{ JobsAmount: number }>(
+  JobAmountUrl,
+  {
+    watch: [JobAmountUrl]
+  }
+)
+const page = ref(1)
+
+const { data: jobs } = await useFetch(
+  JobsUrl,
+  {
+    watch: [JobsUrl]
+  }
+)
+watch([page, selectedCategories, selectedSkills, selectedLocations, selectedWorkplaces, selectedSalary], async () => {
+  JobsUrl.value = await urlQueryBuilder({
+    skills: selectedSkills.value,
+    location: selectedLocations.value,
+    categories: selectedCategories.value,
+    workplace: selectedWorkplaces.value,
+    salaryStart: selectedSalary.value[0],
+    salaryEnd: selectedSalary.value[1],
+    page: page.value
+  }, true, 'https://localhost:3000/api/jobs')
+
+  JobAmountUrl.value = await urlQueryBuilder({
+    skills: selectedSkills.value,
+    location: selectedLocations.value,
+    categories: selectedCategories.value,
+    workplace: selectedWorkplaces.value,
+    salaryStart: selectedSalary.value[0],
+    salaryEnd: selectedSalary.value[1]
+  }, false, 'https://localhost:3000/api/jobs')
   window.scrollTo({ top: 0, behavior: 'smooth' })
 })
 const search = ref('')
-
-const { selectedSkills, verifySkillCheckboxes } = useSkillsFilter()
-const { selectedLocations, verifyLocationCheckboxes } = useLocationsFilter()
-const { selectedCategories, verifyCategoryCheckboxes } = useCategoriesFilter()
-const { selectedWorkplaces, verifyWorkplaceCheckboxes } = useWorkplacesFilter()
-const { selectedSalary, verifySalarySliders } = useSalaryFilter()
 
 const filteredJobs = computed(() => {
   if (!jobs.value) {
@@ -36,11 +66,7 @@ const filteredJobs = computed(() => {
       return j.title.toLowerCase().includes(query)
     })
   }
-  jobMatches = verifySkillCheckboxes(jobMatches)
-  jobMatches = verifyLocationCheckboxes(jobMatches)
-  jobMatches = verifyCategoryCheckboxes(jobMatches)
-  jobMatches = verifyWorkplaceCheckboxes(jobMatches)
-  return verifySalarySliders(jobMatches)
+  return jobMatches
 })
 </script>
 
@@ -87,7 +113,7 @@ const filteredJobs = computed(() => {
       <div v-if="filteredJobs.length === 0" class="text-muted py-20 text-center italic">
         No jobs found.
       </div>
-      <UPagination v-model:page="page" :items-per-page="10" :total="data.JobsAmount" />
+      <UPagination v-model:page="page" :items-per-page="10" :total="data?.JobsAmount" />
     </UPageBody>
   </UPage>
 </template>

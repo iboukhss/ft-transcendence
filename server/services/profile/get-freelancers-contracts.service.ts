@@ -1,11 +1,17 @@
 import { eq, and } from 'drizzle-orm'
 import { z } from 'zod'
 
-import type { JobDTO } from '#shared/dto/job.dto.js'
+import type { DB, Tables } from '#server/utils/db.js'
 
 import { jobSchema } from '#shared/dto/job.dto.js'
 
-export async function getFreelancerContracts(db: DB, tables: Tables, userId: number): Promise<JobDTO[]> {
+const contractSchema = jobSchema.extend({
+  companyName: z.string()
+})
+
+export type ContractDTO = z.infer<typeof contractSchema>
+
+export async function getFreelancerContracts(db: DB, tables: Tables, userId: number): Promise<ContractDTO[]> {
   const jobs = await db
     .select({
       id: tables.jobs.id,
@@ -20,16 +26,18 @@ export async function getFreelancerContracts(db: DB, tables: Tables, userId: num
       location: tables.jobs.location,
       status: tables.jobs.status,
       createdAt: tables.jobs.createdAt,
-      updatedAt: tables.jobs.updatedAt
+      updatedAt: tables.jobs.updatedAt,
+      companyName: tables.companyProfiles.companyName
     })
     .from(tables.jobs)
     .innerJoin(tables.offers, eq(tables.jobs.id, tables.offers.jobId))
+    .innerJoin(tables.companyProfiles, eq(tables.jobs.userId, tables.companyProfiles.userId))
     .where(
       and(
         eq(tables.offers.sellerId, userId)
       )
     )
-    .orderBy(tables.jobs.createdAt) as unknown as JobDTO[]
+    .orderBy(tables.jobs.createdAt)
 
-  return z.array(jobSchema).parse(jobs)
+  return z.array(contractSchema).parse(jobs)
 }

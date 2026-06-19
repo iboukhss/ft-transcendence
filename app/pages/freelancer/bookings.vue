@@ -1,8 +1,5 @@
 <script setup lang="ts">
 import type { TableColumn } from '@nuxt/ui'
-
-import type { JobDTO } from '#shared/dto/job.dto'
-
 import { COUNTRY_LABELS, WORKPLACE_LABELS } from '~/utils/labels'
 
 const { data: rawJobs } = useFetch('/api/profiles/freelancer-contracts')
@@ -10,7 +7,6 @@ const { data: rawJobs } = useFetch('/api/profiles/freelancer-contracts')
 const jobs = computed(() => {
   if (!rawJobs.value)
     return []
-
   return rawJobs.value
     .filter(row => row.status === 'booked')
     .map(row => ({
@@ -20,7 +16,11 @@ const jobs = computed(() => {
     }))
 })
 
-const columns: TableColumn<JobDTO>[] = [
+const columns: TableColumn<any>[] = [
+  {
+    accessorKey: 'companyName',
+    header: 'Company'
+  },
   {
     accessorKey: 'title',
     header: 'Job title'
@@ -56,10 +56,17 @@ const columns: TableColumn<JobDTO>[] = [
       </div>
 
       <UCard>
-        <UTable
-          :data="jobs ?? []"
-          :columns="columns"
-        />
+        <div class="overflow-x-auto">
+          <UTable
+            :data="jobs ?? []"
+            :columns="columns"
+            class="min-w-max"
+          />
+        </div>
+
+        <div v-if="!jobs?.length" class="py-8 text-center text-muted text-sm">
+          You don't have any active contracts yet.
+        </div>
       </UCard>
     </UPageBody>
   </UPage>

@@ -110,9 +110,11 @@ async function submitHandshake(offerId: number, action: 'accept' | 'decline') {
       </div>
 
       <UCard>
+	<div class="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
         <UTable
           :data="offers ?? []"
           :columns="columns"
+	class="min-w-max"
         >
           <template #empty>
             <div>
@@ -190,6 +192,7 @@ async function submitHandshake(offerId: number, action: 'accept' | 'decline') {
             </div>
           </template>
         </UTable>
+	</div>
       </UCard>
     </UPageBody>
 

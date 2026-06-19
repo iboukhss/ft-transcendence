@@ -5,6 +5,11 @@ const toast = useToast()
 
 const items = computed<NavigationMenuItem[]>(() => [
   {
+    label: 'Home',
+    to: '/',
+    icon: 'i-lucide-house'
+  },
+  {
     label: 'Find talents',
     to: '/public/profiles',
     icon: 'i-lucide-search'
@@ -151,6 +156,16 @@ const userMenuItems = computed<DropdownMenuItem[][]>(() => {
       </template>
 
       <UNavigationMenu :items="items" />
+
+<template #toggle>
+        <UButton
+          class="lg:hidden"
+          icon="i-lucide-house"
+          variant="ghost"
+          color="neutral"
+          to="/"
+        />
+      </template>
 
       <template #right>
         <div class="flex items-center gap-4">

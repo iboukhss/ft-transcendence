@@ -49,6 +49,13 @@ export default defineAppConfig({
       slots: {
         root: 'divide-none'
       }
+    },
+    // Julien: this last block shows the page sidebar (filters, settings nav, etc.) on all screen
+    // sizes instead of only on desktop (lg: and up). For the mobile [EVAL] .
+    pageAside: {
+      slots: {
+        root: 'block overflow-y-auto lg:max-h-[calc(100vh-var(--ui-header-height))] lg:sticky lg:top-(--ui-header-height) py-8 lg:ps-4 lg:-ms-4 lg:pe-6.5'
+      }
     }
   }
 })

@@ -40,7 +40,7 @@ async function buildCategoriesquery(categories: string[]) {
     return ('')
 
   let category_query = 'categories='
-  for (const category in categories) {
+  for (const category of categories) {
     category_query += `${category},`
   }
   if (category_query[category_query.length - 1] === ',')
@@ -53,7 +53,7 @@ async function buildLocationsquery(locations: string[]) {
     return ('')
 
   let location_query = 'location='
-  for (const location in locations) {
+  for (const location of locations) {
     location_query += `${location},`
   }
   if (location_query[location_query.length - 1] === ',')
@@ -65,7 +65,7 @@ async function buildskillsquery(skills: string[]) {
   if (!skills || skills.length <= 0)
     return ('')
   let skill_query = 'skills='
-  for (const skill in skills) {
+  for (const skill of skills) {
     skill_query += `${skill},`
   }
   if (skill_query[skill_query.length - 1] === ',')
@@ -83,7 +83,7 @@ export async function urlQueryBuilder(data: query, includePage: boolean, urlStar
 
   let urlQuery = `${urlStart}?${skills}${location}${categoriy}${workplace}${salaryStart}${salaryEnd}${page}`
 
-  if (urlQuery[urlQuery.length - 1] === '&')
+  if (urlQuery[urlQuery.length - 1] === '&' || urlQuery[urlQuery.length - 1] === '?')
     urlQuery = urlQuery.substring(0, urlQuery.length - 1)
 
   console.log(`built query ${urlQuery}`)

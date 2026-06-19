@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
     filter_data.location = undefined
   if (!page) {
     const amount = await getFreelancersAmount(filter_data)
-    return (JSON.stringify({ FreelancersAmount: amount }))
+    return { FreelancersAmount: amount }
   }
   return getFreelancerProfiles(parseInt(page as string), filter_data)
 })

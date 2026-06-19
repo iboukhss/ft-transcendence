@@ -1,26 +1,33 @@
 <script setup lang="ts">
 import type { FreelancerDTO } from '#shared/dto/profile.dto'
 
+import { urlQueryBuilder } from '~/composables/urlQueryBuilder'
 import { useLocationsFilter } from '~/composables/useLocationsFilter'
 import { useSkillsFilter } from '~/composables/useSkillsFilter'
 import { COUNTRY_LABELS } from '~/utils/labels'
 
 const page = ref(1)
-const { data: freelancers, refresh } = await useFetch<FreelancerDTO[]>(
-  () => `/api/profiles/freelancers?page=${page.value}`
+const profilesUrl = ref('https://localhost:3000/api/profiles/freelancers?page=1')
+const profilesAmountUrl = ref('https://localhost:3000/api/profiles/freelancers')
+const { data: freelancers } = await useFetch<FreelancerDTO[]>(
+  profilesUrl,
+  {
+    watch: [profilesUrl]
+  }
 )
 
-watch(page, async () => {
-  await refresh()
-})
 const search = ref('')
 
-const response = await fetch('https://localhost:3000/api/profiles/freelancers')
-const data = await response.json()
+const { data } = await useFetch<{ FreelancersAmount: number }>(
+  profilesAmountUrl,
+  {
+    watch: [profilesAmountUrl]
+  }
+)
 
-const { selectedSkills, verifySkillCheckboxes } = useSkillsFilter()
+const { selectedSkills } = useSkillsFilter()
 
-const { selectedLocations, verifyLocationCheckboxes } = useLocationsFilter()
+const { selectedLocations } = useLocationsFilter()
 
 const filteredProfiles = computed(() => {
   if (!freelancers.value) {
@@ -40,8 +47,21 @@ const filteredProfiles = computed(() => {
         || fullName.includes(query)
     })
   }
-  nameMatches = verifyLocationCheckboxes(nameMatches)
-  return verifySkillCheckboxes(nameMatches)
+  return nameMatches
+})
+
+watch([selectedSkills, selectedLocations, page], async () => {
+  profilesUrl.value = await urlQueryBuilder({
+    page: page.value,
+    skills: selectedSkills.value,
+    location: selectedLocations.value
+  }, true, 'https://localhost:3000/api/profiles/freelancers')
+
+  profilesAmountUrl.value = await urlQueryBuilder({
+    page: page.value,
+    skills: selectedSkills.value,
+    location: selectedLocations.value
+  }, false, 'https://localhost:3000/api/profiles/freelancers')
 })
 </script>
 
@@ -78,7 +98,7 @@ const filteredProfiles = computed(() => {
       <div v-if="filteredProfiles.length === 0" class="text-muted py-20 text-center italic">
         No profiles found.
       </div>
-      <UPagination v-model:page="page" :items-per-page="10" :total="data.FreelancersAmount" />
+      <UPagination v-model:page="page" :items-per-page="10" :total="data?.FreelancersAmount" />
     </UPageBody>
   </UPage>
 </template>

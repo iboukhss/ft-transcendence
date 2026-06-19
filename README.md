@@ -1,5 +1,6 @@
 *This project has been created as part of the 42 curriculum by \<aakerblo\>, \<dheck\>, \<iboukhss\>, \<jmeli\>, \<knjaloun\>*
 
+
 ## Description
 LuxLink offers a platform that allows companies in need of external IT support to post IT and development-related mission offers. Freelancers looking for contract work can then apply to these missions.
 
@@ -11,14 +12,6 @@ The platform enables companies to select the best-fitting freelancer by reviewin
 ## Instructions
 
 The following section shows how the setup and run the project.
-
-### Stack
-- **Framework:** Nuxt 4 (full-stack)
-- **Database:** PostgreSQL
-- **ORM:** Drizzle ORM
-- **Form validation:** Zod
-- **Styling:** Nuxt UI with Tailwind CSS
-- **Auth:** [nuxt-auth-utils](https://nuxt.com/modules/auth-utils)
 
 ### Build dependencies
 - Node.js v24+
@@ -107,7 +100,7 @@ npm run db:reset
 
 ## Resources
 
-The following ressources have been involved
+The following ressources have been involved.
 
 ### Official documentation
 
@@ -231,7 +224,7 @@ The following features have been implemented.
 
 #### Authentication Middleware
 - Owner : dheck
-- Description : A custom middleware that verifies whether a user is securely authenticated and possesses the required account type authorized to access the route.
+- Description : A middleware that verifies whether a user is securely authenticated and possesses the required account type authorized to access the route.
 
 ### User profile management
 
@@ -273,7 +266,7 @@ The following features have been implemented.
 - Owner : knjaloun  
 - Description : Pagination for jobs and talents.
 
-### Implementation business logic
+### Business logic implementation
 
 #### Frontend
 - Owner : dheck  
@@ -289,9 +282,10 @@ The following features have been implemented.
 
 ## Individual Contributions
 
+(to be done)
 
 
 ## Limitations
-no billing
 
-
+### Billing
+Billing System: Not implemented. The platform manages the booking handshake but does not currently support invoice generation or payment processing.

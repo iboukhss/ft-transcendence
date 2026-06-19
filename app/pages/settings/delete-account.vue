@@ -1,38 +1,35 @@
 <script setup lang="ts">
-import { z } from 'zod'
+import { deleteAccountSchema } from '#shared/dto/account.dto'
 
 const toast = useToast()
 const isLoading = ref(false)
+
 const { clear } = useUserSession()
-//const router = useRouter()
 
-const schema = z.object({
-  confirmText: z.literal('DELETE', {
-    errorMap: () => ({ message: 'Please type DELETE exactly as shown' })
-  }),
-  password: z.string().min(1, 'Password is required')
-})
-
-type Schema = z.infer<typeof schema>
-
-const state = reactive<Partial<Schema>>({
+// NOTE(isma):
+// Unsure how to make this object typesafe. We do enforce schema validation down the line.
+// But how to enforce it at this point? No clue.
+const state = reactive({
   confirmText: '',
   password: ''
 })
 
 async function onDeleteAccount() {
   isLoading.value = true
+
   try {
     await $fetch('/api/account', {
       method: 'DELETE',
-      body: { password: state.password }
+      body: state
     })
+
     toast.add({
       title: 'Account deleted',
       description: 'Your account has been permanently deleted.',
       color: 'success',
       icon: 'i-lucide-circle-check'
     })
+
     await clear()
     navigateTo('/')
   }
@@ -61,7 +58,7 @@ async function onDeleteAccount() {
       <div class="flex items-start gap-4">
         <UIcon
           name="i-lucide-triangle-alert"
-          class="text-red-500 mt-0.5 shrink-0"
+          class="mt-0.5 shrink-0 text-red-500"
           size="24"
         />
         <div class="space-y-2 text-sm">
@@ -71,7 +68,7 @@ async function onDeleteAccount() {
           <p class="text-muted">
             Deleting your account will immediately remove:
           </p>
-          <ul class="list-disc pl-5 space-y-1 text-muted">
+          <ul class="text-muted list-disc space-y-1 pl-5">
             <li>Your profile and all personal information</li>
             <li>All job offers you have posted or applied to</li>
             <li>All bookings and offers associated with your account</li>
@@ -92,7 +89,7 @@ async function onDeleteAccount() {
       description="Please complete both steps below to permanently delete your account."
     >
       <UForm
-        :schema="schema"
+        :schema="deleteAccountSchema"
         :state="state"
         class="space-y-6"
         @submit="onDeleteAccount"
@@ -101,7 +98,6 @@ async function onDeleteAccount() {
         <UFormField
           label="Step 1 — Type DELETE to confirm"
           name="confirmText"
-          hint="Type the word DELETE in capitals"
         >
           <UInput
             v-model="state.confirmText"
@@ -122,21 +118,15 @@ async function onDeleteAccount() {
           />
         </UFormField>
 
-        <div class="flex items-center justify-start gap-6">
-          <UButton
-            type="submit"
-            class="w-72"
-            label="Permanently delete my account"
-            :loading="isLoading"
-            color="error"
-            icon="i-lucide-trash"
-          />
-          <ULink to="/settings" class="text-sm text-muted hover:text-primary">
-            Cancel
-          </ULink>
-        </div>
+        <UButton
+          type="submit"
+          class="w-72"
+          label="Permanently delete my account"
+          :loading="isLoading"
+          color="error"
+          icon="i-lucide-trash"
+        />
       </UForm>
     </UCard>
-
   </UPageBody>
 </template>

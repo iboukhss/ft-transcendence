@@ -1,5 +1,4 @@
 import { deleteAccount } from '#server/services/account/delete-account.service'
-import { db, tables } from '#server/utils/db'
 
 export default defineEventHandler(async (event) => {
   const session = await requireUserSession(event)
@@ -14,7 +13,8 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  await deleteAccount(db, tables, session.user.id, body.password)
+  await deleteAccount(session.user.id, body.password)
   await clearUserSession(event)
+
   return { success: true }
 })

@@ -1,8 +1,8 @@
 import { eq } from 'drizzle-orm'
 
-import type { DB, Tables } from '#server/utils/db'
+import { db, tables } from '#server/utils/db'
 
-export async function deleteAccount(db: DB, tables: Tables, userId: number, password: string) {
+export async function deleteAccount(userId: number, password: string) {
   // Fetch the user to verify password
   const user = await db.query.users.findFirst({
     where: eq(tables.users.id, userId)
@@ -11,7 +11,6 @@ export async function deleteAccount(db: DB, tables: Tables, userId: number, pass
   if (!user) {
     throw createError({
       statusCode: 404,
-      message: 'Not found',
       statusMessage: 'User not found'
     })
   }
@@ -22,7 +21,6 @@ export async function deleteAccount(db: DB, tables: Tables, userId: number, pass
   if (!valid) {
     throw createError({
       statusCode: 401,
-      message: 'Unauthorized',
       statusMessage: 'Invalid password'
     })
   }

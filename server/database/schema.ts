@@ -92,7 +92,7 @@ export const jobs = pgTable('jobs', {
 export const bookings = pgTable('bookings', {
   id: serial('id').primaryKey(),
   offerId: integer('offer_id').notNull().references(() => offers.id),
-  jobId: integer('job_id').notNull().references(() => jobs.id),
+  jobId: integer('job_id').notNull().references(() => jobs.id, { onDelete: 'cascade' }),
   buyerId: integer('buyer_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   sellerId: integer('seller_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   price: real('price').notNull(),
@@ -108,7 +108,7 @@ export const bookings = pgTable('bookings', {
 
 export const offers = pgTable('offers', {
   id: serial('id').primaryKey(),
-  jobId: integer('job_id').notNull().references(() => jobs.id),
+  jobId: integer('job_id').notNull().references(() => jobs.id, { onDelete: 'cascade' }),
   buyerId: integer('buyer_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   sellerId: integer('seller_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   status: offerStatusEnum('status').default('pending').notNull(),

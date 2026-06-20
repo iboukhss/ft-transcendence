@@ -52,7 +52,7 @@ export const freelancerProfiles = pgTable('freelancer_profiles', {
   country: countryEnum('country').notNull(),
   avatar: text('avatar'),
   bio: text('bio'),
-  skills: skillsEnum('skills').array().notNull().default([]),
+  skills: text('skills').array().notNull(),
   languages: languageEnum('languages').array().notNull().default([]),
   hourlyRate: real('hourly_rate'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -79,7 +79,11 @@ export const jobs = pgTable('jobs', {
   title: text('title').notNull(),
   description: text('description').notNull(),
   category: categoryEnum('category').notNull(),
-  skills: skillsEnum('skills').array().notNull(),
+
+  // We lose a little typesafety here for a more confortable query experience.
+  // This row used to be a PgEnum array.
+  skills: text('skills').array().notNull(),
+
   hourlyRate: real('hourly_rate').notNull(),
   duration: integer('duration').default(1).notNull(),
   workplace: workPlaceEnum('workplace').notNull(),

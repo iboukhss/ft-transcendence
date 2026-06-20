@@ -1,14 +1,8 @@
-import { z } from 'zod'
-
-import { getJobs } from '#server/services/jobs/get-jobs.service.js'
-
-const querySchema = z.object({
-  userId: z.coerce.number().optional(),
-  search: z.string().optional()
-})
+import { getJobs } from '#server/services/jobs/get-jobs.service'
+import { jobsQuerySchema } from '#shared/dto/job.dto'
 
 export default defineEventHandler(async (event) => {
-  const query = await getValidatedQuery(event, querySchema.parse)
+  const query = await getValidatedQuery(event, jobsQuerySchema.parse)
 
-  return getJobs({ userId: query.userId })
+  return getJobs(query)
 })

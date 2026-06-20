@@ -1,50 +1,56 @@
 <script setup lang="ts">
-import type { FreelancerDTO } from '#shared/dto/profile.dto'
-
-import { useLocationsFilter } from '~/composables/useLocationsFilter'
-import { useSkillsFilter } from '~/composables/useSkillsFilter'
+import { freelancersQuerySchema } from '#shared/dto/profile.dto'
 import { COUNTRY_LABELS } from '~/utils/labels'
 
-const { data: freelancers } = await useFetch<FreelancerDTO[]>('/api/profiles/freelancers')
-const search = ref('')
+const route = useRoute()
 
-const { selectedSkills, verifySkillCheckboxes } = useSkillsFilter()
+const result = freelancersQuerySchema.safeParse(route.query)
 
-const { selectedLocations, verifyLocationCheckboxes } = useLocationsFilter()
+const filters = ref(
+  result.success
+    ? result.data
+    : freelancersQuerySchema.parse({ page: 1 })
+)
 
-const filteredProfiles = computed(() => {
-  if (!freelancers.value) {
-    return []
-  }
+const { data: response, status } = await useFetch('/api/profiles/freelancers', {
+  query: filters
+})
 
-  const query = search.value.toLowerCase().trim()
-  let nameMatches = freelancers.value
+const isLoading = computed(() => status.value === 'pending')
+const filteredProfiles = computed(() => response.value?.items ?? [])
 
-  if (query) {
-    nameMatches = freelancers.value.filter((j) => {
-      const firstName = j.firstName.toLowerCase()
-      const lastName = j.lastName.toLowerCase()
-      const fullName = `${firstName} ${lastName}`
-      return firstName.includes(query)
-        || lastName.includes(query)
-        || fullName.includes(query)
+watch(() => filters.value.page, () => {
+  if (import.meta.client) {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
     })
   }
-  nameMatches = verifyLocationCheckboxes(nameMatches)
-  return verifySkillCheckboxes(nameMatches)
 })
+
+watch(
+  () => [
+    filters.value.search,
+    filters.value.skills,
+    filters.value.locations
+  ],
+  () => {
+    filters.value.page = 1
+  },
+  { deep: true }
+)
 </script>
 
 <template>
   <UPage>
     <template #left>
       <UPageAside>
-        <LLSearchFilter v-model="search" label="Search profiles" />
+        <LLSearchFilter v-model="filters.search" label="Search profiles" />
 
-        <LLSkillsFilter v-model="selectedSkills" />
+        <LLSkillsFilter v-model="filters.skills" />
 
         <LLFilterCheckboxGroup
-          v-model="selectedLocations"
+          v-model="filters.locations"
           label="Locations"
           :raw-labels-map="COUNTRY_LABELS"
         />
@@ -67,6 +73,15 @@ const filteredProfiles = computed(() => {
 
       <div v-if="filteredProfiles.length === 0" class="text-muted py-20 text-center italic">
         No profiles found.
+      </div>
+
+      <div v-if="response?.total && response.total > 10" class="mt-8 flex justify-center">
+        <UPagination
+          v-model:page="filters.page"
+          :items-per-page="10"
+          :total="response.total"
+          :disabled="isLoading"
+        />
       </div>
     </UPageBody>
   </UPage>

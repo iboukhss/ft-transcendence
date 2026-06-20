@@ -3,6 +3,7 @@
 import { z } from 'zod'
 
 import { LANGUAGE_KEYS, SKILL_KEYS, COUNTRY_KEYS } from '#shared/constants/enums'
+import { createQueryArray } from '#shared/utils/createQueryArray'
 
 // Retrieve profile information
 
@@ -63,8 +64,20 @@ export const patchProfileSchema = z.discriminatedUnion('type', [
   patchCompanySchema
 ])
 
+// Filter profiles
+
+export const freelancersQuerySchema = z.object({
+  userId: z.coerce.number().optional(),
+  search: z.string().optional(),
+  page: z.coerce.number().int().positive().default(1),
+  limit: z.coerce.number().int().positive().default(10),
+  locations: createQueryArray(COUNTRY_KEYS).optional().default([]),
+  skills: createQueryArray(SKILL_KEYS).optional().default([])
+})
+
 export type ProfileDTO = z.infer<typeof profileSchema>
 export type PatchProfileDTO = z.infer<typeof patchProfileSchema>
+export type FreelancersQueryDTO = z.infer<typeof freelancersQuerySchema>
 
 export type FreelancerDTO = z.infer<typeof freelancerProfileSchema>
 

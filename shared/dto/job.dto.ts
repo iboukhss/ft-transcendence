@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import { JOB_CATEGORY_KEYS, WORKPLACE_KEYS, SKILL_KEYS, COUNTRY_KEYS, JOB_STATUS_KEYS } from '#shared/constants/enums'
+import { createQueryArray } from '#shared/utils/createQueryArray'
 
 export const createJobSchema = z.object({
   title: z.string().min(1, 'Must provide a job title'),
@@ -20,5 +21,19 @@ export const jobSchema = createJobSchema.extend({
   updatedAt: z.coerce.string()
 })
 
+export const jobsQuerySchema = z.object({
+  companyId: z.coerce.number().optional(),
+  search: z.string().optional(),
+  page: z.coerce.number().int().positive().default(1),
+  limit: z.coerce.number().int().positive().default(10),
+  minSalary: z.coerce.number().optional(),
+  maxSalary: z.coerce.number().optional(),
+  categories: createQueryArray(JOB_CATEGORY_KEYS).optional().default([]),
+  locations: createQueryArray(COUNTRY_KEYS).optional().default([]),
+  workplaces: createQueryArray(WORKPLACE_KEYS).optional().default([]),
+  skills: createQueryArray(SKILL_KEYS).optional().default([])
+})
+
 export type CreateJobDTO = z.infer<typeof createJobSchema>
 export type JobDTO = z.infer<typeof jobSchema>
+export type JobsQueryDTO = z.infer<typeof jobsQuerySchema>

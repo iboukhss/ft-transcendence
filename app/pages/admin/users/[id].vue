@@ -1,5 +1,4 @@
 <script setup lang="ts">
-definePageMeta({ middleware: ['admin'] })
 
 const route = useRoute()
 const toast = useToast()

@@ -152,3 +152,18 @@ export const offersRelations = relations(offers, ({ one }) => ({
     references: [freelancerProfiles.userId]
   })
 }))
+
+export const bookingsRelations = relations(bookings, ({ one }) => ({
+  job: one(jobs, {
+    fields: [bookings.jobId],
+    references: [jobs.id]
+  }),
+  buyer: one(companyProfiles, {
+    fields: [bookings.buyerId],
+    references: [companyProfiles.userId]
+  }),
+  seller: one(freelancerProfiles, {
+    fields: [bookings.sellerId],
+    references: [freelancerProfiles.userId]
+  })
+}))

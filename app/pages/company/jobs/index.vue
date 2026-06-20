@@ -9,7 +9,10 @@ const toast = useToast()
 const { user } = useUserSession()
 
 const { data: jobs, refresh } = await useFetch('/api/jobs', {
-  query: { userId: user.value.id }
+  query: {
+    companyId: user.value?.id,
+    limit: 100
+  }
 })
 
 const columns: TableColumn<JobDTO>[] = [
@@ -104,7 +107,7 @@ async function confirmDelete() {
 
       <UCard>
         <UTable
-          :data="jobs ?? []"
+          :data="jobs?.items ?? []"
           :columns="columns"
         >
           <template #empty>
@@ -124,7 +127,7 @@ async function confirmDelete() {
           </template>
 
           <template #hourlyRate-cell="{ row }">
-            €{{ row.original.hourlyRate }}/hr
+            €{{ row.original.hourlyRate }} /hr
           </template>
 
           <template #duration-cell="{ row }">

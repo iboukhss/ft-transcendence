@@ -1,24 +1,37 @@
 import { z } from 'zod'
 
-import { BOOKING_STATUS_KEYS, WORKPLACE_KEYS } from '../constants/enums'
+import { BOOKING_STATUS_KEYS, WORKPLACE_KEYS } from '#shared/constants/enums'
+import { jobSchema } from '#shared/dto/job.dto.js'
+import { companyProfileSchema, freelancerProfileSchema } from '#shared/dto/profile.dto.js'
 
-const bookingFields = {
-  price: z.number().positive(),
-  hourlyRate: z.number().positive(),
-  duration: z.number().int().min(1),
-  workplace: z.enum(WORKPLACE_KEYS).optional(),
-  status: z.enum(BOOKING_STATUS_KEYS).default('upcoming')
-}
-
-export const insertBookingSchema = z.object({
-  ...bookingFields,
-  offerId: z.number().int(),
-  jobId: z.number().int(),
-  buyerId: z.number().int(),
-  sellerId: z.number().int()
+export const bookingSchema = z.object({
+  id: z.number(),
+  offerId: z.number(),
+  jobId: z.number(),
+  buyerId: z.number(),
+  sellerId: z.number(),
+  price: z.number(),
+  hourlyRate: z.number(),
+  duration: z.number(),
+  workplace: z.enum(WORKPLACE_KEYS),
+  status: z.enum(BOOKING_STATUS_KEYS),
+  createdAt: z.coerce.string(),
+  updatedAt: z.coerce.string()
 })
 
-export const updateBookingSchema = z.object(bookingFields).partial().strict()
+export const dashboardBookingSchema = bookingSchema.extend({
+  job: jobSchema.pick({
+    title: true,
+    location: true
+  }),
+  buyer: companyProfileSchema.pick({
+    companyName: true
+  }),
+  seller: freelancerProfileSchema.pick({
+    firstName: true,
+    lastName: true
+  })
+})
 
-export type InsertBookingDTO = z.infer<typeof insertBookingSchema>
-export type UpdateBookingDTO = z.infer<typeof updateBookingSchema>
+export type BookingDTO = z.infer<typeof bookingSchema>
+export type DashboardBookingDTO = z.infer<typeof dashboardBookingSchema>

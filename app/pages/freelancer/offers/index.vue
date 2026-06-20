@@ -110,89 +110,89 @@ async function submitHandshake(offerId: number, action: 'accept' | 'decline') {
       </div>
 
       <UCard>
-	<div class="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
-        <UTable
-          :data="offers ?? []"
-          :columns="columns"
-	class="min-w-max"
-        >
-          <template #empty>
-            <div>
-              You haven't submitted any applications yet.
-            </div>
-          </template>
+        <div class="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+          <UTable
+            :data="offers ?? []"
+            :columns="columns"
+            class="min-w-max"
+          >
+            <template #empty>
+              <div>
+                You haven't submitted any applications yet.
+              </div>
+            </template>
 
-          <template #jobTitle-cell="{ row }">
-            <ULink
-              :to="`/public/jobs/${row.original.jobId}`"
-            >
-              {{ row.original.job.title }}
-            </ULink>
-          </template>
-
-          <template #proposedHourlyRate-cell="{ row }">
-            <div>€{{ row.original.proposedHourlyRate }} /hr</div>
-          </template>
-
-          <template #status-cell="{ row }">
-            <UBadge v-bind="getStatusProps(row.original.status)" />
-          </template>
-
-          <template #createdAt-cell="{ row }">
-            {{ new Date(row.original.createdAt).toLocaleDateString() }}
-          </template>
-
-          <template #actions-header>
-            <div class="text-center">Actions</div>
-          </template>
-
-          <template #actions-cell="{ row }">
-            <div class="flex w-full items-center justify-center gap-2">
-              <template v-if="row.original.status === 'pending'">
-                <UButton
-                  label="Update"
-                  icon="i-lucide-pencil"
-                  variant="subtle"
-                  color="neutral"
-                  size="sm"
-                  @click="navigateTo(`/freelancer/offers/${row.original.id}/edit`)"
-                />
-                <UButton
-                  label="Withdraw"
-                  icon="i-lucide-file-x"
-                  variant="subtle"
-                  color="error"
-                  size="sm"
-                  @click="openDeleteModal(row.original)"
-                />
-              </template>
-
-              <template
-                v-else-if="row.original.status === 'company_accepted'"
+            <template #jobTitle-cell="{ row }">
+              <ULink
+                :to="`/public/jobs/${row.original.jobId}`"
               >
-                <UButton
-                  label="Accept"
-                  icon="i-lucide-check"
-                  variant="subtle"
-                  color="success"
-                  size="sm"
-                  @click="submitHandshake(row.original.id, 'accept')"
-                />
-                <UButton
-                  label="Decline"
-                  icon="i-lucide-x"
-                  variant="subtle"
-                  color="error"
-                  size="sm"
-                  @click="submitHandshake(row.original.id, 'decline')"
-                />
-              </template>
+                {{ row.original.job.title }}
+              </ULink>
+            </template>
 
-              <span v-else>—</span>
-            </div>
-          </template>
-        </UTable>
-	</div>
+            <template #proposedHourlyRate-cell="{ row }">
+              <div>€{{ row.original.proposedHourlyRate }} /hr</div>
+            </template>
+
+            <template #status-cell="{ row }">
+              <UBadge v-bind="getStatusProps(row.original.status)" />
+            </template>
+
+            <template #createdAt-cell="{ row }">
+              {{ new Date(row.original.createdAt).toLocaleDateString() }}
+            </template>
+
+            <template #actions-header>
+              <div class="text-center">Actions</div>
+            </template>
+
+            <template #actions-cell="{ row }">
+              <div class="flex w-full items-center justify-center gap-2">
+                <template v-if="row.original.status === 'pending'">
+                  <UButton
+                    label="Update"
+                    icon="i-lucide-pencil"
+                    variant="subtle"
+                    color="neutral"
+                    size="sm"
+                    @click="navigateTo(`/freelancer/offers/${row.original.id}/edit`)"
+                  />
+                  <UButton
+                    label="Withdraw"
+                    icon="i-lucide-file-x"
+                    variant="subtle"
+                    color="error"
+                    size="sm"
+                    @click="openDeleteModal(row.original)"
+                  />
+                </template>
+
+                <template
+                  v-else-if="row.original.status === 'company_accepted'"
+                >
+                  <UButton
+                    label="Accept"
+                    icon="i-lucide-check"
+                    variant="subtle"
+                    color="success"
+                    size="sm"
+                    @click="submitHandshake(row.original.id, 'accept')"
+                  />
+                  <UButton
+                    label="Decline"
+                    icon="i-lucide-x"
+                    variant="subtle"
+                    color="error"
+                    size="sm"
+                    @click="submitHandshake(row.original.id, 'decline')"
+                  />
+                </template>
+
+                <span v-else>—</span>
+              </div>
+            </template>
+          </UTable>
+        </div>
       </UCard>
     </UPageBody>
 

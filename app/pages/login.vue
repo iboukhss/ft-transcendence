@@ -5,6 +5,8 @@ import type { LoginDTO } from '#shared/dto/login.dto'
 
 import { loginSchema } from '#shared/dto/login.dto'
 
+const route = useRoute()
+
 const state = reactive({
   email: '',
   password: '',
@@ -15,10 +17,6 @@ const toast = useToast()
 const isLoading = ref(false)
 
 async function onSubmit(event: FormSubmitEvent<LoginDTO>) {
-  if (isLoading.value) {
-    return
-  }
-
   isLoading.value = true
 
   try {
@@ -32,18 +30,22 @@ async function onSubmit(event: FormSubmitEvent<LoginDTO>) {
     await refreshSession()
 
     toast.add({
-      title: 'Connected',
+      title: 'Logged in',
       description: 'Welcome back!',
-      color: 'success'
+      color: 'success',
+      icon: 'i-lucide-circle-check'
     })
 
-    await navigateTo('/')
+    const destination = (route.query.redirectTo as string) || '/'
+
+    await navigateTo(destination)
   }
   catch (err: any) {
     toast.add({
-      title: 'Error',
-      description: err.data?.message || 'Invalid credentials',
-      color: 'error'
+      title: 'Login failed',
+      description: err.data?.message || 'Invalid credentials.',
+      color: 'error',
+      icon: 'i-lucide-circle-x'
     })
   }
   finally {
@@ -79,16 +81,23 @@ async function onSubmit(event: FormSubmitEvent<LoginDTO>) {
 
         <UCheckbox v-model="state.remember" label="Remember me" />
 
-        <UButton type="submit" :loading="isLoading" :disabled="isLoading" block size="lg">
+        <UButton
+          type="submit"
+          :loading="isLoading"
+          :disabled="isLoading"
+          size="lg"
+          block
+        >
           Log In
         </UButton>
+
         <UButton
           to="https://localhost:3000/api/oauth/google"
-          block
-          size="lg"
-          color="neutral"
-          variant="outline"
           icon="logos:google-icon"
+          variant="outline"
+          color="neutral"
+          size="lg"
+          block
         >
           Continue with Google
         </UButton>

@@ -1,10 +1,10 @@
 import { changeEmail } from '#server/services/auth/change-email.service'
+import { requireValidUserSession } from '#server/utils/require-valid-user-session'
 import { validateOrThrow } from '#server/utils/validateOrThrow'
 import { emailSchema } from '#shared/dto/email.dto'
 
 export default defineEventHandler(async (event) => {
-  const session = await requireUserSession(event)
-
+  const session = await requireValidUserSession(event)
   const body = await readBody(event)
   const result = emailSchema.safeParse(body)
   const validData = validateOrThrow(result)

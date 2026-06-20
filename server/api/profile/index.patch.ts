@@ -1,11 +1,11 @@
 import type { SessionUserDTO } from '#shared/dto/user.dto'
 
 import { updateProfile } from '#server/services/profile/update-profile.service'
+import { requireValidUserSession } from '#server/utils/require-valid-user-session'
 import { patchProfileSchema } from '#shared/dto/profile.dto'
 
 export default defineEventHandler(async (event) => {
-  const session = await requireUserSession(event)
-
+  const session = await requireValidUserSession(event)
   const body = await readBody(event)
   const result = patchProfileSchema.safeParse(body)
   const validData = validateOrThrow(result)

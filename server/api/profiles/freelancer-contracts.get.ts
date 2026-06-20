@@ -1,15 +1,14 @@
 import { getFreelancerContracts } from '#server/services/profile/get-freelancers-contracts.service.js'
+import { requireValidUserSession } from '#server/utils/require-valid-user-session'
 
 export default defineEventHandler(async (event) => {
-  const session = await requireUserSession(event)
-
+  const session = await requireValidUserSession(event)
   if (session.user.accountType !== 'freelancer') {
     throw createError({
       statusCode: 403,
       statusMessage: 'Forbidden: Only freelancers can access this contract endpoint.'
     })
   }
-
   try {
     return await getFreelancerContracts(db, tables, session.user.id)
   }

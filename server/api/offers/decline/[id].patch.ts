@@ -1,10 +1,10 @@
 import { declineOffer } from '#server/services/offers/decline.service.js'
 import { db, tables } from '#server/utils/db'
 import { getRouterParamAsNumber } from '#server/utils/router.js'
+import { requireValidUserSession } from '#server/utils/require-valid-user-session'
 
 export default defineEventHandler(async (event) => {
-  const session = await requireUserSession(event)
-
+  const session = await requireValidUserSession(event)
   const offerId = getRouterParamAsNumber(event)
 
   return (

@@ -1,10 +1,10 @@
 import { deleteJob } from '#server/services/jobs/company/delete-job.service.js'
 import { db, tables } from '#server/utils/db'
 import { requireCompany } from '#server/utils/permission-utils.js'
+import { requireValidUserSession } from '#server/utils/require-valid-user-session'
 
 export default defineEventHandler(async (event) => {
-  const session = await requireUserSession(event)
-
+  const session = await requireValidUserSession(event)
   requireCompany(session.user)
 
   const jobId = getRouterParam(event, 'id')

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const toast = useToast()
+const { user } = useUserSession()
 const isExporting = ref(false)
 
 const contactState = reactive({
@@ -20,15 +21,20 @@ async function onExportData() {
   isExporting.value = true
 
   try {
+    // Common to both account types
     const [account, profile, bookings] = await Promise.allSettled([
       $fetch('/api/account'),
       $fetch('/api/profile'),
       $fetch('/api/bookings')
     ])
 
-    const [offers, jobs] = await Promise.allSettled([
-      $fetch('/api/offers/freelancer'),
-      $fetch('/api/jobs/company')
+    // Account-type-specific data
+    const isFreelancer = user.value?.accountType === 'freelancer'
+
+    const [offers, jobs, contracts] = await Promise.allSettled([
+      isFreelancer ? $fetch('/api/offers') : Promise.resolve(null),
+      isFreelancer ? Promise.resolve(null) : $fetch('/api/jobs', { query: { userId: user.value?.id } }),
+      isFreelancer ? $fetch('/api/profiles/freelancer-contracts') : Promise.resolve(null)
     ])
 
     const exportData: Record<string, any> = {
@@ -37,10 +43,11 @@ async function onExportData() {
       profile: profile.status === 'fulfilled' ? profile.value : null,
       bookings: bookings.status === 'fulfilled' ? bookings.value : null,
       offers: offers.status === 'fulfilled' ? offers.value : null,
-      jobs: jobs.status === 'fulfilled' ? jobs.value : null
+      jobs: jobs.status === 'fulfilled' ? jobs.value : null,
+      contracts: contracts.status === 'fulfilled' ? contracts.value : null
     }
 
-    // Remove null entries (endpoints that returned 403 for wrong account type)
+    // Remove null entries (not applicable to this account type, or fetch skipped)
     Object.keys(exportData).forEach((k) => {
       if (exportData[k] === null) delete exportData[k]
     })
@@ -109,6 +116,7 @@ function onContactSubmit() {
         />
       </template>
     </UCard>
+
     <UCard
       title="Exercise your rights"
       description="Submit a request to our team regarding your personal data. We will respond within 30 days as required by GDPR."

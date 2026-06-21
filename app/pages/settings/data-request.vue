@@ -1,6 +1,14 @@
 <script setup lang="ts">
 const toast = useToast()
+const { user } = useUserSession()
 const isExporting = ref(false)
+const exportFormat = ref<'json' | 'csv' | 'xml'>('json')
+
+const formatOptions = [
+  { label: 'JSON', value: 'json' },
+  { label: 'CSV', value: 'csv' },
+  { label: 'XML', value: 'xml' }
+]
 
 const contactState = reactive({
   subject: '',
@@ -15,6 +23,92 @@ const subjectOptions = [
   { label: 'Right to withdraw consent', value: 'Withdrawal of consent' }
 ]
 
+// --- format converters -------------------------------------------------
+
+function escapeCsvValue(value: any): string {
+  if (value === null || value === undefined) return ''
+  const str = typeof value === 'object' ? JSON.stringify(value) : String(value)
+  if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+    return `"${str.replace(/"/g, '""')}"`
+  }
+  return str
+}
+
+function toCsv(data: Record<string, any>): string {
+  const sections: string[] = []
+
+  for (const [sectionName, sectionData] of Object.entries(data)) {
+    sections.push(`# ${sectionName}`)
+
+    if (Array.isArray(sectionData)) {
+      if (sectionData.length === 0) {
+        sections.push('(no entries)')
+      }
+      else {
+        const headers = Object.keys(sectionData[0])
+        sections.push(headers.join(','))
+        for (const row of sectionData) {
+          sections.push(headers.map(h => escapeCsvValue(row[h])).join(','))
+        }
+      }
+    }
+    else if (sectionData && typeof sectionData === 'object') {
+      const headers = Object.keys(sectionData)
+      sections.push(headers.join(','))
+      sections.push(headers.map(h => escapeCsvValue(sectionData[h])).join(','))
+    }
+    else {
+      sections.push(escapeCsvValue(sectionData))
+    }
+
+    sections.push('')
+  }
+
+  return sections.join('\n')
+}
+
+function escapeXml(value: any): string {
+  if (value === null || value === undefined) return ''
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
+}
+
+function valueToXml(value: any, tagName: string): string {
+  if (Array.isArray(value)) {
+    return value.map(item => valueToXml(item, tagName)).join('')
+  }
+  if (value && typeof value === 'object') {
+    const inner = Object.entries(value)
+      .map(([k, v]) => valueToXml(v, k))
+      .join('')
+    return `<${tagName}>${inner}</${tagName}>`
+  }
+  return `<${tagName}>${escapeXml(value)}</${tagName}>`
+}
+
+function toXml(data: Record<string, any>): string {
+  const body = Object.entries(data)
+    .map(([key, value]) => valueToXml(value, key))
+    .join('')
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<export>${body}</export>`
+}
+
+function buildExportFile(data: Record<string, any>, format: 'json' | 'csv' | 'xml') {
+  if (format === 'csv') {
+    return { content: toCsv(data), mime: 'text/csv', ext: 'csv' }
+  }
+  if (format === 'xml') {
+    return { content: toXml(data), mime: 'application/xml', ext: 'xml' }
+  }
+  return { content: JSON.stringify(data, null, 2), mime: 'application/json', ext: 'json' }
+}
+
+// --- export --------------------------------------------------------------
+
 async function onExportData() {
   if (isExporting.value) return
   isExporting.value = true
@@ -26,9 +120,12 @@ async function onExportData() {
       $fetch('/api/bookings')
     ])
 
-    const [offers, jobs] = await Promise.allSettled([
-      $fetch('/api/offers/freelancer'),
-      $fetch('/api/jobs/company')
+    const isFreelancer = user.value?.accountType === 'freelancer'
+
+    const [offers, jobs, contracts] = await Promise.allSettled([
+      isFreelancer ? $fetch('/api/offers') : Promise.resolve(null),
+      isFreelancer ? Promise.resolve(null) : $fetch('/api/jobs', { query: { companyId: user.value?.id } }),
+      isFreelancer ? $fetch('/api/profiles/freelancer-contracts') : Promise.resolve(null)
     ])
 
     const exportData: Record<string, any> = {
@@ -37,25 +134,27 @@ async function onExportData() {
       profile: profile.status === 'fulfilled' ? profile.value : null,
       bookings: bookings.status === 'fulfilled' ? bookings.value : null,
       offers: offers.status === 'fulfilled' ? offers.value : null,
-      jobs: jobs.status === 'fulfilled' ? jobs.value : null
+      jobs: jobs.status === 'fulfilled' ? jobs.value : null,
+      contracts: contracts.status === 'fulfilled' ? contracts.value : null
     }
 
-    // Remove null entries (endpoints that returned 403 for wrong account type)
     Object.keys(exportData).forEach((k) => {
       if (exportData[k] === null) delete exportData[k]
     })
 
-    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' })
+    const { content, mime, ext } = buildExportFile(exportData, exportFormat.value)
+
+    const blob = new Blob([content], { type: mime })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `luxlink-data-export-${new Date().toISOString().slice(0, 10)}.json`
+    a.download = `luxlink-data-export-${new Date().toISOString().slice(0, 10)}.${ext}`
     a.click()
     URL.revokeObjectURL(url)
 
     toast.add({
       title: 'Export successful',
-      description: 'Your data has been downloaded.',
+      description: `Your data has been downloaded as ${exportFormat.value.toUpperCase()}.`,
       color: 'success',
       icon: 'i-lucide-circle-check'
     })
@@ -99,6 +198,15 @@ function onContactSubmit() {
       title="Export your data"
       description="Download a copy of all personal data LuxLink holds about you, in accordance with your right to data portability (Art. 20 GDPR)."
     >
+      <UFormField label="Format">
+        <USelect
+          v-model="exportFormat"
+          :items="formatOptions"
+          value-key="value"
+          class="w-40"
+        />
+      </UFormField>
+
       <template #footer>
         <UButton
           label="Download my data"
@@ -109,6 +217,7 @@ function onContactSubmit() {
         />
       </template>
     </UCard>
+
     <UCard
       title="Exercise your rights"
       description="Submit a request to our team regarding your personal data. We will respond within 30 days as required by GDPR."

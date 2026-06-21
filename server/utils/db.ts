@@ -8,12 +8,13 @@ import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 
 import * as schema from '#server/database/schema'
-import { env } from '#server/utils/env'
 
-export const queryClient = postgres(env.DATABASE_URL)
-export const tables = schema
+const config = useRuntimeConfig()
 
+export const queryClient = postgres(config.databaseUrl)
 export const db = drizzle(queryClient, { schema })
+
+export const tables = schema
 
 export type DB = PostgresJsDatabase<typeof schema>
 export type Tables = typeof schema

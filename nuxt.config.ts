@@ -8,11 +8,12 @@ export default defineNuxtConfig({
   // From here: https://ui.nuxt.com/docs/getting-started/installation/nuxt
   css: ['~/assets/css/main.css'],
   runtimeConfig: {
-
+    databaseUrl: '',
+    authSecret: '',
     oauth: {
       google: {
-        clientId: process.env.GOOGLE_OAUTH_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_OAUTH_CLIENT_KEY
+        clientId: '',
+        clientSecret: ''
       }
     }
   },

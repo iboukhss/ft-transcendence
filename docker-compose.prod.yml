@@ -1,0 +1,34 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: luxlink-prod-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${DATABASE_PORT}:5432"
+    volumes:
+      - pgdata_prod:/var/lib/postgresql/data
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: luxlink-prod-app
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    volumes:
+      - upload_data_prod:/app/public/uploads
+    environment:
+      NUXT_DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      NUXT_SESSION_PASSWORD: ${NUXT_SESSION_PASSWORD}
+      NODE_TLS_REJECT_UNAUTHORIZED: ${NODE_TLS_REJECT_UNAUTHORIZED}
+      NUXT_OAUTH_GOOGLE_CLIENT_ID: ${NUXT_OAUTH_GOOGLE_CLIENT_ID}
+      NUXT_OAUTH_GOOGLE_CLIENT_SECRET: ${NUXT_OAUTH_GOOGLE_CLIENT_SECRET}
+
+volumes:
+  pgdata_prod:
+  upload_data_prod:

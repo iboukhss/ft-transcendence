@@ -29,10 +29,22 @@ The following section shows how the setup and run the project.
 - bruno
 - curl
 
-### Initial dev setup
+### Production setup
+```bash
+# 0. Git clone to project
+git clone repository_path
+
+# 1. Copy the environment file
+cp .env.prod.example .env.prod
+
+# 2. Start the prod server running on https://localhost:3001
+docker compose -f docker-compose.prod.yml --env-file .env.prod up --build -d
+```
+
+### Developpement setup
 
 ```bash
-# 1. Git clone to project
+# 0. Git clone to project
 git clone repository_path
 
 # 1. Copy the environment file
@@ -63,10 +75,6 @@ npm run db:push
 
 # 6. Start the dev server running on https://localhost:3000
 npm run dev
-
-# 7. Start the prod server running on https://localhost:3001
-cp .env.prod.example .env.prod
-docker compose -f docker-compose.prod.yml --env-file .env.prod up --build -d
 ```
 
 Eventually, the goal will be to deploy everything with a single command but I think it's best to start simple before getting into any premature refactoring.
@@ -156,7 +164,7 @@ The team is composed of 5 teams members.
     - Description : Full-stack developper in charge of deciding the tech stack and coordinating the team efforts.  
 - *jmeli* :
     - Role : Developper
-    - Description : Frontend developper working on the feature list and bug fixing.
+    - Description : Full-stack developper working on the feature list and bug fixing.
 
 
 ## Project Management
@@ -271,11 +279,11 @@ The following features have been implemented.
 ### Business logic implementation
 
 #### Frontend
-- Owner : dheck  
+- Owner : aakerblo & jmeli
 - Description : Possibility to create jobs, apply to jobs, accept/decline job applications and create the bookings.
 
 #### Backend
-- Owner : dheck  
+- Owner : iboukhs & dheck  
 - Description : Possibility to create jobs, apply to jobs, accept/decline job applications and create the bookings.
 
 ### Admin panel

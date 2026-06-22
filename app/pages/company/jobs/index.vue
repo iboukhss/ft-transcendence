@@ -143,7 +143,10 @@ async function confirmDelete() {
           </template>
 
           <template #actions-cell="{ row }">
-            <div class="flex w-full items-center justify-center gap-2">
+            <div
+              v-if="row.original.status !== 'booked'"
+              class="flex w-full items-center justify-center gap-2"
+            >
               <UButton
                 label="Update"
                 icon="i-lucide-pencil"

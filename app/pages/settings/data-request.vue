@@ -123,9 +123,9 @@ async function onExportData() {
     const isFreelancer = user.value?.accountType === 'freelancer'
 
     const [offers, jobs, contracts] = await Promise.allSettled([
-      isFreelancer ? $fetch('/api/offers') : Promise.resolve(null),
+      $fetch('/api/offers'),
       isFreelancer ? Promise.resolve(null) : $fetch('/api/jobs', { query: { companyId: user.value?.id } }),
-      isFreelancer ? $fetch('/api/bookings') : Promise.resolve(null)
+      isFreelancer ? $fetch('/api/profiles/freelancer-contracts') : Promise.resolve(null)
     ])
 
     const exportData: Record<string, any> = {

@@ -26,7 +26,8 @@ export async function getFreelancerContracts(db: DB, tables: Tables, userId: num
     .innerJoin(tables.offers, eq(tables.jobs.id, tables.offers.jobId))
     .where(
       and(
-        eq(tables.offers.sellerId, userId)
+        eq(tables.offers.sellerId, userId),
+        eq(tables.offers.status, 'accepted')
       )
     )
     .orderBy(tables.jobs.createdAt) as unknown as JobDTO[]

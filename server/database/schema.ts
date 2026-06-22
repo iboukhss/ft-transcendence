@@ -57,7 +57,6 @@ export const companyProfiles = pgTable('company_profiles', {
   contactLastName: text('contact_last_name').notNull(),
   companyName: text('company_name').notNull(),
   country: countryEnum('country').notNull(),
-  website: text('website').notNull().default(''),
   logo: text('logo'),
   description: text('description').notNull().default(''),
   createdAt: timestamp('created_at').notNull().defaultNow(),

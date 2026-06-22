@@ -13,7 +13,6 @@ export const bookingSchema = z.object({
   price: z.number(),
   hourlyRate: z.number(),
   duration: z.number(),
-  workplace: z.enum(WORKPLACE_KEYS),
   status: z.enum(BOOKING_STATUS_KEYS),
   createdAt: z.coerce.string(),
   updatedAt: z.coerce.string()

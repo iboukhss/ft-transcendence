@@ -31,7 +31,6 @@ export const companyProfileSchema = baseProfileSchema.extend({
   contactFirstName: z.string().min(1),
   contactLastName: z.string().min(1),
   country: z.enum(COUNTRY_KEYS, 'Please select your country'),
-  website: z.url().nullable(),
   logo: z.string().nullable(),
   description: z.string().nullable()
 })

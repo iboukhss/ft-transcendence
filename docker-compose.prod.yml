@@ -18,8 +18,8 @@ services:
       dockerfile: Dockerfile
     container_name: luxlink-prod-app
     restart: unless-stopped
-    ports:
-      - "3001:3000"
+    expose:
+      - "3000"
     volumes:
       - upload_data_prod:/app/uploads
     environment:
@@ -29,6 +29,19 @@ services:
       NUXT_OAUTH_GOOGLE_CLIENT_ID: ${NUXT_OAUTH_GOOGLE_CLIENT_ID}
       NUXT_OAUTH_GOOGLE_CLIENT_SECRET: ${NUXT_OAUTH_GOOGLE_CLIENT_SECRET}
 
+  proxy:
+    image: caddy:2-alpine
+    container_name: luxlink-prod-proxy
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+
 volumes:
   pgdata_prod:
   upload_data_prod:
+  caddy_data:
+  caddy_config:

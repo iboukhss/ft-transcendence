@@ -1,4 +1,10 @@
 export default defineNuxtRouteMiddleware((to) => {
+  // Possible fix for seeding failures on 42 clusters? Should not hurt but you never know.
+  // Check here: https://localhost:3001/api/db/seed?token=eval-secret-123
+  if (to.path.startsWith('/api')) {
+    return
+  }
+
   if (
     to.path === '/'
     || to.path.startsWith('/public')

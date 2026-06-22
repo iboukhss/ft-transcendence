@@ -2,6 +2,7 @@
 
 
 ## Description
+
 LuxLink offers a platform that allows companies in need of external IT support to post IT and development-related mission offers. Freelancers looking for contract work can then apply to these missions.
 
 LuxLink's goal is to enhance the efficiency of the Luxembourgish job market by focusing its activity on the Greater Region (Luxembourg, Germany, Belgium, and France).
@@ -14,11 +15,13 @@ The platform enables companies to select the best-fitting freelancer by reviewin
 The following section shows how the setup and run the project.
 
 ### Build dependencies
+
 - Node.js v24+
 - npm
 - Docker and Docker Compose
 
 ### Development dependencies
+
 - drizzle-kit
 - drizzle-seed
 - @nuxt/eslint
@@ -30,6 +33,7 @@ The following section shows how the setup and run the project.
 - curl
 
 ### Production setup
+
 ```bash
 # 0. Git clone to project
 git clone repository_path
@@ -41,9 +45,12 @@ cp .env.prod.example .env.prod
 docker compose -f docker-compose.prod.yml --env-file .env.prod up --build -d
 
 # 3. Seed the database during evaluation
-curl -i "http://localhost:3001/api/db-seed?token=eval-secret-123"
+https://localhost:3001/api/db/seed?token=eval-secret-123
 
-# 4. Stop the prod server
+# Or alternatively, via curl
+curl -ik "https://localhost:3001/api/db/seed?token=eval-secret-123"
+
+# 4. Destroy the prod container with volumes
 docker compose -f docker-compose.prod.yml down -v
 ```
 
@@ -117,6 +124,7 @@ npm run db:push
 npm run db:reset
 ```
 
+
 ## Resources
 
 The following ressources have been involved.
@@ -127,8 +135,9 @@ A key ressource is the official documenation of the frameworks and libraries use
 
 #### Nuxt & Nuxt Hub
 
-[NUXT](https://nuxt.com/)
-[NUXT Hub](https://hub.nuxt.com/)
+[Nuxt](https://nuxt.com/)
+[Nuxt UI](https://ui.nuxt.com/)
+[Nuxt Hub](https://hub.nuxt.com/)
 
 #### Drizzle ORM documentation
 
@@ -204,7 +213,7 @@ Authentication is handled via Nuxt Hub **nuxt-auth-utils**, which provides a str
 
 For API development and manual route testing, we chose **Bruno**, an open-source API client. Finally, to ensure data integrity across the entire application stack, we use **Zod** to handle strict end-to-end form validation on both the frontend and backend.
 
-For the UI, Tailwind CSS has been used to style the frontend.
+For the UI, [Nuxt UI](https://ui.nuxt.com/) has been used in combination with Tailwind CSS to style the frontend.
 
 
 ## Database Schema
@@ -224,75 +233,91 @@ Finally, the *api_keys* table stores the tokens that allow corporate clients to 
 
 The following features have been implemented.
 
-### Register a new user :
+### Register a new user
+
 - Owner : iboukhss & dheck
 - Description : Registering a new user and writting the information including the hashed password to the database.
 
 ### User login
 
 #### Standard login
+
 - Owner : iboukhss & dheck
 - Description : Retrieves the user record from the database and verifies that the entered password matches the securely stored password hash.
 
 #### OAuth login
+
 - Owner : iboukhs
 - Description : Login via the user Google Account.
 
 #### Authentication Middleware
+
 - Owner : dheck
 - Description : A middleware that verifies whether a user is securely authenticated and possesses the required account type authorized to access the route.
 
 ### User profile management
 
 #### Change email address
+
 - Owner : iboukhss & dheck
 - Description : Updating the user's email used for the login.
 
 #### Change password
+
 - Owner : iboukhss & dheck
 - Description : Fetching the database and verifying that the password entered matches the password stored in the database.
 
 #### Update profile information
+
 - Owner : iboukhss & dheck
 - Description : Updating the user's profile information in the database (First name, Last name, country, About, ...)
 
 #### Upload / delete Avatar
+
 - Owner : iboukhss & aakerblo
 - Description : Storing / delete avatar uploaded by the user.
 
 #### GDPR - request your data
+
 - Owner : jmeli
 - Description : Allow the user to download its data and request their suppresion.
 
 ### Terms of service & Privacy policy
+
 - Owner : jmeli
 - Description : Drafting and implementing the view for the Terms of service & Privacy policy pages.
 
 ### Find talents & jobs pages
 
 #### Frontend views
+
 - Owner : iboukhss & aakerblo & jmeli
 - Description : Fetching the database and verifying that the password entered matches the password stored in the database.
 
 #### Advanced search
+
 - Owner : iboukhss & aakerblo  
 - Description : Advanced search and filtering system that allows to efficiently search through talents and jobs
 
 #### Pagination
+
 - Owner : iboukhs
 - Description : Pagination for jobs and talents.
 
 ### Business logic implementation
 
 #### Frontend
+
 - Owner : aakerblo & jmeli
 - Description : Possibility to create jobs, apply to jobs, accept/decline job applications and create the bookings.
 
 #### Backend
+
 - Owner : iboukhs & dheck  
 - Description : Possibility to create jobs, apply to jobs, accept/decline job applications and create the bookings.
 
 ### Admin panel
+
 - Owner: jmeli
 - Description: Search and edit users.
 
@@ -343,4 +368,5 @@ For detailed individual contributions to specific features, please refer to the 
 
 
 ## Limitations
+
 The primary goal of this project was to gain a deeper understanding of web application development and the technologies involved, an objective that has been successfully achieved.However, prior to launching into production, we need to implement several key features, including a billing system, a feedback/review system, and a messaging system. Since these features rely on the same technology stack already in use, we are fully equipped and confident in our ability to develop them.

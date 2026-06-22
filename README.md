@@ -42,6 +42,9 @@ docker compose -f docker-compose.prod.yml --env-file .env.prod up --build -d
 
 # 3. Seed the database during evaluation
 curl -i "http://localhost:3001/api/db-seed?token=eval-secret-123"
+
+# 4. Stop the prod server
+docker compose -f docker-compose.prod.yml down -v
 ```
 
 ### Developpement setup

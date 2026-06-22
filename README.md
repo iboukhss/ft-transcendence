@@ -1,146 +1,328 @@
-*This project has been created as part of the 42 curriculum by dheck, iboukhss, aakerblo, knjaloun, jmeli.*
+*This project has been created as part of the 42 curriculum by \<aakerblo\>, \<dheck\>, \<iboukhss\>, \<jmeli\>, \<knjaloun\>*
 
-# LuxLink
 
 ## Description
+LuxLink offers a platform that allows companies in need of external IT support to post IT and development-related mission offers. Freelancers looking for contract work can then apply to these missions.
 
-**LuxLink** is a freelance services marketplace connecting clients ("Companies") with independent professionals ("Freelancers") across the Greater Region (Luxembourg, France, Belgium, Germany).
+LuxLink's goal is to enhance the efficiency of the Luxembourgish job market by focusing its activity on the Greater Region (Luxembourg, Germany, Belgium, and France).
 
-The platform allows companies to post job offers, freelancers to apply with a motivation letter and proposed rate, and both parties to go through a two-step handshake (company approval → freelancer confirmation) before a contract is automatically created. The project covers the full lifecycle of a freelance engagement: discovery, application, negotiation, booking, and account/data management — including a complete GDPR compliance suite.
+The platform enables companies to select the best-fitting freelancer by reviewing applications before agreeing to enter into a business relationship.
 
-### Key features
 
-- Freelancer and Company account types with dedicated dashboards
-- Job posting, browsing, filtering (skills, location, salary, category, workplace) and search
-- A two-step offer handshake system (company accepts → freelancer confirms → booking created automatically)
-- Real-time online/offline presence indicators via WebSockets
-- Google OAuth login alongside standard email/password authentication
-- Role-based access control (Freelancer / Company / Admin) enforced via global middleware
-- A full admin panel to search, view, edit, and delete user accounts (with multi-step deletion guardrails)
-- GDPR compliance: data export (JSON), account deletion, and a rights-request contact form
-- A public, API-key-authenticated REST API with rate limiting, separate from the session-based web app
-- Avatar upload/replace/delete, with file type and size validation
-- A custom design system built on Nuxt UI with reusable components (cards, filters, edit sections)
+## Instructions
 
----
+The following section shows how the setup and run the project.
+
+### Build dependencies
+- Node.js v24+
+- npm
+- Docker and Docker Compose
+
+### Development dependencies
+- drizzle-kit
+- drizzle-seed
+- @nuxt/eslint
+- eslint-plugin-perfectionist
+- eslint-plugin-tailwindcss
+- @faker-js/faker
+- mkcert
+- bruno
+- curl
+
+### Initial dev setup
+
+```bash
+# 1. Git clone to project
+git clone repository_path
+
+# 1. Copy the environment file
+cp .env.example .env
+
+# 2. Generate HTTPS keys (important!)
+
+# with root access
+sudo apt install mkcert
+mkcert -install
+mkcert localhost
+
+# otherwise, at 42 to install mkcert without root privileges (make sure ~/.local/bin is in your PATH)
+mkdir -p ~/.local/bin
+wget -O ~/.local/bin/mkcert https://github.com/FiloSottile/mkcert/releases/download/v1.4.4/mkcert-v1.4.4-linux-amd64
+mkcert -CAROOT
+mkcert localhost
+
+# 3. Install the project dependencies
+npm install
+
+# 4. Start the database container
+docker compose up -d
+
+# 5. Push the database schema
+npm run db:push
+
+# 6. Start the server
+npm run dev
+```
+
+Eventually, the goal will be to deploy everything with a single command but I think it's best to start simple before getting into any premature refactoring.
+
+### Available dev commands
+
+Once the project has been setup, the following commands are available in the project.
+
+```bash
+# Start dev server (main command)
+npm run dev
+
+# Check code style
+npm run lint
+npm run lint:fix
+
+# Database operations (Drizzle)
+npm run db:push
+npm run db:generate
+npm run db:migrate
+npm run db:studio
+npm run db:reset
+npm run db:seed
+
+# Other
+npm run typecheck
+
+# How to nuke the database in case something goes wrong
+docker compose down -v
+docker compose up -d
+npm run db:push
+
+# Or use this more gentle method to scrub all database tables
+npm run db:reset
+```
+
+## Resources
+
+The following ressources have been involved.
+
+### Official documentation
+
+A key ressource is the official documenation of the frameworks and libraries used.
+
+#### Nuxt & Nuxt Hub / Vue
+
+- [NUXT Hub](https://hub.nuxt.com/)
+- [Nuxt documentation](https://nuxt.com/docs)
+- [Vue.js documentation](https://vuejs.org/guide/introduction.html)
+- [Nuxt UI documentation](https://ui.nuxt.com/)
+- [nuxt-auth-utils](https://nuxt.com/modules/auth-utils)
+
+#### Drizzle ORM documentation
+
+- [Drizzle ORM documentation](https://orm.drizzle.team/docs/overview)
+- [Drizzle Kit (migrations) guide](https://orm.drizzle.team/docs/kit-overview)
+
+#### Faker.js
+
+[Faker.js](https://fakerjs.dev/)
+
+#### Zod
+
+[Zod](https://zod.dev/)
+
+### PostgreSQL
+- [Official documentation](https://www.postgresql.org/docs/)
+- [PostgreSQL tutorial](https://www.postgresqltutorial.com/)
+
+### Videos
+
+The following Nuxt tutorial playlists greatly helped in taking the first steps : 
+
+[Nuxt 4 - Fullstack Web Development Series](https://www.youtube.com/playlist?list=PLrQyuTC3FMzyv5r8p1QLXlb_6RaAYQfhk) 
+[Nuxt Crash Course 2025](https://www.youtube.com/watch?v=RhZZ0whiuT8)
+[Integrating WebSockets in Nuxt and Nitro](https://www.youtube.com/watch?v=OfY7JcrqkPg&t=56s)
+
+### Usage of Artificial Intelligence
+
+AI played a key role in both the planning and development phases of this project. In the architectural phase, it helped identify appropriate libraries and provided strategies for implementing complex features. During development, AI helped the team overcome the steep learning curve associated with Nuxt and TypeScript. Specifically, it was used to draft boilerplate code, provide real-time debugging assistance, and review code implementations to ensure we were writing clean, structured, and type-safe code.
+
 
 ## Team Information
 
-| Login | Role(s) | Responsibilities |
-|---|---|---|
-| **dheck** | Architect / Technical Lead | WebSockets, API routes, full stack, database setup |
-| **iboukhss** | Project Owner | API endpoints, full stack, organization |
-| **aakerblo** | Developer | Frontend, testing, debugging |
-| **knjaloun** | Developer | OAuth, testing, debugging |
-| **jmeli** | Project Manager | Organization, testing |
+The team is composed of 5 teams members.
 
----
+- *aakerblo* :
+  - Role : Developper
+  - Description : Full-stack developper working on the feature list and bug fixing.
+- *dheck* :
+    - Role : Product Owner, Developper
+    - Description : Backend developper responsible for defining the product.
+- *iboukhss* :
+    - Role : Projet Manager, Technical Lead
+    - Description : Full-stack developper in charge of deciding the tech stack and coordinating the team efforts.  
+- *jmeli* :
+    - Role : Developper
+    - Description : Frontend developper working on the feature list and bug fixing.
+- *knjaloun* :
+    - Role : Developper
+    - Description : Full-stack developper working on the feature list and bug fixing.
+
 
 ## Project Management
 
-- **Work organization:** the team met regularly in person at 42 to plan, divide, and review work.
-- **Tools:** GitHub for version control, issue tracking, and pull request review.
-- **Communication:** Discord (day-to-day coordination) and WhatsApp (quick syncs).
+We use GitHub Issues as our main project management tool. Features and bugs are tracked via open issues, which can be assigned to and picked up by team members.
 
----
+Weekly physical meetings allow to discuss the progress, align on the approach and ensure that everyone is on the same page. Beside the these onsite meetings, a Discord Chat is in place that allows to interact with the team through the following channels :
+- general
+- frontend
+- backend
+- ressources
+
+Additionally, a channel "git-log"  keeping track of the GitHub pull requests keeps the team members updated.
+
 
 ## Technical Stack
 
-### Frontend
-- **Nuxt 4** (Vue 3) — full-stack framework, used here primarily for SSR pages and the client app
-- **Nuxt UI** — component library (built on Tailwind CSS and Reka UI) for the design system
-- **Tailwind CSS** — utility-first styling
+Choosing the framework used, the following criteria have been considered :
+- the framework should be simple to learn and to use
+- the language used for the backend logic should be the same as the language used for the frontend logic
+- the framework should be well documented
 
-### Backend
-- **Nuxt 4 / Nitro** — the same framework powers the server API (`server/api/`), keeping frontend and backend in a single codebase and deployment unit
-- **nuxt-auth-utils** — session-based authentication and OAuth integration
-- **WebSockets (via Nitro/crossws)** — real-time presence system
+Two candidates were identified in the early stages of the project: Svelte and Nuxt
+Both are Typescript frameworks that comply with the criteria cited above.
 
-### Database
-- **PostgreSQL** — relational database
-- **Drizzle ORM** — type-safe schema definition and queries
+We chose **Nuxt** primarily for its automatic file-system routing. By following its structured directory layout, application routes are generated automatically. Additionally, Nuxt features Hot Module Replacement to instantly re-render changes upon saving, greatly improving the developer experience.
 
-### Validation & tooling
-- **Zod** — shared frontend/backend schema validation
-- **drizzle-seed** / **@faker-js/faker** — database seeding for development
-- **Bruno** — manual API test collections (`testing/bruno/`)
-- **ESLint** (with `eslint-plugin-perfectionist`, `eslint-plugin-tailwindcss`) — code style enforcement
+We selected **PostgreSQL** as our database due to its open-source nature, reliability, and industry-standard performance. To bridge our database with our Nuxt backend, we opted for **Drizzle ORM** for its lightweight feel and type-safe schema management. To populate our database with realistic test data and simulate user activity during development, we utilized **Faker.js**.
 
-### Why these choices
+Authentication is handled via Nuxt Hub **nuxt-auth-utils**, which provides a streamlined way to manage user sessions, handle secure cookies, and protect server routes across our application.
 
-**PostgreSQL**
-- Mature, ACID-compliant relational database — a good fit for a domain with many interrelated entities (users, profiles, jobs, offers, bookings) and strict referential integrity needs (foreign keys, cascading deletes for GDPR compliance).
-- Native support for enums and array columns, both used extensively in our schema (e.g. `skills`, `languages` as arrays; status fields as enums).
-- Free, open-source, and runs identically in development (Docker) and production.
+For API development and manual route testing, we chose **Bruno**, an open-source API client. Finally, to ensure data integrity across the entire application stack, we use **Zod** to handle strict end-to-end form validation on both the frontend and backend.
 
-**Nuxt.js / Vue**
-- A single framework covers both frontend (SSR pages, routing, components) and backend (file-based API routes in `server/api/`), reducing context-switching and duplicated tooling.
-- Vue's component model and Nuxt's auto-imports kept the codebase concise across 5 contributors working in parallel on different features.
-- Built-in SSR support (a project requirement) with no extra configuration.
-- Strong ecosystem: `nuxt-auth-utils` for auth/OAuth, Nuxt UI for the design system, and first-class TypeScript support throughout.
+For the UI, Tailwind CSS has been used to style the frontend.
 
-**Drizzle ORM**
-- Type-safe queries generated directly from the schema definition — query bugs are caught at compile time rather than at runtime.
-- SQL-like query builder (rather than a heavier abstraction) made it easy for the team to reason about exactly what queries were being run, which mattered for debugging foreign-key/cascade issues during development.
-- Lightweight compared to alternatives like Prisma, with fast cold-start times suited to a Nitro serverless-style runtime.
-- `drizzle-kit` provides both quick iteration (`db:push`) for early development and proper versioned migrations (`db:generate` / `db:migrate`) for later stages.
-
----
 
 ## Database Schema
 
-The schema is defined in `server/database/schema.ts`. Core tables and relationships:
+The database schema can found under the location : server/database/schema.ts
 
-```
-users (1) ───< (1) freelancer_profiles
-      │
-      └──── (1) company_profiles
+The database architecture is visualized in an ER diagram, which renders automatically when opening server/database/entity-relationships.md on GitHub.
 
-users (1) ───< (many) jobs            [company posts jobs]
-jobs  (1) ───< (many) offers          [freelancers apply to jobs]
-users (1) ───< (many) offers          [as buyer (company) or seller (freelancer)]
-offers(1) ───< (1) bookings           [created once an offer is mutually accepted]
-users (1) ───< (many) api_keys        [for the public v1 API]
-```
+The entry point of the diagram is the *users* table, where accounts are classified into one of two types: "freelancer" or "company". Depending on the user's account type, their profile details are stored in either the *company_profiles* or *freelancer_profiles* table.
 
-| Table | Purpose | Key fields |
-|---|---|---|
-| `users` | Core identity, credentials, role | `email`, `password` (hashed), `accountType`, `role` |
-| `freelancer_profiles` | Public freelancer profile | `firstName`, `lastName`, `country`, `skills[]`, `languages[]`, `hourlyRate` |
-| `company_profiles` | Public company profile | `companyName`, `contactFirstName/LastName`, `description`, `website` |
-| `jobs` | Job postings | `title`, `category`, `skills[]`, `hourlyRate`, `duration`, `workplace`, `status` |
-| `offers` | Applications / negotiation state | `jobId`, `buyerId`, `sellerId`, `status`, `motivationLetter`, `proposedHourlyRate` |
-| `bookings` | Confirmed contracts | `offerId`, `jobId`, `price`, `hourlyRate`, `duration`, `status` |
-| `api_keys` | Public API authentication | `userId`, `key`, `isActive`, `expiresAt` |
+Companies post project listings (*jobs* table), and freelancers apply to them via the *offers* table. A booking is finalized through a two-step handshake: first, the company accepts a freelancer's offer, and then the freelancer must confirm the job on their end. This confirmation step ensures that freelancers are not involuntarily double-booked for multiple conflicting missions during the same time period. Upon the freelancer's acceptance, the booking is triggered, locking the final terms of the mission into the *bookings* table.
 
-All foreign keys to `users` use `onDelete: 'cascade'` so that account deletion (a GDPR requirement) cleanly removes all associated data.
+Finally, the *api_keys* table stores the tokens that allow corporate clients to access the public API to manage their job postings programmatically. 
 
----
 
 ## Features List
 
-> Attribution below is a first draft based on commit history and file ownership patterns. **To be reviewed and corrected by the team.**
+The following features have been implemented.
 
-| Feature | Built by | Description |
-|---|---|---|
-| Database schema & migrations | <name> | Core schema design, enums, relations |
-| Authentication (email/password) | <name> | Register, login, session management |
-| Google OAuth | <name> | Remote authentication via `nuxt-auth-utils` |
-| Job posting & management | <name> | Create, edit, delete jobs (company side) |
-| Job browsing & filters | <name> | Search, skills/location/salary/category/workplace filters |
-| Public profile browsing | <name> | Freelancer directory with filters |
-| Offer / application system | <name> | Submit, edit, withdraw applications |
-| Two-step handshake & booking | <name> | Company/freelancer mutual acceptance, automatic booking creation |
-| Admin panel | <name> | User search, edit, multi-guardrail deletion |
-| Avatar upload/delete | <name> | File validation, storage, replacement |
-| WebSocket presence system | <name> | Real-time online/offline indicators |
-| Public API (v1) | <name> | API-key auth, rate limiting |
-| GDPR data export & deletion | <name> | JSON export, account deletion, rights request form |
-| Privacy Policy / Terms of Service | <name> | Luxembourg-law-compliant legal pages |
-| Settings (account, security, preferences) | <name> | Email/password change, theme selection |
-| Testing & QA | <name> | Manual test plans, Bruno collections |
+### Register a new user :
+- Owner : iboukhss & dheck
+- Description : Registering a new user and writting the information including the hashed password to the database.
 
----
+### User login
+
+#### Standard login
+- Owner : iboukhss & dheck
+- Description : Retrieves the user record from the database and verifies that the entered password matches the securely stored password hash.
+
+#### Session management
+- Owner:
+- Description:
+
+#### OAuth login
+- Owner : knjaloun
+- Description : Login via the user Google Account.
+
+#### Authentication Middleware
+- Owner : dheck
+- Description : A middleware that verifies whether a user is securely authenticated and possesses the required account type authorized to access the route.
+
+### User profile management
+
+#### Change email address
+- Owner : iboukhss & dheck
+- Description : Updating the user's email used for the login.
+
+#### Change password
+- Owner : iboukhss & dheck
+- Description : Fetching the database and verifying that the password entered matches the password stored in the database.
+
+#### Update profile information
+- Owner : iboukhss & dheck
+- Description : Updating the user's profile information in the database (First name, Last name, country, About, ...)
+
+#### Upload / delete Avatar
+- Owner : iboukhss & aakerblo
+- Description : Storing / delete avatar uploaded by the user.
+
+#### GDPR - data export and deletion
+- Owner : jmeli
+- Description : Allow the user to download its data and request their suppresion.
+
+#### Terms of service & Privacy policy
+- Owner : jmeli
+- Description : Drafting and implementing the view for the Terms of service & Privacy policy pages.
+
+#### Database schema & migrations
+- Owner: <my team will complete this part>
+- Description: Core schema design, enums, relations
+
+#### Job posting & management
+- Owner: <my team will complete this part>
+- Description: Create, edit, delete jobs (company side)
+
+#### Job browsing & filters
+- Owner: <my team will complete this part>
+- Description: Search, skills/location/salary/category/workplace filters
+
+#### Public profile browsing
+- Owner: <my team will complete this part>
+- Description: Freelancer directory with filters
+
+#### Offer / application system
+- Owner: <my team will complete this part>
+- Description: Submit, edit, withdraw applications
+
+#### Two-step handshake & booking
+- Owner: <my team will complete this part>
+- Description: Company/freelancer mutual acceptance, automatic booking creation
+
+#### Admin panel
+- Owner: <my team will complete this part>
+- Description: User search, edit, multi-guardrail deletion
+
+#### WebSocket presence system
+- Owner: <my team will complete this part>
+- Description: Real-time online/offline indicators
+
+#### Public API (v1)
+- Owner: <my team will complete this part>
+- Description: API-key auth, rate limiting
+
+### Find talents & jobs pages
+
+#### Frontend views
+- Owner : iboukhss & aakerblo & jmeli
+- Description : Fetching the database and verifying that the password entered matches the password stored in the database.
+
+#### Advanced search
+- Owner : iboukhss & aakerblo  
+- Description : Advanced search and filtering system that allows to efficiently search through talents and jobs
+
+#### Pagination
+- Owner : knjaloun  
+- Description : Pagination for jobs and talents.
+
+### Business logic implementation
+
+#### Frontend
+- Owner : dheck  
+- Description : Possibility to create jobs, apply to jobs, accept/decline job applications and create the bookings.
+
+#### Backend
+- Owner : dheck  
+- Description : Possibility to create jobs, apply to jobs, accept/decline job applications and create the bookings.
 
 ## Modules
 
@@ -214,133 +396,13 @@ Not planned.
 
 ---
 
-## AI Usage
-
-Claude (Anthropic) was used throughout the project's lifecycle as a pair-programming and documentation assistant. Specific uses included:
-
-- **Debugging:** diagnosing server crashes (e.g. an unhandled WebSocket promise rejection that crashed the Nitro process), database foreign-key constraint violations, schema/migration mismatches, and Vue hydration warnings.
-- **Documentation:** drafting and updating `API_DOC.md` (kept in sync across ~9 major revisions as the API was restructured) to reflect the current state of the codebase.
-- **Legal content:** drafting the Privacy Policy and Terms of Service pages with reference to Luxembourg and EU law (GDPR, e-commerce law).
-- **This README:** drafted by Claude based on team-provided information (roles, module status, technical stack) and the project's actual implemented features as established through the development conversation; reviewed and corrected by the team before submission.
-
-All AI-assisted code and content was reviewed, tested, and adjusted by team members before being merged.
-
----
 
 ## Individual Contributions
 
-> To be completed by the team — see Features List above for a first-draft mapping of features to contributors.
+(to be done)
 
----
 
-## Instructions
+## Limitations
 
-### Build dependencies
-- Node.js v24.14 (LTS recommended)
-- npm
-- Docker and Docker Compose
-
-### Development dependencies
-- drizzle-kit
-- drizzle-seed
-- @nuxt/eslint
-- eslint-plugin-perfectionist
-- eslint-plugin-tailwindcss
-- @faker-js/faker
-- mkcert
-- bruno
-- curl
-
-### Initial dev setup
-
-```bash
-# 1. Copy the environment file and fill in the required values
-cp .env.example .env
-
-# 2. Generate HTTPS keys (required for local dev)
-# with root access:
-sudo apt install mkcert
-mkcert -install
-mkcert localhost
-
-# without root access (e.g. at 42 — ensure ~/.local/bin is in your PATH):
-mkdir -p ~/.local/bin
-wget -O ~/.local/bin/mkcert https://github.com/FiloSottile/mkcert/releases/download/v1.4.4/mkcert-v1.4.4-linux-amd64
-mkcert -install
-mkcert localhost
-
-# 3. Install dependencies
-npm install
-
-# 4. Start the database container
-docker compose up -d
-
-# 5. Push the database schema
-npm run db:push
-
-# 6. (Optional) Seed the database with sample data
-npm run db:seed
-
-# 7. Start the dev server
-npm run dev
-```
-
-The app will be available at `https://localhost:3000`.
-
-### Available dev commands
-
-```bash
-# Start dev server
-npm run dev
-
-# Code style
-npm run lint
-npm run lint:fix
-
-# Database (Drizzle)
-npm run db:push
-npm run db:generate
-npm run db:migrate
-npm run db:studio
-npm run db:reset
-npm run db:seed
-
-# Type checking
-npm run typecheck
-
-# Reset the database if something goes wrong
-docker compose down -v
-docker compose up -d
-npm run db:push
-
-# Or use the gentler reset task
-npm run db:reset
-```
-
-### API Testing
-
-Manual API test collections are available via [Bruno](https://www.usebruno.com/) in `testing/bruno/`. A curl-based smoke test script is also available for quick access-control and validation checks (see project test documentation).
-
----
-
-## Resources
-
-### PostgreSQL
-- [Official documentation](https://www.postgresql.org/docs/)
-- [PostgreSQL tutorial](https://www.postgresqltutorial.com/)
-
-### Nuxt.js / Vue
-- [Nuxt documentation](https://nuxt.com/docs)
-- [Vue.js documentation](https://vuejs.org/guide/introduction.html)
-- [Nuxt UI documentation](https://ui.nuxt.com/)
-- [nuxt-auth-utils](https://nuxt.com/modules/auth-utils)
-
-### Drizzle ORM
-- [Drizzle ORM documentation](https://orm.drizzle.team/docs/overview)
-- [Drizzle Kit (migrations) guide](https://orm.drizzle.team/docs/kit-overview)
-
----
-
-## License & Credits
-
-This project was created as part of the 42 Luxembourg curriculum (ft_transcendence subject) by dheck, iboukhss, aakerblo, knjaloun, jmeli.
+### Billing
+Billing System: Not implemented. The platform manages the booking handshake but does not currently support invoice generation or payment processing.

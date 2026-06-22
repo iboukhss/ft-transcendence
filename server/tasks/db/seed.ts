@@ -7,8 +7,9 @@
 import { faker } from '@faker-js/faker'
 import { reset } from 'drizzle-seed'
 
-import { db, tables } from '#server/utils/db'
 import { COUNTRY_KEYS, JOB_CATEGORY_KEYS, SKILL_KEYS, WORKPLACE_KEYS } from '#shared/constants/enums'
+
+import { db, tables } from '../../utils/db'
 
 export default defineTask({
   meta: {

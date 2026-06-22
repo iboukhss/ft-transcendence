@@ -39,6 +39,9 @@ cp .env.prod.example .env.prod
 
 # 2. Start the prod server running on https://localhost:3001
 docker compose -f docker-compose.prod.yml --env-file .env.prod up --build -d
+
+# 3. Seed the database during evaluation
+curl -i "http://localhost:3001/api/db-seed?token=eval-secret-123"
 ```
 
 ### Developpement setup

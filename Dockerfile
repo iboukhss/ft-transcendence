@@ -21,6 +21,8 @@ ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOST=0.0.0.0
 
+RUN mkdir -p uploads
+
 COPY --from=builder /src/.output ./.output
 COPY --from=builder /src/package*.json ./
 COPY --from=builder /src/drizzle.config.ts ./

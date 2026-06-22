@@ -64,7 +64,7 @@ export default defineNuxtConfig({
       },
       uploads: {
         driver: 'fs',
-        base: './public/uploads'
+        base: './uploads'
       }
     }
   },

@@ -29,4 +29,4 @@ localhost-key.pem
 localhost.pem
 
 # Local storage
-public/uploads/
+uploads/

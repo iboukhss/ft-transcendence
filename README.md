@@ -61,8 +61,12 @@ docker compose up -d
 # 5. Push the database schema
 npm run db:push
 
-# 6. Start the server
+# 6. Start the dev server running on https://localhost:3000
 npm run dev
+
+# 7. Start the prod server running on https://localhost:3001
+cp .env.prod.example .env.prod
+docker compose -f docker-compose.prod.yml --env-file .env.prod up --build -d
 ```
 
 Eventually, the goal will be to deploy everything with a single command but I think it's best to start simple before getting into any premature refactoring.

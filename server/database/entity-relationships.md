@@ -18,7 +18,7 @@ erDiagram
         countryEnum country
         text avatar
         text bio
-        skillsEnum_array skills
+        text_array skills
         languageEnum_array languages
         real hourly_rate
         timestamp created_at
@@ -32,26 +32,8 @@ erDiagram
         text contact_last_name
         text company_name
         countryEnum country
-        text website
         text logo
         text description
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    PROFILES {
-        serial id PK
-        integer user_id FK, UK
-        text first_name
-        text last_name
-        integer house_number
-        text street
-        text zip
-        countryEnum country
-        text avatar
-        text about
-        skillsEnum_array skills
-        languageEnum_array languages
         timestamp created_at
         timestamp updated_at
     }
@@ -62,7 +44,7 @@ erDiagram
         text title
         text description
         categoryEnum category
-        skillsEnum_array skills
+        text_array skills
         real hourly_rate
         integer duration
         workPlaceEnum workplace
@@ -80,12 +62,6 @@ erDiagram
         offerStatusEnum status
         text motivation_letter
         real proposed_hourly_rate
-        integer proposed_duration
-        workPlaceEnum proposed_workplace
-        timestamp buyer_agreed
-        timestamp seller_agreed
-        timestamp buyer_declined
-        timestamp seller_declined
         timestamp created_at
         timestamp updated_at
     }
@@ -99,7 +75,6 @@ erDiagram
         real price
         real hourly_rate
         integer duration
-        workPlaceEnum workplace
         bookingStatusEnum status
         timestamp created_at
         timestamp updated_at
@@ -117,14 +92,17 @@ erDiagram
         timestamp updated_at
     }
 
-    USERS ||--|| FREELANCER_PROFILES : "has one (onDelete: cascade)"
-    USERS ||--|| COMPANY_PROFILES : "has one (onDelete: cascade)"
-    USERS ||--|| PROFILES : "has one (onDelete: cascade)"
-    USERS ||--o{ JOBS : "posts (onDelete: cascade)"
-    USERS ||--o{ OFFERS : "interacts as buyer/seller"
-    USERS ||--o{ BOOKINGS : "interacts as buyer/seller"
-    USERS ||--o{ API_KEYS : "owns (onDelete: cascade)"
-    JOBS ||--o{ OFFERS : "has"
-    JOBS ||--o{ BOOKINGS : "has"
-    OFFERS ||--|| BOOKINGS : "converts to (1:1 via UK)"
+    USERS ||--|| FREELANCER_PROFILES : "has profile"
+    USERS ||--|| COMPANY_PROFILES : "has profile"
+    USERS ||--o{ JOBS : "creates"
+    USERS ||--o{ API_KEYS : "owns"
+    
+    JOBS ||--o{ OFFERS : "receives"
+    USERS ||--o{ OFFERS : "buys (buyer_id)"
+    USERS ||--o{ OFFERS : "sells (seller_id)"
+    
+    OFFERS ||--|| BOOKINGS : "turns into"
+    JOBS ||--o{ BOOKINGS : "references"
+    USERS ||--o{ BOOKINGS : "pays (buyer_id)"
+    USERS ||--o{ BOOKINGS : "works (seller_id)"
 ```

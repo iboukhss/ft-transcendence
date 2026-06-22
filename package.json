@@ -23,9 +23,11 @@
     "db:studio": "npx drizzle-kit studio"
   },
   "dependencies": {
+    "@faker-js/faker": "^10.5.0",
     "@nuxt/eslint": "^1.15.2",
     "@nuxt/ui": "^4.6.1",
     "drizzle-orm": "^0.45.2",
+    "drizzle-seed": "^0.3.1",
     "nuxt": "^4.4.2",
     "nuxt-auth-utils": "^0.5.29",
     "postgres": "^3.4.9",
@@ -35,11 +37,9 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@faker-js/faker": "^10.4.0",
     "@types/eslint-plugin-tailwindcss": "^3.17.0",
     "@types/node": "^25.5.2",
     "drizzle-kit": "^0.31.10",
-    "drizzle-seed": "^0.3.1",
     "eslint-plugin-perfectionist": "^5.9.0",
     "eslint-plugin-tailwindcss": "^3.18.3",
     "typescript": "^6.0.3",

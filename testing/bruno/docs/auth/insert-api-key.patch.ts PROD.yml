@@ -1,0 +1,25 @@
+info:
+  name: insert-api-key.patch.ts PROD
+  type: http
+  seq: 11
+
+http:
+  method: POST
+  url: http://localhost:3001/api/auth/insert-api-key
+  body:
+    type: json
+    data: |-
+      {
+        "userId": 3,
+        "key": "some-new-secret-key",
+        "name": "to be used with care",
+        "is_active": true,
+        "expires_at": null
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

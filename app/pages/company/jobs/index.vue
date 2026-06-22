@@ -164,6 +164,9 @@ async function confirmDelete() {
                 @click="openDeleteModal(row.original)"
               />
             </div>
+            <div v-else class="flex w-full items-center justify-center">
+              —
+            </div>
           </template>
         </UTable>
       </UCard>

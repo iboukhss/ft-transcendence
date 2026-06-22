@@ -15,8 +15,9 @@ export async function getBookingsUser(db: DB, tables: Tables, userId: number, ac
     filter = eq(tables.bookings.buyerId, userId)
   }
   else if (accountType !== 'admin') {
-    throw403('Invalid account type')
+    return throw403('Invalid account type')
   }
+  console.log(filter)
 
   const bookings = await db
     .select()

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 const route = useRoute()
 const toast = useToast()
 const userId = Number(route.params.id)
@@ -49,7 +48,7 @@ async function onSave() {
     await refresh()
     toast.add({
       title: 'User updated',
-      description: 'Changes saved and user notified.',
+      description: 'Changes saved.',
       color: 'success',
       icon: 'i-lucide-circle-check'
     })

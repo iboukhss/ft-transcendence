@@ -10,8 +10,8 @@ http:
     type: json
     data: |-
       {
-        "email": "admin@luxlink.com",
-        "password": "admin"
+        "email": "admin@42.lu",
+        "password": "admin@42.lu"
       }
   auth: inherit
 

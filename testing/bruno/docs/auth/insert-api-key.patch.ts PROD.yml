@@ -10,11 +10,11 @@ http:
     type: json
     data: |-
       {
-        "userId": 3,
+        "userId": 2,
         "key": "some-new-secret-key",
         "name": "to be used with care",
-        "is_active": true,
-        "expires_at": null
+        "isActive": true,
+        "expiresAt": null
       }
   auth: inherit
 

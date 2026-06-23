@@ -1,16 +1,16 @@
 info:
-  name: update-api-key.patch.ts
+  name: insert-api-key.patch.ts
   type: http
-  seq: 6
+  seq: 12
 
 http:
-  method: PATCH
-  url: https://localhost:3000/api/auth/update-api-key
+  method: POST
+  url: https://localhost:3000/api/auth/insert-api-key
   body:
     type: json
     data: |-
       {
-        "userId": 14,
+        "userId": 2,
         "key": "some-new-secret-key",
         "name": "to be used with care",
         "isActive": true,

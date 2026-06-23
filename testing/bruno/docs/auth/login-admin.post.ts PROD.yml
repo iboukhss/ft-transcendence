@@ -5,13 +5,13 @@ info:
 
 http:
   method: POST
-  url: http://localhost:3001/api/auth/login
+  url: https://localhost:3001/api/auth/login
   body:
     type: json
     data: |-
       {
-        "email": "d.heck@42.lu",
-        "password": "d.heck@42.lu"
+        "email": "admin@luxlink.lu",
+        "password": "admin"
       }
   auth: inherit
 

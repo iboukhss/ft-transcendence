@@ -5,15 +5,15 @@ info:
 
 http:
   method: POST
-  url: http://localhost:3001/api/v1/jobs/company
+  url: https://localhost:3001/api/v1/jobs/company
   headers:
     - name: x-api-key
-      value: some-key
+      value: some-new-secret-key
   body:
     type: json
     data: |-
       {
-        "title": "Transcendence",
+        "title": "Artemis",
         "description": "My first mission description must have more than 30 characters!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
         "category": "devops",
         "skills": ["c"],

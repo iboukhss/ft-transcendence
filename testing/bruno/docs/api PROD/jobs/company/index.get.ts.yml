@@ -5,10 +5,10 @@ info:
 
 http:
   method: GET
-  url: http://localhost:3001/api/v1/jobs/company
+  url: https://localhost:3001/api/v1/jobs/company
   headers:
     - name: x-api-key
-      value: some-key
+      value: some-new-secret-key
   auth: inherit
 
 settings:

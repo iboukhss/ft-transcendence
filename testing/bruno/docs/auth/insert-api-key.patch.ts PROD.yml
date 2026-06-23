@@ -5,12 +5,12 @@ info:
 
 http:
   method: POST
-  url: http://localhost:3001/api/auth/insert-api-key
+  url: https://localhost:3001/api/auth/insert-api-key
   body:
     type: json
     data: |-
       {
-        "userId": 2,
+        "userId": 26,
         "key": "some-new-secret-key",
         "name": "to be used with care",
         "isActive": true,
